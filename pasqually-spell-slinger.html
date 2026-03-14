@@ -1398,8 +1398,65 @@
         <label class="import-radio-label"><input type="radio" name="import-effect" value="healing" onchange="handleImportEffectChange()"> Healing</label>
         <label class="import-radio-label"><input type="radio" name="import-effect" value="neither" checked onchange="handleImportEffectChange()"> Neither</label>
       </div>
-      <div id="import-effect-input-wrap" style="margin-top:0.15rem;">
-        <input type="text" class="import-text-input" id="import-effect-desc" placeholder="Describe the effect — e.g. 8d6 fire damage…" maxlength="120">
+      <!-- Damage fields -->
+      <div id="import-damage-fields" style="display:none;flex-direction:column;gap:0.4rem;margin-top:0.5rem;">
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <label style="font-size:0.75rem;color:var(--text-label);min-width:6rem;">Damage Dice</label>
+          <input type="text" class="import-text-input" id="import-damage-dice" placeholder="e.g. 8d6" maxlength="20" style="flex:1;">
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <label style="font-size:0.75rem;color:var(--text-label);min-width:6rem;">Damage Type</label>
+          <select class="import-select" id="import-damage-type" style="flex:1;">
+            <option value="">— None / Physical —</option>
+            <option value="Fire">Fire</option>
+            <option value="Ice">Ice</option>
+            <option value="Lightning">Lightning</option>
+            <option value="Acid">Acid</option>
+            <option value="Thunder">Thunder</option>
+            <option value="Necrotic">Necrotic</option>
+            <option value="Radiant">Radiant</option>
+            <option value="Poison">Poison</option>
+            <option value="Force">Force</option>
+            <option value="Psychic">Psychic</option>
+            <option value="Cold">Cold</option>
+            <option value="Bludgeoning">Bludgeoning</option>
+            <option value="Piercing">Piercing</option>
+            <option value="Slashing">Slashing</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <label style="font-size:0.75rem;color:var(--text-label);min-width:6rem;">Attack / Save</label>
+          <select class="import-select" id="import-damage-roll" style="flex:1;">
+            <option value="Attack Roll">Attack Roll</option>
+            <option value="STR Save">STR Save</option>
+            <option value="DEX Save">DEX Save</option>
+            <option value="CON Save">CON Save</option>
+            <option value="INT Save">INT Save</option>
+            <option value="WIS Save">WIS Save</option>
+            <option value="CHA Save">CHA Save</option>
+            <option value="No Roll">No Roll</option>
+          </select>
+        </div>
+      </div>
+      <!-- Healing fields -->
+      <div id="import-healing-fields" style="display:none;flex-direction:column;gap:0.4rem;margin-top:0.5rem;">
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <label style="font-size:0.75rem;color:var(--text-label);min-width:6rem;">Healing Dice</label>
+          <input type="text" class="import-text-input" id="import-healing-dice" placeholder="e.g. 4d8 + 10" maxlength="20" style="flex:1;">
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <label style="font-size:0.75rem;color:var(--text-label);min-width:6rem;">Attack / Save</label>
+          <select class="import-select" id="import-healing-roll" style="flex:1;">
+            <option value="Attack Roll">Attack Roll</option>
+            <option value="STR Save">STR Save</option>
+            <option value="DEX Save">DEX Save</option>
+            <option value="CON Save">CON Save</option>
+            <option value="INT Save">INT Save</option>
+            <option value="WIS Save">WIS Save</option>
+            <option value="CHA Save">CHA Save</option>
+            <option value="No Roll" selected>No Roll</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -1408,20 +1465,8 @@
     <!-- Step 3 -->
     <div class="import-step">
       <div class="import-step-num">Step 3</div>
-      <div class="import-step-title">Element</div>
-      <label class="import-element-label">
-        <input type="checkbox" id="import-has-element" onchange="toggleImportElement()">
-        Does the spell have a specific damage type?
-      </label>
-      <div id="import-element-wrap" style="display:none;margin-top:0.2rem;">
-        <select class="import-select" id="import-element">
-          <option value="Fire">Fire</option>
-          <option value="Ice">Ice</option>
-          <option value="Lightning">Lightning</option>
-          <option value="Acid">Acid</option>
-          <option value="Thunder">Thunder</option>
-        </select>
-      </div>
+      <div class="import-step-title">Description</div>
+      <textarea class="import-text-input" id="import-notes" placeholder="Additional notes, flavour text, or description…" maxlength="300" style="resize:vertical;min-height:3.5rem;line-height:1.45;"></textarea>
     </div>
 
     <div class="import-step-divider"></div>
@@ -1559,6 +1604,7 @@ let playerLevel = 1;
 let mindLevel = 1;
 let lockedAugs = new Set();
 let importDescription = '';
+let importNotes = '';
 let importTierLabel = '';
 let importTierMinCost = 0;
 let selectedClass = 'mind';
@@ -1897,7 +1943,9 @@ function updateSummary() {
   let parts = [];
   parts.push(`<strong>${form.name}</strong> — ${form.desc}`);
 
-  if (importDescription) {
+  if (importNotes) {
+    parts.push(`<em style="color:var(--gold);opacity:0.85;">${importNotes}</em>`);
+  } else if (importDescription) {
     parts.push(`<em style="color:var(--gold);opacity:0.85;">${importDescription}</em>`);
   }
 
@@ -1975,6 +2023,7 @@ function resetAll() {
   conditionChoices = {};
   lockedAugs = new Set();
   importDescription = '';
+  importNotes = '';
   importTierLabel = '';
   importTierMinCost = 0;
   document.getElementById('spell-name').value = '';
@@ -2045,6 +2094,7 @@ function loadSpell(id) {
   conditionChoices = { ...spell.conditions };
   lockedAugs = new Set(spell.lockedAugs || []);
   importDescription = spell.importDescription || '';
+  importNotes = spell.importNotes || '';
   importTierLabel = spell.importTierLabel || '';
   importTierMinCost = spell.importTierMinCost || 0;
   playerLevel = spell.playerLevel;
@@ -2438,11 +2488,14 @@ function openImportModal() {
   // Reset form to clean state
   document.getElementById('import-level').value = '1';
   document.querySelectorAll('input[name="import-effect"]').forEach(r => { r.checked = r.value === 'neither'; });
-  document.getElementById('import-effect-input-wrap').style.display = 'none';
-  document.getElementById('import-effect-desc').value = '';
-  document.getElementById('import-has-element').checked = false;
-  document.getElementById('import-element-wrap').style.display = 'none';
-  document.getElementById('import-element').value = 'Fire';
+  document.getElementById('import-damage-fields').style.display = 'none';
+  document.getElementById('import-healing-fields').style.display = 'none';
+  document.getElementById('import-damage-dice').value = '';
+  document.getElementById('import-damage-type').value = '';
+  document.getElementById('import-damage-roll').value = 'Attack Roll';
+  document.getElementById('import-healing-dice').value = '';
+  document.getElementById('import-healing-roll').value = 'No Roll';
+  document.getElementById('import-notes').value = '';
   document.getElementById('import-name').value = '';
   document.getElementById('import-modal-overlay').classList.add('open');
 }
@@ -2453,26 +2506,21 @@ function closeImportModal() {
 
 function handleImportEffectChange() {
   const val = document.querySelector('input[name="import-effect"]:checked')?.value;
-  const placeholders = {
-    damage:  'Describe the damage — e.g. 8d6 fire damage…',
-    healing: 'Describe the healing — e.g. 4d8 + 10 HP restored…',
-    neither: 'Describe the effect — e.g. creates a 20 ft wall of force…',
-  };
-  document.getElementById('import-effect-desc').placeholder = placeholders[val] || placeholders.neither;
-}
-
-function toggleImportElement() {
-  const checked = document.getElementById('import-has-element').checked;
-  document.getElementById('import-element-wrap').style.display = checked ? 'block' : 'none';
+  document.getElementById('import-damage-fields').style.display = val === 'damage' ? 'flex' : 'none';
+  document.getElementById('import-healing-fields').style.display = val === 'healing' ? 'flex' : 'none';
 }
 
 function confirmImport() {
   const levelIdx    = parseInt(document.getElementById('import-level').value) - 1;
   const effect      = document.querySelector('input[name="import-effect"]:checked').value;
-  const effectDesc  = document.getElementById('import-effect-desc').value.trim();
-  const hasElement  = document.getElementById('import-has-element').checked;
-  const element     = document.getElementById('import-element').value;
   const name        = document.getElementById('import-name').value.trim();
+  const notes       = document.getElementById('import-notes').value.trim();
+
+  // Gather structured fields
+  const damageDice  = document.getElementById('import-damage-dice').value.trim();
+  const damageType  = document.getElementById('import-damage-type').value;
+  const damageRoll  = document.getElementById('import-damage-roll').value;
+  const healingDice = document.getElementById('import-healing-dice').value.trim();
 
   // Clear builder state (keep levels)
   selectedForm = null;
@@ -2485,24 +2533,37 @@ function confirmImport() {
   importTierMinCost = IMPORT_LEVEL_COSTS[levelIdx];
   importTierLabel   = IMPORT_LEVEL_LABELS[levelIdx];
 
-  // Lock effect augment
+  // Lock effect augment and build importDescription (used in table view)
+  const ELEMENTAL_TYPES = new Set(['Fire','Ice','Lightning','Acid','Thunder']);
   if (effect === 'damage') {
     selectedAugs.add('destructive');
     lockedAugs.add('destructive');
+    // Auto-lock Elemental Shift if an elemental damage type is chosen
+    if (damageType && ELEMENTAL_TYPES.has(damageType)) {
+      selectedAugs.add('elemental');
+      lockedAugs.add('elemental');
+      conditionChoices['elemental'] = damageType;
+    }
+    // Build compact description for table display
+    const parts = [];
+    if (damageDice) parts.push(damageDice);
+    if (damageType) parts.push(damageType);
+    importDescription = parts.join(' ') || 'damage';
   } else if (effect === 'healing') {
     selectedAugs.add('restorative');
     lockedAugs.add('restorative');
+    importDescription = healingDice || 'healing';
+  } else {
+    importDescription = '';
   }
 
-  // Lock elemental augment
-  if (hasElement) {
-    selectedAugs.add('elemental');
-    lockedAugs.add('elemental');
-    conditionChoices['elemental'] = element;
-  }
+  // Determine attack/save roll type
+  const importRoll = effect === 'damage' ? damageRoll
+                   : effect === 'healing' ? document.getElementById('import-healing-roll').value
+                   : '';
 
-  // Pre-populate description
-  importDescription = effectDesc;
+  // Free-text notes (shown in builder summary)
+  importNotes = notes;
 
   // Require a name
   if (!name) {
@@ -2529,6 +2590,8 @@ function confirmImport() {
     tierLabel: IMPORT_LEVEL_LABELS[levelIdx],
     lockedAugs: [...lockedAugs],
     importDescription,
+    importNotes,
+    importRoll,
     importTierLabel,
     importTierMinCost,
     savedAt: Date.now(),
