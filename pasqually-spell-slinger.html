@@ -632,6 +632,24 @@
     border-bottom-color: var(--gold-light);
   }
 
+  .tab-import-btn {
+    margin-left: auto;
+    align-self: center;
+    margin-bottom: 0.25rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.32rem 0.85rem;
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.4);
+    border-radius: 3px;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-import-btn:hover { background: rgba(184,134,11,0.12); border-color: var(--gold); color: var(--gold-light); }
+
   /* Save button */
   .btn-save {
     display: block;
@@ -1031,6 +1049,165 @@
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--parchment-dark); }
   ::-webkit-scrollbar-thumb { background: rgba(184,134,11,0.4); border-radius: 3px; }
+
+  /* ── Formless tag ── */
+  .sc-formless {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    background: rgba(139,26,26,0.12);
+    color: var(--crimson);
+    border: 1px solid rgba(139,26,26,0.35);
+    margin-top: 0.15rem;
+  }
+
+  /* ── Import Modal ── */
+  .import-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,20,16,0.82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+  }
+  .import-modal-overlay.open { display: flex; }
+
+  .import-modal {
+    background: var(--parchment);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.75), 0 0 0 1px rgba(184,134,11,0.15);
+    width: min(620px, 95vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(184,134,11,0.4) transparent;
+  }
+
+  .import-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(184,134,11,0.3);
+    padding-bottom: 0.75rem;
+  }
+  .import-modal-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+  }
+  .import-close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(26,20,16,0.35);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.1rem 0.4rem;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .import-close-btn:hover { color: var(--crimson); }
+
+  .import-step { display: flex; flex-direction: column; gap: 0.55rem; }
+  .import-step-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.65;
+  }
+  .import-step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .import-step-divider { height: 1px; background: rgba(184,134,11,0.18); }
+
+  .import-select, .import-text-input, .import-name-input {
+    width: 100%;
+    padding: 0.48rem 0.7rem;
+    background: var(--parchment-dark);
+    border: 1px solid rgba(184,134,11,0.35);
+    border-radius: 3px;
+    font-family: 'Crimson Text', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+  }
+  .import-select:focus, .import-text-input:focus, .import-name-input:focus { border-color: var(--gold); }
+  .import-text-input::placeholder, .import-name-input::placeholder { color: rgba(26,20,16,0.3); font-style: italic; }
+  .import-name-input { font-size: 1rem; }
+
+  .import-radio-group { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .import-radio-label {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.95rem; cursor: pointer; color: var(--ink);
+  }
+  .import-radio-label input { cursor: pointer; accent-color: var(--gold); }
+
+  .import-element-label {
+    display: flex; align-items: center; gap: 0.45rem;
+    font-size: 0.95rem; cursor: pointer; color: var(--ink);
+  }
+  .import-element-label input { cursor: pointer; accent-color: var(--gold); }
+
+  .import-confirm-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--gold);
+    border: none;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.15s;
+    margin-top: 0.25rem;
+  }
+  .import-confirm-btn:hover { background: var(--gold-light); }
+
+  /* ── Locked Augments ── */
+  .aug-item.locked {
+    cursor: default !important;
+    background: rgba(184,134,11,0.07) !important;
+    border-color: rgba(184,134,11,0.3) !important;
+    opacity: 0.8;
+  }
+  .aug-item.locked:hover { background: rgba(184,134,11,0.07) !important; }
+  .aug-check.locked-icon { font-size: 0.72rem; color: var(--gold); }
+
+  /* ── Import tier banner in breakdown ── */
+  .import-tier-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.3rem 0.5rem;
+    margin-bottom: 0.35rem;
+    background: rgba(184,134,11,0.09);
+    border: 1px solid rgba(184,134,11,0.25);
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+  }
 </style>
 </head>
 <body>
@@ -1045,6 +1222,7 @@
 <div class="tab-bar">
   <button class="tab-btn active" id="tab-builder" onclick="switchTab('builder')">✦ Spell Builder</button>
   <button class="tab-btn" id="tab-library" onclick="switchTab('library')">✦ Spell Library <span id="library-tab-count" style="opacity:0.55;font-size:0.75em;"></span></button>
+  <button class="tab-import-btn" onclick="openImportModal()">⤓ Import Spell</button>
 </div>
 
 <div class="layout" id="layout-main">
@@ -1083,6 +1261,7 @@
         <div id="class-augments-body"></div>
       </div>
     </div>
+
 
   </div>
 
@@ -1181,6 +1360,80 @@
     </div>
   </div>
   <div id="library-content"></div>
+</div>
+
+<!-- ── Import Modal ── -->
+<div class="import-modal-overlay" id="import-modal-overlay" onclick="closeImportModal()">
+  <div class="import-modal" onclick="event.stopPropagation()">
+    <div class="import-modal-header">
+      <div class="import-modal-title">✦ Import from Another System</div>
+      <button class="import-close-btn" onclick="closeImportModal()" title="Close">✕</button>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="import-step">
+      <div class="import-step-num">Step 1</div>
+      <div class="import-step-title">Spell Level</div>
+      <select class="import-select" id="import-level">
+        <option value="1">1st Level (Simple) — 3 AP/RP minimum</option>
+        <option value="2">2nd Level (Advanced) — 4 AP/RP minimum</option>
+        <option value="3">3rd Level (Major) — 6 AP/RP minimum</option>
+        <option value="4">4th Level (Epic) — 7 AP/RP minimum</option>
+        <option value="5">5th Level (Legendary) — 9 AP/RP minimum</option>
+        <option value="6">6th Level (Mythic) — 10 AP/RP minimum</option>
+        <option value="7">7th Level (Mythic) — 12 AP/RP minimum</option>
+        <option value="8">8th Level (Cosmic) — 13 AP/RP minimum</option>
+        <option value="9">9th Level (Cosmic) — 15 AP/RP minimum</option>
+      </select>
+    </div>
+
+    <div class="import-step-divider"></div>
+
+    <!-- Step 2 -->
+    <div class="import-step">
+      <div class="import-step-num">Step 2</div>
+      <div class="import-step-title">Effect</div>
+      <div class="import-radio-group">
+        <label class="import-radio-label"><input type="radio" name="import-effect" value="damage" onchange="handleImportEffectChange()"> Damage</label>
+        <label class="import-radio-label"><input type="radio" name="import-effect" value="healing" onchange="handleImportEffectChange()"> Healing</label>
+        <label class="import-radio-label"><input type="radio" name="import-effect" value="neither" checked onchange="handleImportEffectChange()"> Neither</label>
+      </div>
+      <div id="import-effect-input-wrap" style="display:none;margin-top:0.15rem;">
+        <input type="text" class="import-text-input" id="import-effect-desc" placeholder="Describe the effect — e.g. 8d6 fire damage…" maxlength="120">
+      </div>
+    </div>
+
+    <div class="import-step-divider"></div>
+
+    <!-- Step 3 -->
+    <div class="import-step">
+      <div class="import-step-num">Step 3</div>
+      <div class="import-step-title">Element</div>
+      <label class="import-element-label">
+        <input type="checkbox" id="import-has-element" onchange="toggleImportElement()">
+        Does the spell have a specific damage type?
+      </label>
+      <div id="import-element-wrap" style="display:none;margin-top:0.2rem;">
+        <select class="import-select" id="import-element">
+          <option value="Fire">Fire</option>
+          <option value="Ice">Ice</option>
+          <option value="Lightning">Lightning</option>
+          <option value="Acid">Acid</option>
+          <option value="Thunder">Thunder</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="import-step-divider"></div>
+
+    <!-- Name -->
+    <div class="import-step">
+      <div class="import-step-title">Spell Name</div>
+      <input type="text" class="import-name-input" id="import-name" placeholder="Name your imported spell…" maxlength="40">
+    </div>
+
+    <button class="import-confirm-btn" onclick="confirmImport()">✦ Add to Repertoire</button>
+  </div>
 </div>
 
 <script>
@@ -1304,6 +1557,10 @@ let selectedMindAugs = new Set();
 let conditionChoices = {};
 let playerLevel = 1;
 let mindLevel = 1;
+let lockedAugs = new Set();
+let importDescription = '';
+let importTierLabel = '';
+let importTierMinCost = 0;
 let selectedClass = 'mind';
 let selectedSubclass = 'arcanist';
 
@@ -1421,16 +1678,21 @@ function getTier(cost) {
 function renderForms() {
   const grid = document.getElementById('forms-grid');
   grid.innerHTML = '';
+  const isImport = importTierMinCost > 0;
   SPELL_FORMS.forEach(f => {
+    const blocked = isImport && f.id === 'cantrip';
     const div = document.createElement('div');
-    div.className = 'form-card' + (selectedForm === f.id ? ' selected' : '');
+    div.className = 'form-card' + (selectedForm === f.id ? ' selected' : '') + (blocked ? ' gated' : '');
     div.innerHTML = `
       <span class="form-cost">${f.cost} RP</span>
       <div class="form-name">${f.name}</div>
       <div class="form-desc">${f.desc}</div>
       <div><span class="form-tag">${f.action}</span> <span class="form-tag">${f.tag}</span></div>
+      ${blocked ? '<div class="gate-label" style="margin-top:0.4rem;">⚠ Not available for imported spells</div>' : ''}
     `;
-    div.onclick = () => { selectedForm = (selectedForm === f.id ? null : f.id); renderAll(); };
+    if (!blocked) {
+      div.onclick = () => { selectedForm = (selectedForm === f.id ? null : f.id); renderAll(); };
+    }
     grid.appendChild(div);
   });
 }
@@ -1446,20 +1708,30 @@ function renderAugments() {
 
     section.augments.forEach(aug => {
       const isSelected = selectedAugs.has(aug.id);
-      const gated = aug.gate && isGated(aug.gate);
+      const isLocked = lockedAugs.has(aug.id);
+      const gated = !isLocked && aug.gate && isGated(aug.gate);
       const item = document.createElement('div');
-      item.className = 'aug-item' + (isSelected ? ' selected' : '') + (gated ? ' gated' : '');
+      item.className = 'aug-item' + (isSelected ? ' selected' : '') + (gated ? ' gated' : '') + (isLocked ? ' locked' : '');
 
       let condHtml = '';
-      if (aug.conditions && isSelected) {
+      if (aug.conditions && isSelected && !isLocked) {
         const current = conditionChoices[aug.id] || aug.conditions[0];
         condHtml = `<div class="condition-select"><select id="cond-${aug.id}" onchange="setCondition('${aug.id}', this.value)" onclick="event.stopPropagation()">
           ${aug.conditions.map(c => `<option value="${c}" ${c===current?'selected':''}>${c}</option>`).join('')}
         </select></div>`;
       }
+      // Show locked element choice for elemental aug
+      let lockedElementHtml = '';
+      if (isLocked && aug.id === 'elemental' && conditionChoices['elemental']) {
+        lockedElementHtml = `<div style="font-size:0.72rem;color:var(--gold);margin-top:0.25rem;font-family:'Cinzel',serif;letter-spacing:0.05em;">Element: ${conditionChoices['elemental']}</div>`;
+      }
+
+      const checkIcon = isLocked
+        ? `<div class="aug-check locked-icon" title="Imported — locked">🔒</div>`
+        : `<div class="aug-check">${isSelected ? '✦' : ''}</div>`;
 
       item.innerHTML = `
-        <div class="aug-check">${isSelected ? '✦' : ''}</div>
+        ${checkIcon}
         <div class="aug-inner">
           <div style="display:flex;justify-content:space-between;align-items:baseline;">
             <span class="aug-name">${aug.name}</span>
@@ -1467,16 +1739,21 @@ function renderAugments() {
           </div>
           <div class="aug-desc">${aug.desc}</div>
           ${aug.gate ? `<div class="gate-label${gated ? '' : ' unlocked'}">⚠ Requires ${aug.gate}</div>` : ''}
+          ${lockedElementHtml}
           ${condHtml}
         </div>
       `;
 
-      item.onclick = () => {
-        if (gated) return;
-        if (selectedAugs.has(aug.id)) selectedAugs.delete(aug.id);
-        else selectedAugs.add(aug.id);
-        renderAll();
-      };
+      if (isLocked) {
+        item.title = 'Imported — locked';
+      } else {
+        item.onclick = () => {
+          if (gated) return;
+          if (selectedAugs.has(aug.id)) selectedAugs.delete(aug.id);
+          else selectedAugs.add(aug.id);
+          renderAll();
+        };
+      }
 
       sec.appendChild(item);
     });
@@ -1552,7 +1829,7 @@ function computeCost() {
     const a = findClassAugById(id);
     if (a) augCost += a.cost;
   });
-  return { base, augCost, total: base + augCost };
+  return { base, augCost, total: base + augCost + importTierMinCost };
 }
 
 function updateSummary() {
@@ -1579,9 +1856,12 @@ function updateSummary() {
   // Breakdown
   const bsec = document.getElementById('breakdown-section');
   const blist = document.getElementById('breakdown-list');
-  if (selectedForm || selectedAugs.size > 0 || selectedMindAugs.size > 0) {
+  if (selectedForm || selectedAugs.size > 0 || selectedMindAugs.size > 0 || importTierLabel) {
     bsec.style.display = 'block';
     let rows = '';
+    if (importTierLabel) {
+      rows += `<div class="breakdown-row"><span>✦ Import Base <em style="font-size:0.8em;opacity:0.7;">(${importTierLabel})</em></span><span class="bval">${importTierMinCost} RP</span></div>`;
+    }
     if (selectedForm) {
       const f = SPELL_FORMS.find(x => x.id === selectedForm);
       rows += `<div class="breakdown-row"><span>${f.name}</span><span class="bval">${f.cost} RP</span></div>`;
@@ -1617,11 +1897,15 @@ function updateSummary() {
   let parts = [];
   parts.push(`<strong>${form.name}</strong> — ${form.desc}`);
 
+  if (importDescription) {
+    parts.push(`<em style="color:var(--gold);opacity:0.85;">${importDescription}</em>`);
+  }
+
   if (selectedAugs.size > 0) {
     let effects = [];
-    if (selectedAugs.has('destructive')) effects.push('deals 2d6 damage to each target');
-    if (selectedAugs.has('elemental')) effects.push(`deals 1d6 additional damage as ${conditionChoices['elemental'] || 'elemental'} type`);
-    if (selectedAugs.has('restorative')) effects.push('restores 2d8 HP to each ally');
+    if (selectedAugs.has('destructive') && !lockedAugs.has('destructive')) effects.push('deals 2d6 damage to each target');
+    if (selectedAugs.has('elemental') && !lockedAugs.has('elemental')) effects.push(`deals 1d6 additional damage as ${conditionChoices['elemental'] || 'elemental'} type`);
+    if (selectedAugs.has('restorative') && !lockedAugs.has('restorative')) effects.push('restores 2d8 HP to each ally');
     if (selectedAugs.has('greater_reach')) effects.push('range doubled');
     if (selectedAugs.has('minor_cond')) effects.push(`imposes ${conditionChoices['minor_cond'] || 'a minor condition'} on failed save`);
     if (selectedAugs.has('major_cond')) effects.push(`imposes ${conditionChoices['major_cond'] || 'a major condition'} on failed save`);
@@ -1689,6 +1973,10 @@ function resetAll() {
   selectedAugs = new Set();
   selectedMindAugs = new Set();
   conditionChoices = {};
+  lockedAugs = new Set();
+  importDescription = '';
+  importTierLabel = '';
+  importTierMinCost = 0;
   document.getElementById('spell-name').value = '';
   renderAll();
 }
@@ -1730,6 +2018,10 @@ function saveSpell() {
     spellSubclass: selectedSubclass,
     cost: total,
     tierLabel: tier ? tier.label : null,
+    lockedAugs: [...lockedAugs],
+    importDescription,
+    importTierLabel,
+    importTierMinCost,
     savedAt: Date.now(),
   });
   persistSpells();
@@ -1751,6 +2043,10 @@ function loadSpell(id) {
   selectedAugs = new Set(spell.augs);
   selectedMindAugs = new Set(spell.mindAugs);
   conditionChoices = { ...spell.conditions };
+  lockedAugs = new Set(spell.lockedAugs || []);
+  importDescription = spell.importDescription || '';
+  importTierLabel = spell.importTierLabel || '';
+  importTierMinCost = spell.importTierMinCost || 0;
   playerLevel = spell.playerLevel;
   mindLevel = spell.mindLevel;
   selectedClass = spell.spellClass || 'mind';
@@ -1852,7 +2148,7 @@ function renderLibraryCards(sorted) {
       <div class="sc-header">
         <div>
           <div class="sc-name">${spell.name}</div>
-          <div class="sc-form">${form ? form.name : '—'}</div>
+          <div class="sc-form">${form ? form.name : '<span class="sc-formless">Formless</span>'}</div>
         </div>
         <div class="sc-cost-col">
           <div class="sc-cost-num">${spell.cost}</div>
@@ -2099,6 +2395,119 @@ function handleImportFile(input) {
     }
   };
   reader.readAsText(file);
+}
+
+// ── Import Modal ────────────────────────────────────────────────
+const IMPORT_LEVEL_COSTS  = [3, 4, 6, 7, 9, 10, 12, 13, 15];
+const IMPORT_LEVEL_LABELS = [
+  '1st — Simple', '2nd — Advanced', '3rd — Major', '4th — Epic', '5th — Legendary',
+  '6th — Mythic',  '7th — Mythic',   '8th — Cosmic', '9th — Cosmic',
+];
+
+function openImportModal() {
+  // Reset form to clean state
+  document.getElementById('import-level').value = '1';
+  document.querySelectorAll('input[name="import-effect"]').forEach(r => { r.checked = r.value === 'neither'; });
+  document.getElementById('import-effect-input-wrap').style.display = 'none';
+  document.getElementById('import-effect-desc').value = '';
+  document.getElementById('import-has-element').checked = false;
+  document.getElementById('import-element-wrap').style.display = 'none';
+  document.getElementById('import-element').value = 'Fire';
+  document.getElementById('import-name').value = '';
+  document.getElementById('import-modal-overlay').classList.add('open');
+}
+
+function closeImportModal() {
+  document.getElementById('import-modal-overlay').classList.remove('open');
+}
+
+function handleImportEffectChange() {
+  const val = document.querySelector('input[name="import-effect"]:checked')?.value;
+  document.getElementById('import-effect-input-wrap').style.display =
+    (val === 'damage' || val === 'healing') ? 'block' : 'none';
+}
+
+function toggleImportElement() {
+  const checked = document.getElementById('import-has-element').checked;
+  document.getElementById('import-element-wrap').style.display = checked ? 'block' : 'none';
+}
+
+function confirmImport() {
+  const levelIdx    = parseInt(document.getElementById('import-level').value) - 1;
+  const effect      = document.querySelector('input[name="import-effect"]:checked').value;
+  const effectDesc  = document.getElementById('import-effect-desc').value.trim();
+  const hasElement  = document.getElementById('import-has-element').checked;
+  const element     = document.getElementById('import-element').value;
+  const name        = document.getElementById('import-name').value.trim();
+
+  // Clear builder state (keep levels)
+  selectedForm = null;
+  selectedAugs = new Set();
+  selectedMindAugs = new Set();
+  conditionChoices = {};
+  lockedAugs = new Set();
+
+  // Tier
+  importTierMinCost = IMPORT_LEVEL_COSTS[levelIdx];
+  importTierLabel   = IMPORT_LEVEL_LABELS[levelIdx];
+
+  // Lock effect augment
+  if (effect === 'damage') {
+    selectedAugs.add('destructive');
+    lockedAugs.add('destructive');
+  } else if (effect === 'healing') {
+    selectedAugs.add('restorative');
+    lockedAugs.add('restorative');
+  }
+
+  // Lock elemental augment
+  if (hasElement) {
+    selectedAugs.add('elemental');
+    lockedAugs.add('elemental');
+    conditionChoices['elemental'] = element;
+  }
+
+  // Pre-populate description
+  importDescription = effectDesc;
+
+  // Require a name
+  if (!name) {
+    document.getElementById('import-name').focus();
+    document.getElementById('import-name').style.borderColor = 'var(--crimson-light)';
+    setTimeout(() => { document.getElementById('import-name').style.borderColor = ''; }, 1800);
+    return;
+  }
+
+  // Save to library (no form required for imports — user loads & finalises later)
+  const { total } = computeCost();
+  savedSpells.unshift({
+    id: Date.now(),
+    name,
+    formId: null,
+    augs: [...selectedAugs],
+    mindAugs: [...selectedMindAugs],
+    conditions: { ...conditionChoices },
+    playerLevel,
+    mindLevel,
+    spellClass: selectedClass,
+    spellSubclass: selectedSubclass,
+    cost: total,
+    tierLabel: IMPORT_LEVEL_LABELS[levelIdx],
+    lockedAugs: [...lockedAugs],
+    importDescription,
+    importTierLabel,
+    importTierMinCost,
+    savedAt: Date.now(),
+  });
+  persistSpells();
+  updateLibraryTabCount();
+
+  // Also prime the builder so the user can load & add a Spell Form immediately
+  document.getElementById('spell-name').value = name;
+
+  closeImportModal();
+  switchTab('library');
+  renderLibrary();
 }
 
 // Init
