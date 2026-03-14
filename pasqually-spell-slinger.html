@@ -751,6 +751,11 @@
     box-shadow: 0 3px 12px var(--shadow);
     overflow: hidden;
     position: relative;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .spell-card:hover {
+    border-color: var(--gold-light);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
   }
 
   .spell-card::before {
@@ -1481,6 +1486,35 @@
   </div>
 </div>
 
+<!-- ── Spell Detail Modal ── -->
+<div class="import-modal-overlay" id="spell-detail-overlay" onclick="closeSpellDetail()">
+  <div class="import-modal" style="width:min(680px,95vw);gap:1rem;" onclick="event.stopPropagation()">
+    <div class="import-modal-header">
+      <div>
+        <div class="import-modal-title" id="sd-name" style="font-size:1.1rem;"></div>
+        <div id="sd-meta" style="font-size:0.78rem;color:rgba(26,20,16,0.5);margin-top:0.25rem;font-family:'Crimson Text',serif;letter-spacing:0.04em;"></div>
+      </div>
+      <button class="import-close-btn" onclick="closeSpellDetail()" title="Close">✕</button>
+    </div>
+
+    <div id="sd-description" style="font-family:'Crimson Text',serif;font-size:1.05rem;line-height:1.7;color:var(--ink);padding:0.5rem 0;border-top:1px solid rgba(184,134,11,0.18);border-bottom:1px solid rgba(184,134,11,0.18);"></div>
+
+    <div id="sd-stats" style="display:flex;gap:1.5rem;flex-wrap:wrap;font-family:'Crimson Text',serif;font-size:0.9rem;color:var(--ink);"></div>
+
+    <div id="sd-tags" style="display:flex;flex-wrap:wrap;gap:0.35rem;min-height:1rem;"></div>
+
+    <div style="display:flex;gap:0.6rem;justify-content:flex-end;padding-top:0.25rem;">
+      <button class="import-confirm-btn" id="sd-delete-btn"
+        style="background:rgba(139,26,26,0.08);border-color:rgba(139,26,26,0.45);color:var(--crimson);padding:0.5rem 1.1rem;">
+        Delete
+      </button>
+      <button class="import-confirm-btn" id="sd-load-btn" style="padding:0.5rem 1.4rem;">
+        Load into Builder
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SPELL_FORMS = [
   { id: 'cantrip',       name: 'Channel Cantrip', cost: 0, action: 'Action',        tag: 'Attack Roll',      desc: 'Attack a single target (60 ft), 1d6 dmg. Recover 2–6 RP on hit.' },
@@ -1878,6 +1912,63 @@ function computeCost() {
   return { base, augCost, total: base + augCost + importTierMinCost };
 }
 
+function buildSpellDescriptionHTML(spell) {
+  const form = SPELL_FORMS.find(x => x.id === spell.formId);
+  const augs = new Set(spell.augs || []);
+  const mindAugs = new Set(spell.mindAugs || []);
+  const locked = new Set(spell.lockedAugs || []);
+  const conds = spell.conditions || {};
+
+  const parts = [];
+  if (form) parts.push(`<strong>${form.name}</strong> — ${form.desc}`);
+
+  if (spell.importNotes) {
+    parts.push(`<em style="color:var(--gold);opacity:0.85;">${spell.importNotes}</em>`);
+  } else if (spell.importDescription) {
+    parts.push(`<em style="color:var(--gold);opacity:0.85;">${spell.importDescription}</em>`);
+  }
+
+  const effects = [];
+  if (augs.has('destructive') && !locked.has('destructive')) effects.push('deals 2d6 damage to each target');
+  if (augs.has('elemental') && !locked.has('elemental')) effects.push(`deals 1d6 additional damage as ${conds['elemental'] || 'elemental'} type`);
+  if (augs.has('restorative') && !locked.has('restorative')) effects.push('restores 2d8 HP to each ally');
+  if (augs.has('greater_reach')) effects.push('range doubled');
+  if (augs.has('minor_cond')) effects.push(`imposes ${conds['minor_cond'] || 'a minor condition'} on failed save`);
+  if (augs.has('major_cond')) effects.push(`imposes ${conds['major_cond'] || 'a major condition'} on failed save`);
+  if (augs.has('severe_cond')) effects.push(`imposes ${conds['severe_cond'] || 'a severe condition'} on failed save`);
+  if (mindAugs.has('kinetic_chain')) effects.push('chains damage to a second enemy within 10 ft.');
+  if (mindAugs.has('flawless_strike')) effects.push('converts Glancing Blows to Full Damage');
+  if (mindAugs.has('flicker_warp')) effects.push('lets you teleport up to 30 ft. after casting');
+  if (mindAugs.has('haste_field')) effects.push("doubles an affected ally's movement speed until their next turn");
+  if (mindAugs.has('temporal_hitch')) effects.push('can be delayed on a successful Save and reapplied with Disadvantage');
+  if (mindAugs.has('displacement')) effects.push('pushes or pulls the target up to 15 ft.');
+  if (mindAugs.has('astral_link')) effects.push('links two targets so half damage dealt to one is shared with the other');
+  if (mindAugs.has('prowlers_strike')) effects.push("boosts the Anima's attack by 1d8");
+  if (mindAugs.has('ancestral_ward')) effects.push('grants the Anima Physical Resistance for a round');
+  if (mindAugs.has('aggressive_tether')) effects.push('lets the Anima reposition a hit enemy up to 10 ft.');
+  if (mindAugs.has('symbiotic_healing')) effects.push('heals the Animist for half the HP restored to the Anima');
+  if (mindAugs.has('blinding_radiance')) effects.push('blinds enemies within 15 ft. on a failed Reflex Save');
+  if (mindAugs.has('guardian_link')) effects.push('lets the Anima intercept an attack as a Reaction');
+  if (mindAugs.has('smite')) effects.push('deals +1d12 Radiant Damage');
+  if (mindAugs.has('ward_of_faith')) effects.push('grants an ally +2 Defense Score');
+  if (mindAugs.has('purify_condition')) effects.push('removes one Advanced condition from an ally');
+  if (mindAugs.has('restore_vitality')) effects.push('restores +2d6 HP and grants Physical Resistance');
+  if (mindAugs.has('hallowed_ground')) effects.push('frightens enemies and bolsters ally Defense Scores');
+  if (mindAugs.has('judgment')) effects.push('marks an enemy for Advantage and +1d6 bonus damage');
+  if (mindAugs.has('empower_healing')) effects.push('restores +1d8 HP and splashes 1d4 to an adjacent ally');
+  if (mindAugs.has('mass_renewal')) effects.push('extends healing to two additional allies or removes a condition');
+  if (mindAugs.has('sanctuary')) effects.push('grants Immunity to Medium/Low conditions for one turn');
+  if (mindAugs.has('aura_of_protection')) effects.push('grants +2 Defense Score to nearby allies');
+  if (mindAugs.has('aura_of_courage')) effects.push('grants Advantage on all Saving Throws to nearby allies');
+  if (mindAugs.has('aura_of_retribution')) effects.push('grants Advantage on the next Attack Roll with +2d6 Radiant to nearby allies');
+  if (mindAugs.has('chained_punishment')) effects.push('deals half damage to a second target within 10 ft.');
+  if (mindAugs.has('agony')) effects.push('inflicts Distracted and +1d6 ongoing damage');
+  if (mindAugs.has('oblivion')) effects.push('inflicts Disadvantage on all Saves and -2 Defense Score');
+  if (effects.length > 0) parts.push('The spell ' + effects.join(', and ') + '.');
+
+  return parts.join(' ') || '<em style="opacity:0.45;">No description available.</em>';
+}
+
 function updateSummary() {
   const { base, augCost, total } = computeCost();
 
@@ -1939,59 +2030,15 @@ function updateSummary() {
     stxt.innerHTML = '<em>Select a Spell Form to begin weaving your spell.</em>';
     return;
   }
-  const form = SPELL_FORMS.find(x => x.id === selectedForm);
-  let parts = [];
-  parts.push(`<strong>${form.name}</strong> — ${form.desc}`);
-
-  if (importNotes) {
-    parts.push(`<em style="color:var(--gold);opacity:0.85;">${importNotes}</em>`);
-  } else if (importDescription) {
-    parts.push(`<em style="color:var(--gold);opacity:0.85;">${importDescription}</em>`);
-  }
-
-  if (selectedAugs.size > 0) {
-    let effects = [];
-    if (selectedAugs.has('destructive') && !lockedAugs.has('destructive')) effects.push('deals 2d6 damage to each target');
-    if (selectedAugs.has('elemental') && !lockedAugs.has('elemental')) effects.push(`deals 1d6 additional damage as ${conditionChoices['elemental'] || 'elemental'} type`);
-    if (selectedAugs.has('restorative') && !lockedAugs.has('restorative')) effects.push('restores 2d8 HP to each ally');
-    if (selectedAugs.has('greater_reach')) effects.push('range doubled');
-    if (selectedAugs.has('minor_cond')) effects.push(`imposes ${conditionChoices['minor_cond'] || 'a minor condition'} on failed save`);
-    if (selectedAugs.has('major_cond')) effects.push(`imposes ${conditionChoices['major_cond'] || 'a major condition'} on failed save`);
-    if (selectedAugs.has('severe_cond')) effects.push(`imposes ${conditionChoices['severe_cond'] || 'a severe condition'} on failed save`);
-    if (selectedMindAugs.has('kinetic_chain')) effects.push('chains damage to a second enemy within 10 ft.');
-    if (selectedMindAugs.has('flawless_strike')) effects.push('converts Glancing Blows to Full Damage');
-    if (selectedMindAugs.has('flicker_warp')) effects.push('lets you teleport up to 30 ft. after casting');
-    if (selectedMindAugs.has('haste_field')) effects.push('doubles an affected ally\'s movement speed until their next turn');
-    if (selectedMindAugs.has('temporal_hitch')) effects.push('can be delayed on a successful Save and reapplied with Disadvantage');
-    if (selectedMindAugs.has('displacement')) effects.push('pushes or pulls the target up to 15 ft.');
-    if (selectedMindAugs.has('astral_link')) effects.push('links two targets so half damage dealt to one is shared with the other');
-    // Animist
-    if (selectedMindAugs.has('prowlers_strike')) effects.push("boosts the Anima's attack by 1d8");
-    if (selectedMindAugs.has('ancestral_ward')) effects.push('grants the Anima Physical Resistance for a round');
-    if (selectedMindAugs.has('aggressive_tether')) effects.push('lets the Anima reposition a hit enemy up to 10 ft.');
-    if (selectedMindAugs.has('symbiotic_healing')) effects.push('heals the Animist for half the HP restored to the Anima');
-    if (selectedMindAugs.has('blinding_radiance')) effects.push('blinds enemies within 15 ft. on a failed Reflex Save');
-    if (selectedMindAugs.has('guardian_link')) effects.push('lets the Anima intercept an attack as a Reaction');
-    // Spirit
-    if (selectedMindAugs.has('smite')) effects.push('deals +1d12 Radiant Damage');
-    if (selectedMindAugs.has('ward_of_faith')) effects.push('grants an ally +2 Defense Score');
-    if (selectedMindAugs.has('purify_condition')) effects.push('removes one Advanced condition from an ally');
-    if (selectedMindAugs.has('restore_vitality')) effects.push('restores +2d6 HP and grants Physical Resistance');
-    if (selectedMindAugs.has('hallowed_ground')) effects.push('frightens enemies and bolsters ally Defense Scores');
-    if (selectedMindAugs.has('judgment')) effects.push('marks an enemy for Advantage and +1d6 bonus damage');
-    if (selectedMindAugs.has('empower_healing')) effects.push('restores +1d8 HP and splashes 1d4 to an adjacent ally');
-    if (selectedMindAugs.has('mass_renewal')) effects.push('extends healing to two additional allies or removes a condition');
-    if (selectedMindAugs.has('sanctuary')) effects.push('grants Immunity to Medium/Low conditions for one turn');
-    if (selectedMindAugs.has('aura_of_protection')) effects.push('grants +2 Defense Score to nearby allies');
-    if (selectedMindAugs.has('aura_of_courage')) effects.push('grants Advantage on all Saving Throws to nearby allies');
-    if (selectedMindAugs.has('aura_of_retribution')) effects.push('grants Advantage on the next Attack Roll with +2d6 Radiant to nearby allies');
-    if (selectedMindAugs.has('chained_punishment')) effects.push('deals half damage to a second target within 10 ft.');
-    if (selectedMindAugs.has('agony')) effects.push('inflicts Distracted and +1d6 ongoing damage');
-    if (selectedMindAugs.has('oblivion')) effects.push('inflicts Disadvantage on all Saves and -2 Defense Score');
-    if (effects.length > 0) parts.push('The spell ' + effects.join(', and ') + '.');
-  }
-
-  stxt.innerHTML = parts.join(' ');
+  stxt.innerHTML = buildSpellDescriptionHTML({
+    formId: selectedForm,
+    augs: [...selectedAugs],
+    mindAugs: [...selectedMindAugs],
+    lockedAugs: [...lockedAugs],
+    conditions: conditionChoices,
+    importNotes,
+    importDescription,
+  });
 }
 
 function updateTierTable() {
@@ -2069,6 +2116,8 @@ function saveSpell() {
     tierLabel: tier ? tier.label : null,
     lockedAugs: [...lockedAugs],
     importDescription,
+    importNotes,
+    importRoll: '',
     importTierLabel,
     importTierMinCost,
     savedAt: Date.now(),
@@ -2194,6 +2243,8 @@ function renderLibraryCards(sorted) {
 
     const card = document.createElement('div');
     card.className = 'spell-card';
+    card.style.cursor = 'pointer';
+    card.onclick = () => openSpellDetail(spell.id);
     card.innerHTML = `
       <div class="sc-header">
         <div>
@@ -2211,8 +2262,8 @@ function renderLibraryCards(sorted) {
         <span class="sc-level">${levelStr}</span>
         <span class="sc-date">${dateStr}</span>
         <div class="sc-actions">
-          <button class="btn-sc btn-sc-load" onclick="loadSpell(${spell.id})">Load</button>
-          <button class="btn-sc btn-sc-del" onclick="deleteSpell(${spell.id})">✕</button>
+          <button class="btn-sc btn-sc-load" onclick="event.stopPropagation();loadSpell(${spell.id})">Load</button>
+          <button class="btn-sc btn-sc-del" onclick="event.stopPropagation();deleteSpell(${spell.id})">✕</button>
         </div>
       </div>
     `;
@@ -2368,7 +2419,7 @@ function renderLibraryTable(rows) {
     const tierCell = row.tierLabel !== '—'
       ? `<span class="sc-tier-badge" style="color:${row.tc.color};border-color:${row.tc.color};background:${row.tc.bg};">${row.tierLabel}</span>`
       : '<span class="td-dim">—</span>';
-    return `<tr>
+    return `<tr style="cursor:pointer;" onclick="openSpellDetail(${row._id})">
       <td class="td-name">${row.name}</td>
       <td class="td-dim" style="white-space:nowrap;">${row.formName}</td>
       <td class="td-dim" style="white-space:nowrap;">${row.action}</td>
@@ -2376,10 +2427,9 @@ function renderLibraryTable(rows) {
       <td class="${row.damage !== '—' ? 'td-dmg' : 'td-dim'}">${row.damage}</td>
       <td class="${row.healing !== '—' ? 'td-heal' : 'td-dim'}">${row.healing}</td>
       <td class="${row.condition !== '—' ? '' : 'td-dim'}" style="font-size:0.78rem;">${row.condition}</td>
-
       <td class="td-cost">${row.cost} RP</td>
       <td>${tierCell}</td>
-      <td class="td-actions">
+      <td class="td-actions" onclick="event.stopPropagation()">
         <div style="display:flex;gap:0.3rem;">
           <button class="btn-sc btn-sc-load" onclick="loadSpell(${row._id})">Load</button>
           <button class="btn-sc btn-sc-del" onclick="deleteSpell(${row._id})">✕</button>
@@ -2605,6 +2655,61 @@ function confirmImport() {
   closeImportModal();
   switchTab('library');
   renderLibrary();
+}
+
+// ── Spell Detail Modal ─────────────────────────────────────────────────────
+function openSpellDetail(id) {
+  const spell = savedSpells.find(s => s.id === id);
+  if (!spell) return;
+
+  const form = SPELL_FORMS.find(f => f.id === spell.formId);
+  const tc = getTierColor(spell.cost);
+  const savedCond = spell.conditions || {};
+  const locked = new Set(spell.lockedAugs || []);
+
+  // Header
+  document.getElementById('sd-name').textContent = spell.name;
+  const formLabel = form ? form.name : 'Formless';
+  const tierPart = spell.tierLabel ? ` · ${spell.tierLabel}` : '';
+  const rollPart = spell.importRoll ? ` · ${spell.importRoll}` : (form ? ` · ${form.tag}` : '');
+  document.getElementById('sd-meta').textContent = `${formLabel}${rollPart}${tierPart} · ${spell.cost} RP`;
+
+  // Description
+  document.getElementById('sd-description').innerHTML = buildSpellDescriptionHTML(spell);
+
+  // Stats row (Damage / Healing / Condition)
+  const row = deriveSpellTableRow(spell);
+  let statsHtml = '';
+  if (row.damage !== '—') statsHtml += `<span><strong style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--crimson-light);">Damage</strong><br>${row.damage}</span>`;
+  if (row.healing !== '—') statsHtml += `<span><strong style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:#3a7a3a;">Healing</strong><br>${row.healing}</span>`;
+  if (row.condition !== '—') statsHtml += `<span><strong style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);">Condition</strong><br>${row.condition}</span>`;
+  if (row.range !== '—') statsHtml += `<span><strong style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(26,20,16,0.45);">Range</strong><br>${row.range}</span>`;
+  document.getElementById('sd-stats').innerHTML = statsHtml || '';
+
+  // Augment tags
+  const tagHtml = [...(spell.augs || []), ...(spell.mindAugs || [])].map(aid => {
+    for (const sec of AUG_SECTIONS) {
+      const a = sec.augments.find(x => x.id === aid);
+      if (a) {
+        const cond = a.conditions ? ` (${savedCond[aid] || a.conditions[0]})` : '';
+        const isLock = locked.has(aid) ? ' 🔒' : '';
+        return `<span class="sc-tag">${a.name}${cond}${isLock}</span>`;
+      }
+    }
+    const ca = findClassAugById(aid);
+    return ca ? `<span class="sc-tag">${ca.name}</span>` : '';
+  }).join('');
+  document.getElementById('sd-tags').innerHTML = tagHtml || '<span style="font-style:italic;font-size:0.78rem;color:rgba(26,20,16,0.3);">No augments</span>';
+
+  // Buttons
+  document.getElementById('sd-load-btn').onclick = () => { loadSpell(id); closeSpellDetail(); };
+  document.getElementById('sd-delete-btn').onclick = () => { deleteSpell(id); closeSpellDetail(); };
+
+  document.getElementById('spell-detail-overlay').classList.add('open');
+}
+
+function closeSpellDetail() {
+  document.getElementById('spell-detail-overlay').classList.remove('open');
 }
 
 // Init
