@@ -1398,7 +1398,7 @@
         <label class="import-radio-label"><input type="radio" name="import-effect" value="healing" onchange="handleImportEffectChange()"> Healing</label>
         <label class="import-radio-label"><input type="radio" name="import-effect" value="neither" checked onchange="handleImportEffectChange()"> Neither</label>
       </div>
-      <div id="import-effect-input-wrap" style="display:none;margin-top:0.15rem;">
+      <div id="import-effect-input-wrap" style="margin-top:0.15rem;">
         <input type="text" class="import-text-input" id="import-effect-desc" placeholder="Describe the effect — e.g. 8d6 fire damage…" maxlength="120">
       </div>
     </div>
@@ -2197,17 +2197,26 @@ function deriveSpellTableRow(spell) {
   }
 
   // Damage
-  const dmgParts = [];
-  if (spell.formId === 'cantrip') dmgParts.push('1d6');
-  if (augs.includes('destructive')) dmgParts.push('2d6');
-  if (augs.includes('elemental')) dmgParts.push(`1d6 ${savedCond['elemental'] || 'Elemental'}`);
-  const damage = dmgParts.join(' + ') || '—';
-  const dmgDice = (spell.formId === 'cantrip' ? 1 : 0)
-    + (augs.includes('destructive') ? 2 : 0)
-    + (augs.includes('elemental') ? 1 : 0);
+  const locked = new Set(spell.lockedAugs || []);
+  const importDesc = spell.importDescription || '';
+  let damage, dmgDice;
+  if (importDesc && (locked.has('destructive') || locked.has('elemental'))) {
+    damage = importDesc;
+    dmgDice = 99; // keeps imported spells sortable above 0-damage spells
+  } else {
+    const dmgParts = [];
+    if (spell.formId === 'cantrip') dmgParts.push('1d6');
+    if (augs.includes('destructive')) dmgParts.push('2d6');
+    if (augs.includes('elemental')) dmgParts.push(`1d6 ${savedCond['elemental'] || 'Elemental'}`);
+    damage = dmgParts.join(' + ') || '—';
+    dmgDice = (spell.formId === 'cantrip' ? 1 : 0)
+      + (augs.includes('destructive') ? 2 : 0)
+      + (augs.includes('elemental') ? 1 : 0);
+  }
 
   // Healing
-  const healing = augs.includes('restorative') ? '2d8' : '—';
+  const healing = (importDesc && locked.has('restorative')) ? importDesc
+    : augs.includes('restorative') ? '2d8' : '—';
 
   // Conditions
   const condParts = [];
@@ -2268,7 +2277,7 @@ function sortTableRows(rows) {
       case 'damage':    va = a._dmgDice;  vb = b._dmgDice;  break;
       case 'healing':   va = a.healing === '—' ? 0 : 1; vb = b.healing === '—' ? 0 : 1; break;
       case 'condition': va = a.condition; vb = b.condition; break;
-      case 'mindfx':    va = a.mindFx;    vb = b.mindFx;    break;
+
       case 'cost':      va = a.cost;      vb = b.cost;      break;
       case 'tier':      va = a.cost;      vb = b.cost;      break;
       default:          va = a._savedAt;  vb = b._savedAt;  break;
@@ -2288,7 +2297,6 @@ function renderLibraryTable(rows) {
     { key: 'damage',    label: 'Damage' },
     { key: 'healing',   label: 'Healing' },
     { key: 'condition', label: 'Condition' },
-    { key: 'mindfx',    label: 'Mind FX' },
     { key: 'cost',      label: 'Cost' },
     { key: 'tier',      label: 'Tier' },
     { key: null,        label: '' },
@@ -2318,7 +2326,7 @@ function renderLibraryTable(rows) {
       <td class="${row.damage !== '—' ? 'td-dmg' : 'td-dim'}">${row.damage}</td>
       <td class="${row.healing !== '—' ? 'td-heal' : 'td-dim'}">${row.healing}</td>
       <td class="${row.condition !== '—' ? '' : 'td-dim'}" style="font-size:0.78rem;">${row.condition}</td>
-      <td class="${row.mindFx !== '—' ? '' : 'td-dim'}" style="font-size:0.75rem;">${row.mindFx}</td>
+
       <td class="td-cost">${row.cost} RP</td>
       <td>${tierCell}</td>
       <td class="td-actions">
@@ -2355,17 +2363,39 @@ function showIoMsg(text, ok) {
   setTimeout(() => { el.textContent = ''; el.className = 'io-msg'; }, 3000);
 }
 
-function exportLibrary() {
+async function exportLibrary() {
   if (savedSpells.length === 0) { showIoMsg('No spells to export.', false); return; }
   const json = JSON.stringify(savedSpells, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'aethel-spell-library.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+  const defaultName = 'aethel-spell-library.json';
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: defaultName,
+        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(json);
+      await writable.close();
+      showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+    } catch (e) {
+      if (e.name !== 'AbortError') {
+        // Fallback if write fails after picker
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = defaultName; a.click();
+        URL.revokeObjectURL(url);
+        showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+      }
+    }
+  } else {
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = defaultName; a.click();
+    URL.revokeObjectURL(url);
+    showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+  }
 }
 
 function importLibrary() {
@@ -2423,8 +2453,12 @@ function closeImportModal() {
 
 function handleImportEffectChange() {
   const val = document.querySelector('input[name="import-effect"]:checked')?.value;
-  document.getElementById('import-effect-input-wrap').style.display =
-    (val === 'damage' || val === 'healing') ? 'block' : 'none';
+  const placeholders = {
+    damage:  'Describe the damage — e.g. 8d6 fire damage…',
+    healing: 'Describe the healing — e.g. 4d8 + 10 HP restored…',
+    neither: 'Describe the effect — e.g. creates a 20 ft wall of force…',
+  };
+  document.getElementById('import-effect-desc').placeholder = placeholders[val] || placeholders.neither;
 }
 
 function toggleImportElement() {
