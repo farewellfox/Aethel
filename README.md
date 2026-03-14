@@ -19,8 +19,8 @@ A spell builder and library for **The Mind** and **The Spirit** classes.
 ### Building a Spell
 - Select your **class** (Mind or Spirit). The augments update to show only what's relevant to you
 - For Spirit, select your **subclass** (Oracle, Templar, or Zealot) to filter subclass-specific augments
-- Choose a **Spell Form** — this is the shape and delivery method of your spell
-- Add **Strand Augments** — each one adds to the spell's cost and effect
+- Choose a **Spell Form**. This is the shape and delivery method of your spell
+- Add **Strand Augments**. Each one adds to the spell's cost and effect
 - The running **Resource Point cost** and **power tier** update live as you build
 - Name your spell and save it to your **spell library**
 
