@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aethel — Pasqually's Spell Slinger</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --parchment: #f2e8d5;
+    --parchment-dark: #e8d9bc;
+    --parchment-mid: #ede0c8;
+    --gold: #b8860b;
+    --gold-light: #d4a520;
+    --gold-pale: #f0d080;
+    --crimson: #8b1a1a;
+    --crimson-light: #c0392b;
+    --teal: #1a5c5c;
+    --shadow: rgba(26,20,16,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ink);
+    font-family: 'Crimson Text', Georgia, serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+    background-image: 
+      radial-gradient(ellipse at 20% 10%, #2a1f0a 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 90%, #0a1a2a 0%, transparent 60%);
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .title-rune {
+    font-size: 0.75rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    color: var(--gold-light);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 30px rgba(184,134,11,0.4), 0 2px 4px rgba(0,0,0,0.8);
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    font-style: italic;
+    color: var(--parchment);
+    opacity: 0.6;
+    font-size: 1rem;
+    margin-top: 0.4rem;
+  }
+
+  .divider {
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 1rem auto;
+    position: relative;
+  }
+  .divider::before {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--gold);
+    font-size: 0.7rem;
+    background: var(--ink);
+    padding: 0 6px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1100px;
+    align-items: start;
+  }
+
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--parchment);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    box-shadow: 0 4px 20px var(--shadow), inset 0 0 60px rgba(232,217,188,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(184,134,11,0.2);
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  .panel-header {
+    background: linear-gradient(to bottom, #2a1f0a, #1a1410);
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--gold);
+  }
+
+  .panel-title {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-light);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .panel-body {
+    padding: 1.25rem;
+  }
+
+  /* Spell Forms */
+  .forms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  @media (max-width: 600px) {
+    .forms-grid { grid-template-columns: 1fr; }
+  }
+
+  .form-card {
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    background: var(--parchment-mid);
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-card:hover {
+    background: var(--parchment-dark);
+    border-color: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px var(--shadow);
+  }
+
+  .form-card.selected {
+    background: linear-gradient(135deg, #2a1f0a 0%, #1a1410 100%);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 15px rgba(184,134,11,0.3), inset 0 0 20px rgba(184,134,11,0.05);
+  }
+
+  .form-card.selected .form-name { color: var(--gold-light); }
+  .form-card.selected .form-cost { color: var(--gold-pale); }
+  .form-card.selected .form-desc { color: rgba(242,232,213,0.7); }
+  .form-card.selected .form-tag { background: rgba(184,134,11,0.2); color: var(--gold-pale); }
+
+  .form-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .form-cost {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--crimson);
+    float: right;
+    line-height: 1;
+    margin-top: 1px;
+  }
+
+  .form-desc {
+    font-size: 0.78rem;
+    color: rgba(26,20,16,0.65);
+    margin-top: 0.25rem;
+    line-height: 1.3;
+    font-style: italic;
+  }
+
+  .form-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    background: rgba(26,20,16,0.08);
+    color: rgba(26,20,16,0.5);
+    border-radius: 2px;
+    padding: 1px 5px;
+    margin-top: 0.3rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Augments */
+  .aug-section {
+    margin-bottom: 1.2rem;
+  }
+
+  .aug-section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid rgba(26,92,92,0.2);
+  }
+
+  .aug-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-bottom: 0.3rem;
+    border: 1px solid transparent;
+    transition: all 0.12s ease;
+  }
+
+  .aug-item:hover { background: var(--parchment-dark); border-color: rgba(184,134,11,0.3); }
+
+  .aug-item.selected {
+    background: linear-gradient(135deg, rgba(42,31,10,0.9), rgba(26,20,16,0.95));
+    border-color: var(--gold);
+  }
+
+  .aug-item.selected .aug-name { color: var(--gold-light); }
+  .aug-item.selected .aug-cost { color: var(--gold-pale); }
+  .aug-item.selected .aug-desc { color: rgba(242,232,213,0.6); }
+
+  .aug-check {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--gold);
+    border-radius: 1px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--gold-light);
+    background: transparent;
+    transition: all 0.12s;
+  }
+
+  .aug-item.selected .aug-check {
+    background: var(--gold);
+    color: var(--ink);
+  }
+
+  .aug-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--ink);
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .aug-cost {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--crimson);
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+
+  .aug-desc {
+    font-size: 0.75rem;
+    color: rgba(26,20,16,0.6);
+    font-style: italic;
+    margin-top: 0.15rem;
+    line-height: 1.3;
+    grid-column: 2 / -1;
+  }
+
+  .aug-inner { flex: 1; }
+
+  /* Conditions sub-list */
+  .condition-select {
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+  }
+
+  .condition-select select {
+    background: var(--parchment-mid);
+    border: 1px solid var(--gold);
+    color: var(--ink);
+    font-family: 'Crimson Text', serif;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  /* Summary panel */
+  .cost-display {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid rgba(184,134,11,0.3);
+  }
+
+  .cost-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(26,20,16,0.5);
+    margin-bottom: 0.3rem;
+  }
+
+  .cost-number {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--crimson);
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(139,26,26,0.2);
+    transition: all 0.2s ease;
+  }
+
+  .cost-unit {
+    font-size: 1rem;
+    color: rgba(26,20,16,0.4);
+    font-style: italic;
+    margin-top: 0.2rem;
+  }
+
+  .tier-badge {
+    display: inline-block;
+    margin-top: 0.6rem;
+    padding: 0.25rem 0.8rem;
+    border: 1px solid;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .breakdown {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(184,134,11,0.3);
+  }
+
+  .breakdown-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(26,20,16,0.45);
+    margin-bottom: 0.6rem;
+  }
+
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.85rem;
+    padding: 0.2rem 0;
+    color: var(--ink);
+    border-bottom: 1px dashed rgba(26,20,16,0.1);
+  }
+
+  .breakdown-row:last-child { border-bottom: none; }
+  .breakdown-row .bval { font-weight: 600; color: var(--crimson); }
+  .breakdown-row.total-row {
+    font-weight: 700;
+    border-top: 1px solid rgba(26,20,16,0.2);
+    margin-top: 0.3rem;
+    padding-top: 0.4rem;
+    border-bottom: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Spell summary */
+  .spell-summary {
+    padding: 1rem 1.25rem;
+  }
+
+  .summary-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(26,20,16,0.45);
+    margin-bottom: 0.6rem;
+  }
+
+  .summary-text {
+    font-style: italic;
+    font-size: 0.88rem;
+    color: rgba(26,20,16,0.8);
+    line-height: 1.6;
+    min-height: 3rem;
+  }
+
+  .summary-text.empty {
+    color: rgba(26,20,16,0.3);
+    font-style: italic;
+  }
+
+  /* Name input */
+  .spell-name-wrap {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(184,134,11,0.3);
+  }
+
+  .spell-name-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(184,134,11,0.4);
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    padding: 0.3rem 0;
+    outline: none;
+    text-align: center;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s;
+  }
+
+  .spell-name-input::placeholder { color: rgba(26,20,16,0.3); font-weight: 400; font-style: italic; }
+  .spell-name-input:focus { border-bottom-color: var(--gold); }
+
+  /* Tier table */
+  .tier-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+
+  .tier-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(26,20,16,0.5);
+    padding: 0.3rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(184,134,11,0.3);
+  }
+
+  .tier-table td {
+    padding: 0.3rem 0.5rem;
+    color: var(--ink);
+    border-bottom: 1px solid rgba(26,20,16,0.06);
+    line-height: 1.3;
+  }
+
+  .tier-table tr.active-tier td {
+    background: rgba(42,31,10,0.07);
+    font-weight: 600;
+    color: var(--crimson);
+  }
+
+  .tier-table tr.active-tier td:first-child {
+    border-left: 2px solid var(--crimson);
+  }
+
+  /* Reset button */
+  .btn-reset {
+    display: block;
+    width: calc(100% - 2.5rem);
+    margin: 0.75rem 1.25rem 1rem;
+    padding: 0.6rem;
+    background: transparent;
+    border: 1px solid rgba(139,26,26,0.4);
+    border-radius: 2px;
+    color: var(--crimson);
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-reset:hover {
+    background: var(--crimson);
+    color: var(--parchment);
+    border-color: var(--crimson);
+  }
+
+  /* Gating */
+  .aug-item.gated {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .aug-item.gated:hover { background: transparent; border-color: transparent; }
+  .gate-label {
+    font-size: 0.65rem;
+    color: var(--crimson-light);
+    font-style: italic;
+    margin-top: 0.1rem;
+  }
+
+  /* Level tracker */
+  .level-wrap {
+    padding: 0.65rem 1.25rem;
+    border-bottom: 1px solid rgba(184,134,11,0.3);
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .level-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .level-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(26,20,16,0.5);
+    flex: 1;
+    line-height: 1.3;
+  }
+
+  .level-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .level-btn {
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.45);
+    border-radius: 2px;
+    color: var(--gold);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    transition: all 0.12s;
+  }
+
+  .level-btn:hover { background: var(--gold); color: var(--ink); }
+
+  .level-val {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    width: 2rem;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid rgba(184,134,11,0.4);
+    background: transparent;
+    outline: none;
+    padding: 0;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .level-val:focus { border-bottom-color: var(--gold); }
+  .level-val::-webkit-inner-spin-button,
+  .level-val::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  /* Unlocked gate label */
+  .gate-label.unlocked {
+    color: #2d6a2d;
+  }
+
+  /* Tab bar */
+  .tab-bar {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(184,134,11,0.35);
+  }
+
+  .tab-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.4rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: rgba(242,232,213,0.4);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: -1px;
+  }
+
+  .tab-btn:hover { color: rgba(242,232,213,0.75); }
+
+  .tab-btn.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold-light);
+  }
+
+  /* Save button */
+  .btn-save {
+    display: block;
+    width: calc(100% - 2.5rem);
+    margin: 0.6rem 1.25rem 0;
+    padding: 0.6rem;
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.5);
+    border-radius: 2px;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-save:hover { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+  .save-msg {
+    text-align: center;
+    font-size: 0.72rem;
+    font-style: italic;
+    padding: 0.2rem 1.25rem 0;
+    min-height: 1.1rem;
+    color: var(--crimson-light);
+    transition: opacity 0.3s;
+  }
+
+  /* Library view */
+  .library-view {
+    display: none;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .sort-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .sort-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(242,232,213,0.45);
+  }
+
+  .sort-select {
+    background: #1e1710;
+    border: 1px solid rgba(184,134,11,0.4);
+    color: var(--gold-light);
+    font-family: 'Crimson Text', serif;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 2px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .sort-select:focus { border-color: var(--gold); }
+
+  .library-count {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(242,232,213,0.28);
+    margin-left: auto;
+  }
+
+  .library-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: rgba(242,232,213,0.22);
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .spell-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 700px) { .spell-cards-grid { grid-template-columns: 1fr; } }
+
+  /* Spell card */
+  .spell-card {
+    background: var(--parchment);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    box-shadow: 0 3px 12px var(--shadow);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .spell-card::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(184,134,11,0.15);
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  .sc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 1rem 0.55rem;
+    background: linear-gradient(to bottom, rgba(42,31,10,0.07), transparent);
+    border-bottom: 1px solid rgba(184,134,11,0.2);
+  }
+
+  .sc-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
+  .sc-form {
+    font-size: 0.75rem;
+    color: rgba(26,20,16,0.5);
+    font-style: italic;
+    margin-top: 0.2rem;
+  }
+
+  .sc-cost-col { text-align: right; flex-shrink: 0; margin-left: 0.75rem; }
+
+  .sc-cost-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--crimson);
+    line-height: 1;
+  }
+
+  .sc-cost-rp {
+    font-size: 0.62rem;
+    color: rgba(26,20,16,0.32);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.1em;
+    display: block;
+    text-align: right;
+  }
+
+  .sc-tags {
+    padding: 0.45rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    min-height: 2rem;
+    border-bottom: 1px solid rgba(184,134,11,0.15);
+    align-items: center;
+  }
+
+  .sc-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    background: rgba(26,20,16,0.07);
+    color: rgba(26,20,16,0.58);
+    border-radius: 2px;
+    padding: 2px 6px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .sc-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem 0.4rem 1rem;
+    flex-wrap: wrap;
+  }
+
+  .sc-tier-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border: 1px solid;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  .sc-level {
+    font-size: 0.65rem;
+    color: rgba(26,20,16,0.42);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.03em;
+  }
+
+  .sc-date {
+    font-size: 0.65rem;
+    color: rgba(26,20,16,0.3);
+    font-style: italic;
+    margin-left: auto;
+  }
+
+  .sc-actions { display: flex; gap: 0.3rem; }
+
+  .btn-sc {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.55rem;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.12s;
+    background: transparent;
+  }
+
+  .btn-sc-load { color: var(--teal); border-color: rgba(26,92,92,0.4); }
+  .btn-sc-load:hover { background: var(--teal); color: var(--parchment); border-color: var(--teal); }
+  .btn-sc-del { color: rgba(139,26,26,0.6); border-color: rgba(139,26,26,0.3); }
+  .btn-sc-del:hover { background: var(--crimson); color: var(--parchment); border-color: var(--crimson); }
+
+  /* Import / Export */
+  .io-group { display: flex; gap: 0.3rem; margin-left: auto; }
+  .btn-io {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.35);
+    color: rgba(242,232,213,0.5);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .btn-io:hover { color: var(--gold-light); border-color: rgba(184,134,11,0.7); }
+  .btn-io.import { border-color: rgba(26,92,92,0.5); color: rgba(242,232,213,0.45); }
+  .btn-io.import:hover { border-color: var(--teal); color: #5dc5c5; }
+  .io-msg {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: rgba(242,232,213,0.5);
+    white-space: nowrap;
+  }
+  .io-msg.ok  { color: #5dc58a; }
+  .io-msg.err { color: #c55d5d; }
+
+  /* View toggle */
+  .view-toggle { display: flex; gap: 0.3rem; }
+
+  .btn-view {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.35);
+    border-radius: 2px;
+    color: rgba(242,232,213,0.38);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .btn-view:hover { color: var(--gold-light); border-color: rgba(184,134,11,0.6); }
+  .btn-view.active { background: rgba(184,134,11,0.13); color: var(--gold-light); border-color: var(--gold); }
+
+  /* Spell table */
+  .spell-table-wrap { overflow-x: auto; }
+
+  .spell-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    background: var(--parchment);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+  }
+
+  .spell-table thead tr {
+    background: linear-gradient(to bottom, #2a1f0a, #1e1710);
+  }
+
+  .spell-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(242,232,213,0.5);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gold);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.12s;
+  }
+
+  .spell-table th:hover { color: var(--gold-light); }
+  .spell-table th.th-sorted { color: var(--gold-light); }
+  .spell-table th:last-child { cursor: default; }
+
+  .sort-arrow { margin-left: 0.25rem; font-size: 0.7rem; opacity: 0.6; }
+  .th-sorted .sort-arrow { opacity: 1; }
+
+  .spell-table td {
+    padding: 0.48rem 0.8rem;
+    color: var(--ink);
+    border-bottom: 1px solid rgba(184,134,11,0.1);
+    vertical-align: middle;
+    line-height: 1.3;
+  }
+
+  .spell-table tbody tr:last-child td { border-bottom: none; }
+  .spell-table tbody tr:hover td { background: rgba(42,31,10,0.04); }
+
+  .td-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .td-cost {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: var(--crimson);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .td-dim { color: rgba(26,20,16,0.38); font-style: italic; font-size: 0.78rem; }
+  .td-dmg { color: var(--crimson); font-weight: 600; white-space: nowrap; }
+  .td-heal { color: #2d6a2d; font-weight: 600; }
+  .td-actions { white-space: nowrap; }
+
+  /* Class / Subclass selector */
+  .class-selector {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(184,134,11,0.2);
+  }
+  .class-btn {
+    flex: 1;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.45rem 0.5rem;
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.3);
+    color: rgba(242,232,213,0.55);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .class-btn:hover { color: var(--gold-light); border-color: rgba(184,134,11,0.6); }
+  .class-btn.active { background: rgba(184,134,11,0.13); color: var(--gold-light); border-color: var(--gold); }
+
+  .subclass-selector {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+  .subclass-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.65rem;
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.2);
+    color: rgba(242,232,213,0.4);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .subclass-btn:hover { color: rgba(242,232,213,0.7); border-color: rgba(184,134,11,0.5); }
+  .subclass-btn.active { background: rgba(184,134,11,0.1); color: var(--gold); border-color: rgba(184,134,11,0.6); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--parchment-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(184,134,11,0.4); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-rune">✦ Aethel System ✦</div>
+  <h1>Pasqually's Spell Slinger</h1>
+  <div class="subtitle">Spell Form & Augment Cost Calculator</div>
+  <div class="divider"></div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-builder" onclick="switchTab('builder')">✦ Spell Builder</button>
+  <button class="tab-btn" id="tab-library" onclick="switchTab('library')">✦ Spell Library <span id="library-tab-count" style="opacity:0.55;font-size:0.75em;"></span></button>
+</div>
+
+<div class="layout" id="layout-main">
+  <!-- Left column: Forms + Augments -->
+  <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+    <!-- Spell Forms -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Part I — Spell Form <span style="font-size:0.7rem;opacity:0.6;margin-left:0.5rem;">Choose One</span></div>
+      </div>
+      <div class="panel-body">
+        <div class="forms-grid" id="forms-grid"></div>
+      </div>
+    </div>
+
+    <!-- Augments -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Part II — Strand Augments <span style="font-size:0.7rem;opacity:0.6;margin-left:0.5rem;">Choose Any</span></div>
+      </div>
+      <div class="panel-body" id="augments-body"></div>
+    </div>
+
+    <!-- Class Augments -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Part III — Class Augments <span style="font-size:0.7rem;opacity:0.6;margin-left:0.5rem;">Choose Any</span></div>
+      </div>
+      <div class="panel-body">
+        <div class="class-selector">
+          <button class="class-btn active" id="class-btn-mind" onclick="selectClass('mind')">Mind</button>
+          <button class="class-btn" id="class-btn-spirit" onclick="selectClass('spirit')">Spirit</button>
+        </div>
+        <div class="subclass-selector" id="subclass-selector"></div>
+        <div id="class-augments-body"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right column: Summary -->
+  <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Spell Summary</div>
+      </div>
+      <div class="spell-name-wrap">
+        <input type="text" class="spell-name-input" id="spell-name" placeholder="Name your spell…" maxlength="40">
+      </div>
+      <div class="level-wrap">
+        <div class="level-row">
+          <span class="level-label">Character<br>Level</span>
+          <div class="level-ctrl">
+            <button class="level-btn" onclick="adjustLevel('player',-1)">−</button>
+            <input type="number" class="level-val" id="player-level-val" value="1" min="1" max="20" oninput="setLevelDirect('player',this.value)">
+            <button class="level-btn" onclick="adjustLevel('player',1)">+</button>
+          </div>
+        </div>
+        <div class="level-row">
+          <span class="level-label" id="class-level-label">Mind Class<br>Level</span>
+          <div class="level-ctrl">
+            <button class="level-btn" onclick="adjustLevel('mind',-1)">−</button>
+            <input type="number" class="level-val" id="mind-level-val" value="1" min="1" max="20" oninput="setLevelDirect('mind',this.value)">
+            <button class="level-btn" onclick="adjustLevel('mind',1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="cost-display">
+        <div class="cost-label">Total Resource Cost</div>
+        <div class="cost-number" id="total-cost">0</div>
+        <div class="cost-unit">RP</div>
+        <div id="tier-badge" class="tier-badge" style="display:none;"></div>
+      </div>
+      <div class="breakdown" id="breakdown-section" style="display:none;">
+        <div class="breakdown-title">Cost Breakdown</div>
+        <div id="breakdown-list"></div>
+      </div>
+      <div class="spell-summary">
+        <div class="summary-title">Spell Description</div>
+        <div class="summary-text" id="summary-text"><em>Select a Spell Form to begin weaving your spell.</em></div>
+      </div>
+      <div class="save-msg" id="save-msg"></div>
+      <button class="btn-save" onclick="saveSpell()">✦ Save Spell</button>
+      <button class="btn-reset" onclick="resetAll()">✦ Clear Spell</button>
+    </div>
+
+    <!-- Tier Reference -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Power Tier Reference</div>
+      </div>
+      <div class="panel-body" style="padding:0.75rem 1rem 1rem;">
+        <table class="tier-table" id="tier-table">
+          <thead>
+            <tr>
+              <th>Tier</th>
+              <th>Min Cost</th>
+              <th>Scale</th>
+            </tr>
+          </thead>
+          <tbody id="tier-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="library-view" id="library-view">
+  <div class="sort-bar">
+    <span class="sort-label" id="sort-dropdown-label">Sort by</span>
+    <select class="sort-select" id="sort-select" onchange="renderLibrary()">
+      <option value="date-desc">Date Saved (Newest)</option>
+      <option value="date-asc">Date Saved (Oldest)</option>
+      <option value="name-asc">Name (A–Z)</option>
+      <option value="name-desc">Name (Z–A)</option>
+      <option value="cost-asc">Cost (Low → High)</option>
+      <option value="cost-desc">Cost (High → Low)</option>
+      <option value="tier-asc">Tier (Low → High)</option>
+      <option value="tier-desc">Tier (High → Low)</option>
+    </select>
+    <div class="view-toggle">
+      <button class="btn-view active" id="btn-view-cards" onclick="setLibraryView('cards')">⊞ Cards</button>
+      <button class="btn-view" id="btn-view-table" onclick="setLibraryView('table')">☰ Table</button>
+    </div>
+    <span class="library-count" id="library-count"></span>
+    <div class="io-group">
+      <span class="io-msg" id="io-msg"></span>
+      <button class="btn-io import" onclick="importLibrary()">↑ Import</button>
+      <button class="btn-io" onclick="exportLibrary()">↓ Export</button>
+      <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="handleImportFile(this)">
+    </div>
+  </div>
+  <div id="library-content"></div>
+</div>
+
+<script>
+const SPELL_FORMS = [
+  { id: 'cantrip',       name: 'Channel Cantrip', cost: 0, action: 'Action',        tag: 'Attack Roll',      desc: 'Attack a single target (60 ft), 1d6 dmg. Recover 2–6 RP on hit.' },
+  { id: 'simple',        name: 'Simple Projection', cost: 1, action: 'Action',      tag: 'Attack Roll',      desc: 'Single target within 60 ft.' },
+  { id: 'close_burst',   name: 'Close Burst',     cost: 3, action: 'Action',        tag: 'Saving Throw',     desc: '15 ft. radius burst originating from you.' },
+  { id: 'ranged_burst',  name: 'Ranged Burst',    cost: 4, action: 'Action',        tag: 'Saving Throw',     desc: '15 ft. radius at a point within 60 ft.' },
+  { id: 'broad_wave',    name: 'Broad Wave',      cost: 3, action: 'Action',        tag: 'Saving Throw',     desc: 'Cone (30 ft.) or Line (60 ft.).' },
+  { id: 'self_channel',  name: 'Self Channel',    cost: 1, action: 'Action',        tag: 'No Roll',          desc: 'Targets only you. Self-affecting effects.' },
+  { id: 'arcane_wall',   name: 'Arcane Wall',     cost: 5, action: 'Action',        tag: 'No Roll',          desc: '30 ft. long, 15 ft. high barrier.' },
+  { id: 'binding_ring',  name: 'Binding Ring',    cost: 5, action: 'Action',        tag: 'Saving Throw',     desc: '10 ft. radius ring around a point within 60 ft.' },
+  { id: 'sense_strands', name: 'Sense Strands',   cost: 1, action: 'Bonus Action',  tag: 'Utility',          desc: 'Targets you or one ally. Usually no roll.' },
+];
+
+const AUG_SECTIONS = [
+  {
+    title: 'Basic Augments',
+    augments: [
+      { id: 'destructive',    name: 'Destructive',       cost: 2, desc: 'Adds 2d6 damage to each affected enemy. Required for damage spells.' },
+      { id: 'restorative',    name: 'Restorative',       cost: 3, desc: 'Restores 2d8 HP to each affected ally.' },
+      { id: 'elemental',      name: 'Elemental Shift',   cost: 1, desc: 'Deals 1d6 damage and shifts all damage to Fire, Ice, Lightning, Acid, or Thunder.' },
+      { id: 'greater_reach',  name: 'Greater Reach',     cost: 1, desc: 'Doubles the Spell Forms range (e.g., 60 ft → 120 ft).' },
+    ]
+  },
+  {
+    title: 'Condition Augments',
+    augments: [
+      { id: 'minor_cond',  name: 'Impose Minor Condition',  cost: 2, desc: 'Imposes a Basic condition on failed save (e.g. Prone, Grappled, Frightened).', gate: null,
+        conditions: ['Deafened','Distracted','Prone','Staggered','Frightened','Grappled'] },
+      { id: 'major_cond',  name: 'Impose Major Condition',  cost: 4, desc: 'Imposes an Advanced condition on failed save (e.g. Blinded, Restrained, Poisoned).', gate: 'Level 3+',
+        conditions: ['Blinded','Poisoned','Restrained'] },
+      { id: 'severe_cond', name: 'Impose Severe Condition', cost: 6, desc: 'Imposes an Expert condition on failed save (e.g. Stunned, Paralyzed, Petrified).', gate: 'Level 5+',
+        conditions: ['Stunned','Paralyzed','Petrified'] },
+    ]
+  }
+];
+
+const MIND_AUG_SECTIONS = [
+  {
+    title: 'Mind Augments',
+    augments: [
+      { id: 'kinetic_chain',   name: 'Kinetic Chain',   cost: 3, desc: 'If the Spell Form deals damage, the damage dealt is also dealt to a second enemy target within 10 ft.' },
+      { id: 'flawless_strike', name: 'Flawless Strike',  cost: 2, desc: 'If this Spell Form lands a Glancing Blow (half damage), it is converted to Full Damage instead.' },
+      { id: 'flicker_warp',   name: 'Flicker Warp',     cost: 2, desc: 'After casting this Spell Form, you may teleport up to 30 ft. to an unoccupied space you can see.' },
+      { id: 'haste_field',    name: 'Haste Field',      cost: 2, desc: 'If this Spell Form affects an ally (including you), that ally\'s movement speed is doubled until the end of their next turn.' },
+    ]
+  },
+  {
+    title: 'Advanced Mind Augments',
+    augments: [
+      { id: 'temporal_hitch', name: 'Temporal Hitch', cost: 4, gate: 'Mind Level 3+', desc: 'If this Spell Form is completely resisted (a successful Save), you may delay its effect until the end of your next turn and reapply it to the same target with Disadvantage on the Save.' },
+      { id: 'displacement',   name: 'Displacement',   cost: 3, gate: 'Mind Level 3+', desc: 'If the Spell Form affects a target, you may push or pull the target up to 15 ft. in any direction. A creature resisting must roll a Fortitude Save.' },
+    ]
+  },
+  {
+    title: 'Expert Mind Augments',
+    augments: [
+      { id: 'astral_link', name: 'Astral Link', cost: 4, gate: 'Mind Level 7+', desc: 'If the power hits or affects two or more targets, half of the damage taken by one linked enemy is also dealt to the other linked enemy within 30 ft. until the end of your next turn.' },
+    ]
+  }
+];
+
+const ANIMIST_AUG_SECTIONS = [
+  {
+    title: 'Anima Augments',
+    note: 'Animist Exclusive — Taken in place of standard Advanced Augments.',
+    augments: [
+      { id: 'prowlers_strike',    name: "Prowler's Strike",  cost: 3, desc: "When the Animist commands the Anima to attack, that attack deals an additional 1d8 damage." },
+      { id: 'ancestral_ward',     name: 'Ancestral Ward',    cost: 3, desc: 'The Anima gains Resistance to all Physical Damage (Slashing, Piercing, Bludgeoning) until the start of the Animist\'s next turn.' },
+      { id: 'aggressive_tether',  name: 'Aggressive Tether', cost: 4, desc: 'If the Anima hits an enemy with an attack this turn, the Anima may immediately move the enemy up to 10 ft. into any open space.' },
+      { id: 'symbiotic_healing',  name: 'Symbiotic Healing', cost: 3, desc: 'When the Animist uses a Restorative spell on the Anima, the Animist also recovers half of the HP healed.' },
+      { id: 'blinding_radiance',  name: 'Blinding Radiance', cost: 4, gate: 'Mind Level 5+', desc: 'The Anima lets out a flash of raw energy. All enemies within a 15 ft. radius must make a Reflex Save or be Blinded until the end of their next turn.' },
+      { id: 'guardian_link',      name: 'Guardian Link',     cost: 4, gate: 'Mind Level 5+', desc: 'If an adjacent ally (other than the Animist) is targeted by an attack, the Animist may command the Anima to intercept as a Reaction. The Anima is instantly moved to the target and takes the hit instead.' },
+    ]
+  }
+];
+
+const SPIRIT_AUGMENTS = [
+  { id: 'ward_of_faith',        name: 'Ward of Faith',        cost: 2, archetypes: ['oracle','templar'],          desc: 'Grants an ally +2 Defense Score until the start of your next turn.' },
+  { id: 'purify_condition',     name: 'Purify Condition',     cost: 3, archetypes: ['oracle','templar'],          desc: 'Removes one Advanced (Medium) condition from one ally. The ally also immediately gains +1 Defense Score until the start of your next turn.' },
+  { id: 'restore_vitality',     name: 'Restore Vitality',     cost: 4, archetypes: ['oracle','templar'], gate: 'Spirit Level 5+', desc: 'If the Spell Form includes Restorative healing, the target recovers an additional 2d6 HP and gains Resistance to physical damage until the start of their next turn.' },
+  { id: 'smite',                name: 'Smite',                cost: 2, archetypes: ['templar','zealot'],          desc: 'If the Spell Form deals damage, the attack deals an additional 1d12 Radiant Damage.' },
+  { id: 'hallowed_ground',      name: 'Hallowed Ground',      cost: 3, archetypes: ['templar','zealot'],          desc: "Enemies must make a Will Save or suffer the Frightened condition (Basic). Allies in the area gain +2 Defense Score until the start of your next turn." },
+  { id: 'judgment',             name: 'Judgment',             cost: 4, archetypes: ['templar','zealot'], gate: 'Spirit Level 5+', desc: 'If the Spell Form hits or affects an enemy, all subsequent attacks by allies against that enemy have Advantage until end of your next turn. The enemy also takes +1d6 damage from all sources until the start of its next turn.' },
+  { id: 'empower_healing',      name: 'Empower Healing',      cost: 2, archetypes: ['oracle'],                    desc: 'If the Spell Form includes Restorative healing, the target recovers an additional 1d8 HP and one adjacent ally also recovers 1d4 HP.' },
+  { id: 'mass_renewal',         name: 'Mass Renewal',         cost: 3, archetypes: ['oracle'], gate: 'Spirit Level 3+', desc: 'If the Spell Form targets a single ally with a Restorative Augment, it also affects two additional allies within 15 ft. OR you may choose a single ally to also remove one Basic or Advanced condition.' },
+  { id: 'sanctuary',            name: 'Sanctuary',            cost: 4, archetypes: ['oracle'], gate: 'Spirit Level 7+', desc: 'One target gains Immunity to all Advanced (Medium) and Basic (Low) conditions until the start of your next turn. The target also gains Advantage on its next Will Save.' },
+  { id: 'aura_of_protection',   name: 'Aura of Protection',   cost: 2, archetypes: ['templar'],                   desc: 'You and all allies within 10 ft. gain +2 to their Defense Score until the start of your next turn.' },
+  { id: 'aura_of_courage',      name: 'Aura of Courage',      cost: 3, archetypes: ['templar'], gate: 'Spirit Level 3+', desc: 'You and all allies within 10 ft. gain Advantage on all Saving Throws (Will, Reflex, Fortitude) until the start of your next turn.' },
+  { id: 'aura_of_retribution',  name: 'Aura of Retribution',  cost: 4, archetypes: ['templar'], gate: 'Spirit Level 7+', desc: 'You and all allies within 15 ft. gain Advantage on their next Attack Roll which deals +2d6 Radiant Damage.' },
+  { id: 'chained_punishment',   name: 'Chained Punishment',   cost: 2, archetypes: ['zealot'],                    desc: 'If the Spell Form deals damage, it immediately deals half that damage to a second target within 10 ft.' },
+  { id: 'agony',                name: 'Agony',                cost: 3, archetypes: ['zealot'], gate: 'Spirit Level 3+', desc: 'If the Spell Form deals damage, the target suffers the Distracted condition and takes an extra 1d6 damage from all sources until the start of your next turn.' },
+  { id: 'oblivion',             name: 'Oblivion',             cost: 4, archetypes: ['zealot'], gate: 'Spirit Level 7+', desc: 'If the Spell Form deals damage, the target automatically suffers Disadvantage on all Saving Throws (Will, Reflex, Fortitude) and -2 Defense Score until the end of your next turn.' },
+];
+
+const TIERS = [
+  { label: '1st — Simple',    min: 3,  max: 3,  scale: '5–6 casts at Level 1' },
+  { label: '2nd — Advanced',  min: 4,  max: 4,  scale: 'Moderate complexity' },
+  { label: '3rd — Major',     min: 6,  max: 6,  scale: 'Impactful AoE or single-target' },
+  { label: '4th — Epic',      min: 7,  max: 7,  scale: 'Major conditions, battlefield control' },
+  { label: '5th — Legendary', min: 9,  max: 9,  scale: 'Capstone-level power' },
+  { label: '6th — Mythic',    min: 10, max: 10, scale: 'Shapes the encounter' },
+  { label: '7th — Mythic',    min: 12, max: 12, scale: 'Can resolve an encounter' },
+  { label: '8th — Cosmic',    min: 13, max: 13, scale: 'Near-ultimate power' },
+  { label: '9th — Cosmic',    min: 15, max: 99, scale: 'Campaign-defining devastation' },
+];
+
+const TIER_COLORS = [
+  { min:0,  max:3,  color:'#2d6a2d', bg:'rgba(45,106,45,0.12)' },
+  { min:4,  max:5,  color:'#1a5c5c', bg:'rgba(26,92,92,0.12)' },
+  { min:6,  max:7,  color:'#1a3a8b', bg:'rgba(26,58,139,0.12)' },
+  { min:8,  max:10, color:'#6a2d8b', bg:'rgba(106,45,139,0.12)' },
+  { min:11, max:13, color:'#b86a00', bg:'rgba(184,106,0,0.12)' },
+  { min:14, max:99, color:'#8b1a1a', bg:'rgba(139,26,26,0.12)' },
+];
+
+let selectedForm = null;
+let selectedAugs = new Set();
+let selectedMindAugs = new Set();
+let conditionChoices = {};
+let playerLevel = 1;
+let mindLevel = 1;
+let selectedClass = 'mind';
+let selectedSubclass = 'arcanist';
+
+function isGated(gate) {
+  if (!gate) return false;
+  const mindMatch = gate.match(/Mind Level (\d+)\+/);
+  if (mindMatch) return mindLevel < parseInt(mindMatch[1]);
+  const spiritMatch = gate.match(/Spirit Level (\d+)\+/);
+  if (spiritMatch) return mindLevel < parseInt(spiritMatch[1]);
+  const levelMatch = gate.match(/Level (\d+)\+/);
+  if (levelMatch) return playerLevel < parseInt(levelMatch[1]);
+  return false;
+}
+
+function getCurrentClassAugSections() {
+  if (selectedClass === 'mind') {
+    return selectedSubclass === 'animist' ? ANIMIST_AUG_SECTIONS : MIND_AUG_SECTIONS;
+  }
+  // Spirit — filter SPIRIT_AUGMENTS by selected subclass
+  const filtered = SPIRIT_AUGMENTS.filter(a => a.archetypes.includes(selectedSubclass));
+  return [{ title: 'Divine Inscriptions', augments: filtered }];
+}
+
+function findClassAugById(id) {
+  for (const sec of MIND_AUG_SECTIONS) {
+    const a = sec.augments.find(x => x.id === id);
+    if (a) return a;
+  }
+  for (const sec of ANIMIST_AUG_SECTIONS) {
+    const a = sec.augments.find(x => x.id === id);
+    if (a) return a;
+  }
+  return SPIRIT_AUGMENTS.find(x => x.id === id) || null;
+}
+
+function selectClass(cls) {
+  if (selectedClass === cls) return;
+  selectedClass = cls;
+  selectedMindAugs = new Set();
+  selectedSubclass = cls === 'mind' ? 'arcanist' : 'oracle';
+  document.getElementById('class-btn-mind').classList.toggle('active', cls === 'mind');
+  document.getElementById('class-btn-spirit').classList.toggle('active', cls === 'spirit');
+  const lbl = document.getElementById('class-level-label');
+  lbl.innerHTML = cls === 'mind' ? 'Mind Class<br>Level' : 'Spirit Class<br>Level';
+  renderSubclassSelector();
+  renderAll();
+}
+
+function selectSubclass(sub) {
+  if (selectedSubclass === sub) return;
+  selectedSubclass = sub;
+  selectedMindAugs = new Set();
+  renderSubclassSelector();
+  renderAll();
+}
+
+function renderSubclassSelector() {
+  const el = document.getElementById('subclass-selector');
+  const subs = selectedClass === 'mind'
+    ? [['arcanist','Arcanist'],['animist','Animist']]
+    : [['oracle','Oracle'],['templar','Templar'],['zealot','Zealot']];
+  el.innerHTML = subs.map(([id, label]) =>
+    `<button class="subclass-btn${selectedSubclass === id ? ' active' : ''}" onclick="selectSubclass('${id}')">${label}</button>`
+  ).join('');
+}
+
+function enforceGating() {
+  for (const sec of AUG_SECTIONS) {
+    for (const aug of sec.augments) {
+      if (aug.gate && isGated(aug.gate)) selectedAugs.delete(aug.id);
+    }
+  }
+  const allClassSecs = [...MIND_AUG_SECTIONS, ...ANIMIST_AUG_SECTIONS];
+  for (const sec of allClassSecs) {
+    for (const aug of sec.augments) {
+      if (aug.gate && isGated(aug.gate)) selectedMindAugs.delete(aug.id);
+    }
+  }
+  for (const aug of SPIRIT_AUGMENTS) {
+    if (aug.gate && isGated(aug.gate)) selectedMindAugs.delete(aug.id);
+  }
+}
+
+function adjustLevel(type, delta) {
+  if (type === 'player') {
+    playerLevel = Math.max(1, Math.min(20, playerLevel + delta));
+    document.getElementById('player-level-val').value = playerLevel;
+  } else {
+    mindLevel = Math.max(1, Math.min(20, mindLevel + delta));
+    document.getElementById('mind-level-val').value = mindLevel;
+  }
+  enforceGating();
+  renderAll();
+}
+
+function setLevelDirect(type, val) {
+  const n = Math.max(1, Math.min(20, parseInt(val) || 1));
+  if (type === 'player') playerLevel = n;
+  else mindLevel = n;
+  enforceGating();
+  renderAll();
+}
+
+function getTierColor(cost) {
+  return TIER_COLORS.find(t => cost >= t.min && cost <= t.max) || { color: '#666', bg: 'transparent' };
+}
+
+function getTier(cost) {
+  for (let i = TIERS.length - 1; i >= 0; i--) {
+    if (cost >= TIERS[i].min) return TIERS[i];
+  }
+  return null;
+}
+
+function renderForms() {
+  const grid = document.getElementById('forms-grid');
+  grid.innerHTML = '';
+  SPELL_FORMS.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'form-card' + (selectedForm === f.id ? ' selected' : '');
+    div.innerHTML = `
+      <span class="form-cost">${f.cost} RP</span>
+      <div class="form-name">${f.name}</div>
+      <div class="form-desc">${f.desc}</div>
+      <div><span class="form-tag">${f.action}</span> <span class="form-tag">${f.tag}</span></div>
+    `;
+    div.onclick = () => { selectedForm = (selectedForm === f.id ? null : f.id); renderAll(); };
+    grid.appendChild(div);
+  });
+}
+
+function renderAugments() {
+  const body = document.getElementById('augments-body');
+  body.innerHTML = '';
+
+  AUG_SECTIONS.forEach(section => {
+    const sec = document.createElement('div');
+    sec.className = 'aug-section';
+    sec.innerHTML = `<div class="aug-section-title">${section.title}</div>`;
+
+    section.augments.forEach(aug => {
+      const isSelected = selectedAugs.has(aug.id);
+      const gated = aug.gate && isGated(aug.gate);
+      const item = document.createElement('div');
+      item.className = 'aug-item' + (isSelected ? ' selected' : '') + (gated ? ' gated' : '');
+
+      let condHtml = '';
+      if (aug.conditions && isSelected) {
+        const current = conditionChoices[aug.id] || aug.conditions[0];
+        condHtml = `<div class="condition-select"><select id="cond-${aug.id}" onchange="setCondition('${aug.id}', this.value)" onclick="event.stopPropagation()">
+          ${aug.conditions.map(c => `<option value="${c}" ${c===current?'selected':''}>${c}</option>`).join('')}
+        </select></div>`;
+      }
+
+      item.innerHTML = `
+        <div class="aug-check">${isSelected ? '✦' : ''}</div>
+        <div class="aug-inner">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span class="aug-name">${aug.name}</span>
+            <span class="aug-cost">+${aug.cost} RP</span>
+          </div>
+          <div class="aug-desc">${aug.desc}</div>
+          ${aug.gate ? `<div class="gate-label${gated ? '' : ' unlocked'}">⚠ Requires ${aug.gate}</div>` : ''}
+          ${condHtml}
+        </div>
+      `;
+
+      item.onclick = () => {
+        if (gated) return;
+        if (selectedAugs.has(aug.id)) selectedAugs.delete(aug.id);
+        else selectedAugs.add(aug.id);
+        renderAll();
+      };
+
+      sec.appendChild(item);
+    });
+
+    body.appendChild(sec);
+  });
+}
+
+function renderMindAugments() {
+  const body = document.getElementById('class-augments-body');
+  body.innerHTML = '';
+
+  const sections = getCurrentClassAugSections();
+  sections.forEach(section => {
+    const sec = document.createElement('div');
+    sec.className = 'aug-section';
+    let noteHtml = section.note
+      ? `<div style="font-size:0.68rem;font-style:italic;color:rgba(26,20,16,0.45);margin-bottom:0.5rem;">${section.note}</div>`
+      : '';
+    sec.innerHTML = `<div class="aug-section-title">${section.title}</div>${noteHtml}`;
+
+    section.augments.forEach(aug => {
+      const isSelected = selectedMindAugs.has(aug.id);
+      const gated = aug.gate && isGated(aug.gate);
+      const item = document.createElement('div');
+      item.className = 'aug-item' + (isSelected ? ' selected' : '') + (gated ? ' gated' : '');
+
+      item.innerHTML = `
+        <div class="aug-check">${isSelected ? '✦' : ''}</div>
+        <div class="aug-inner">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span class="aug-name">${aug.name}</span>
+            <span class="aug-cost">+${aug.cost} RP</span>
+          </div>
+          <div class="aug-desc">${aug.desc}</div>
+          ${aug.gate ? `<div class="gate-label${gated ? '' : ' unlocked'}">⚠ Requires ${aug.gate}</div>` : ''}
+        </div>
+      `;
+
+      item.onclick = () => {
+        if (gated) return;
+        if (selectedMindAugs.has(aug.id)) selectedMindAugs.delete(aug.id);
+        else selectedMindAugs.add(aug.id);
+        renderAll();
+      };
+
+      sec.appendChild(item);
+    });
+
+    body.appendChild(sec);
+  });
+}
+
+function setCondition(augId, val) {
+  conditionChoices[augId] = val;
+  updateSummary();
+}
+
+function computeCost() {
+  let base = 0;
+  if (selectedForm) {
+    const f = SPELL_FORMS.find(x => x.id === selectedForm);
+    if (f) base = f.cost;
+  }
+  let augCost = 0;
+  selectedAugs.forEach(id => {
+    for (const sec of AUG_SECTIONS) {
+      const a = sec.augments.find(x => x.id === id);
+      if (a) augCost += a.cost;
+    }
+  });
+  selectedMindAugs.forEach(id => {
+    const a = findClassAugById(id);
+    if (a) augCost += a.cost;
+  });
+  return { base, augCost, total: base + augCost };
+}
+
+function updateSummary() {
+  const { base, augCost, total } = computeCost();
+
+  // Cost number
+  const el = document.getElementById('total-cost');
+  el.textContent = total;
+
+  // Tier badge
+  const badge = document.getElementById('tier-badge');
+  const tier = getTier(total);
+  const tc = getTierColor(total);
+  if (total > 0 && tier) {
+    badge.style.display = 'inline-block';
+    badge.textContent = tier.label;
+    badge.style.color = tc.color;
+    badge.style.borderColor = tc.color;
+    badge.style.background = tc.bg;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // Breakdown
+  const bsec = document.getElementById('breakdown-section');
+  const blist = document.getElementById('breakdown-list');
+  if (selectedForm || selectedAugs.size > 0 || selectedMindAugs.size > 0) {
+    bsec.style.display = 'block';
+    let rows = '';
+    if (selectedForm) {
+      const f = SPELL_FORMS.find(x => x.id === selectedForm);
+      rows += `<div class="breakdown-row"><span>${f.name}</span><span class="bval">${f.cost} RP</span></div>`;
+    }
+    selectedAugs.forEach(id => {
+      for (const sec of AUG_SECTIONS) {
+        const a = sec.augments.find(x => x.id === id);
+        if (a) {
+          const cond = a.conditions ? ` (${conditionChoices[id] || a.conditions[0]})` : '';
+          rows += `<div class="breakdown-row"><span>${a.name}${cond}</span><span class="bval">+${a.cost} RP</span></div>`;
+        }
+      }
+    });
+    selectedMindAugs.forEach(id => {
+      const a = findClassAugById(id);
+      if (a) rows += `<div class="breakdown-row"><span>${a.name}</span><span class="bval">+${a.cost} RP</span></div>`;
+    });
+    if (selectedAugs.size > 0 || selectedMindAugs.size > 0) {
+      rows += `<div class="breakdown-row total-row"><span>Total</span><span class="bval">${total} RP</span></div>`;
+    }
+    blist.innerHTML = rows;
+  } else {
+    bsec.style.display = 'none';
+  }
+
+  // Summary text
+  const stxt = document.getElementById('summary-text');
+  if (!selectedForm) {
+    stxt.innerHTML = '<em>Select a Spell Form to begin weaving your spell.</em>';
+    return;
+  }
+  const form = SPELL_FORMS.find(x => x.id === selectedForm);
+  let parts = [];
+  parts.push(`<strong>${form.name}</strong> — ${form.desc}`);
+
+  if (selectedAugs.size > 0) {
+    let effects = [];
+    if (selectedAugs.has('destructive')) effects.push('deals 2d6 damage to each target');
+    if (selectedAugs.has('elemental')) effects.push(`deals 1d6 additional damage as ${conditionChoices['elemental'] || 'elemental'} type`);
+    if (selectedAugs.has('restorative')) effects.push('restores 2d8 HP to each ally');
+    if (selectedAugs.has('greater_reach')) effects.push('range doubled');
+    if (selectedAugs.has('minor_cond')) effects.push(`imposes ${conditionChoices['minor_cond'] || 'a minor condition'} on failed save`);
+    if (selectedAugs.has('major_cond')) effects.push(`imposes ${conditionChoices['major_cond'] || 'a major condition'} on failed save`);
+    if (selectedAugs.has('severe_cond')) effects.push(`imposes ${conditionChoices['severe_cond'] || 'a severe condition'} on failed save`);
+    if (selectedMindAugs.has('kinetic_chain')) effects.push('chains damage to a second enemy within 10 ft.');
+    if (selectedMindAugs.has('flawless_strike')) effects.push('converts Glancing Blows to Full Damage');
+    if (selectedMindAugs.has('flicker_warp')) effects.push('lets you teleport up to 30 ft. after casting');
+    if (selectedMindAugs.has('haste_field')) effects.push('doubles an affected ally\'s movement speed until their next turn');
+    if (selectedMindAugs.has('temporal_hitch')) effects.push('can be delayed on a successful Save and reapplied with Disadvantage');
+    if (selectedMindAugs.has('displacement')) effects.push('pushes or pulls the target up to 15 ft.');
+    if (selectedMindAugs.has('astral_link')) effects.push('links two targets so half damage dealt to one is shared with the other');
+    // Animist
+    if (selectedMindAugs.has('prowlers_strike')) effects.push("boosts the Anima's attack by 1d8");
+    if (selectedMindAugs.has('ancestral_ward')) effects.push('grants the Anima Physical Resistance for a round');
+    if (selectedMindAugs.has('aggressive_tether')) effects.push('lets the Anima reposition a hit enemy up to 10 ft.');
+    if (selectedMindAugs.has('symbiotic_healing')) effects.push('heals the Animist for half the HP restored to the Anima');
+    if (selectedMindAugs.has('blinding_radiance')) effects.push('blinds enemies within 15 ft. on a failed Reflex Save');
+    if (selectedMindAugs.has('guardian_link')) effects.push('lets the Anima intercept an attack as a Reaction');
+    // Spirit
+    if (selectedMindAugs.has('smite')) effects.push('deals +1d12 Radiant Damage');
+    if (selectedMindAugs.has('ward_of_faith')) effects.push('grants an ally +2 Defense Score');
+    if (selectedMindAugs.has('purify_condition')) effects.push('removes one Advanced condition from an ally');
+    if (selectedMindAugs.has('restore_vitality')) effects.push('restores +2d6 HP and grants Physical Resistance');
+    if (selectedMindAugs.has('hallowed_ground')) effects.push('frightens enemies and bolsters ally Defense Scores');
+    if (selectedMindAugs.has('judgment')) effects.push('marks an enemy for Advantage and +1d6 bonus damage');
+    if (selectedMindAugs.has('empower_healing')) effects.push('restores +1d8 HP and splashes 1d4 to an adjacent ally');
+    if (selectedMindAugs.has('mass_renewal')) effects.push('extends healing to two additional allies or removes a condition');
+    if (selectedMindAugs.has('sanctuary')) effects.push('grants Immunity to Medium/Low conditions for one turn');
+    if (selectedMindAugs.has('aura_of_protection')) effects.push('grants +2 Defense Score to nearby allies');
+    if (selectedMindAugs.has('aura_of_courage')) effects.push('grants Advantage on all Saving Throws to nearby allies');
+    if (selectedMindAugs.has('aura_of_retribution')) effects.push('grants Advantage on the next Attack Roll with +2d6 Radiant to nearby allies');
+    if (selectedMindAugs.has('chained_punishment')) effects.push('deals half damage to a second target within 10 ft.');
+    if (selectedMindAugs.has('agony')) effects.push('inflicts Distracted and +1d6 ongoing damage');
+    if (selectedMindAugs.has('oblivion')) effects.push('inflicts Disadvantage on all Saves and -2 Defense Score');
+    if (effects.length > 0) parts.push('The spell ' + effects.join(', and ') + '.');
+  }
+
+  stxt.innerHTML = parts.join(' ');
+}
+
+function updateTierTable() {
+  const { total } = computeCost();
+  const tbody = document.getElementById('tier-tbody');
+  tbody.innerHTML = '';
+  TIERS.forEach(t => {
+    const isActive = total >= t.min && total <= t.max;
+    const tr = document.createElement('tr');
+    if (isActive) tr.className = 'active-tier';
+    tr.innerHTML = `<td>${t.label}</td><td>${t.min}${t.min !== t.max ? '+':''} RP</td><td style="font-size:0.72rem;font-style:italic;">${t.scale}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderAll() {
+  renderForms();
+  renderAugments();
+  renderSubclassSelector();
+  renderMindAugments();
+  updateSummary();
+  updateTierTable();
+}
+
+function resetAll() {
+  selectedForm = null;
+  selectedAugs = new Set();
+  selectedMindAugs = new Set();
+  conditionChoices = {};
+  document.getElementById('spell-name').value = '';
+  renderAll();
+}
+
+// ── Saved Spells ────────────────────────────────────────────────
+const LS_KEY = 'aethel_saved_spells';
+let savedSpells = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+let libraryView = 'cards';
+let tableSortCol = 'date';
+let tableSortDir = 'desc';
+
+function persistSpells() {
+  localStorage.setItem(LS_KEY, JSON.stringify(savedSpells));
+}
+
+function saveSpell() {
+  const name = document.getElementById('spell-name').value.trim();
+  const msgEl = document.getElementById('save-msg');
+  const showMsg = (text, ok) => {
+    msgEl.style.color = ok ? '#2d6a2d' : '';
+    msgEl.textContent = text;
+    setTimeout(() => { msgEl.textContent = ''; msgEl.style.color = ''; }, 2800);
+  };
+  if (!name) { showMsg('A name is required to save your spell.', false); return; }
+  if (!selectedForm) { showMsg('Select a Spell Form before saving.', false); return; }
+
+  const { total } = computeCost();
+  const tier = getTier(total);
+  savedSpells.unshift({
+    id: Date.now(),
+    name,
+    formId: selectedForm,
+    augs: [...selectedAugs],
+    mindAugs: [...selectedMindAugs],
+    conditions: { ...conditionChoices },
+    playerLevel,
+    mindLevel,
+    spellClass: selectedClass,
+    spellSubclass: selectedSubclass,
+    cost: total,
+    tierLabel: tier ? tier.label : null,
+    savedAt: Date.now(),
+  });
+  persistSpells();
+  updateLibraryTabCount();
+  showMsg(`"${name}" saved to library.`, true);
+}
+
+function deleteSpell(id) {
+  savedSpells = savedSpells.filter(s => s.id !== id);
+  persistSpells();
+  updateLibraryTabCount();
+  renderLibrary();
+}
+
+function loadSpell(id) {
+  const spell = savedSpells.find(s => s.id === id);
+  if (!spell) return;
+  selectedForm = spell.formId;
+  selectedAugs = new Set(spell.augs);
+  selectedMindAugs = new Set(spell.mindAugs);
+  conditionChoices = { ...spell.conditions };
+  playerLevel = spell.playerLevel;
+  mindLevel = spell.mindLevel;
+  selectedClass = spell.spellClass || 'mind';
+  selectedSubclass = spell.spellSubclass || 'arcanist';
+  document.getElementById('player-level-val').value = playerLevel;
+  document.getElementById('mind-level-val').value = mindLevel;
+  document.getElementById('spell-name').value = spell.name;
+  document.getElementById('class-btn-mind').classList.toggle('active', selectedClass === 'mind');
+  document.getElementById('class-btn-spirit').classList.toggle('active', selectedClass === 'spirit');
+  const lbl = document.getElementById('class-level-label');
+  lbl.innerHTML = selectedClass === 'mind' ? 'Mind Class<br>Level' : 'Spirit Class<br>Level';
+  switchTab('builder');
+  renderAll();
+}
+
+function updateLibraryTabCount() {
+  document.getElementById('library-tab-count').textContent =
+    savedSpells.length > 0 ? `(${savedSpells.length})` : '';
+}
+
+// ── Library render ───────────────────────────────────────────────
+function setLibraryView(view) {
+  libraryView = view;
+  const isCards = view === 'cards';
+  document.getElementById('btn-view-cards').classList.toggle('active', isCards);
+  document.getElementById('btn-view-table').classList.toggle('active', !isCards);
+  document.getElementById('sort-dropdown-label').style.display = isCards ? '' : 'none';
+  document.getElementById('sort-select').style.display = isCards ? '' : 'none';
+  renderLibrary();
+}
+
+function renderLibrary() {
+  const container = document.getElementById('library-content');
+  const countEl = document.getElementById('library-count');
+
+  if (savedSpells.length === 0) {
+    container.innerHTML = '<div class="library-empty">No spells saved yet.<br>Build a spell and press ✦ Save Spell.</div>';
+    countEl.textContent = '';
+    return;
+  }
+
+  countEl.textContent = `${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}`;
+
+  if (libraryView === 'table') {
+    renderLibraryTable(sortTableRows(savedSpells.map(deriveSpellTableRow)));
+  } else {
+    const sortVal = document.getElementById('sort-select').value;
+    const sorted = [...savedSpells].sort((a, b) => {
+      switch (sortVal) {
+        case 'date-asc':  return a.savedAt - b.savedAt;
+        case 'name-asc':  return a.name.localeCompare(b.name);
+        case 'name-desc': return b.name.localeCompare(a.name);
+        case 'cost-asc':  return a.cost - b.cost;
+        case 'cost-desc': return b.cost - a.cost;
+        case 'tier-asc':  return a.cost - b.cost;
+        case 'tier-desc': return b.cost - a.cost;
+        default:          return b.savedAt - a.savedAt;
+      }
+    });
+    renderLibraryCards(sorted);
+  }
+}
+
+function renderLibraryCards(sorted) {
+  const container = document.getElementById('library-content');
+  const grid = document.createElement('div');
+  grid.className = 'spell-cards-grid';
+
+  sorted.forEach(spell => {
+    const tc = getTierColor(spell.cost);
+    const form = SPELL_FORMS.find(f => f.id === spell.formId);
+    const savedCond = spell.conditions || {};
+
+    const tagHtml = [...spell.augs, ...spell.mindAugs].map(id => {
+      for (const sec of AUG_SECTIONS) {
+        const a = sec.augments.find(x => x.id === id);
+        if (a) {
+          const cond = a.conditions ? ` (${savedCond[id] || a.conditions[0]})` : '';
+          return `<span class="sc-tag">${a.name}${cond}</span>`;
+        }
+      }
+      const ca = findClassAugById(id);
+      if (ca) return `<span class="sc-tag">${ca.name}</span>`;
+      return '';
+    }).join('');
+
+    const dateStr = new Date(spell.savedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const clsLabel = spell.spellClass === 'spirit' ? 'Spirit' : 'Mind';
+    const subLabel = spell.spellSubclass
+      ? spell.spellSubclass.charAt(0).toUpperCase() + spell.spellSubclass.slice(1)
+      : 'Arcanist';
+    const levelStr = spell.mindLevel > 1
+      ? `Lv ${spell.playerLevel} · ${clsLabel}/${subLabel} Lv ${spell.mindLevel}`
+      : `Lv ${spell.playerLevel} · ${clsLabel}/${subLabel}`;
+
+    const card = document.createElement('div');
+    card.className = 'spell-card';
+    card.innerHTML = `
+      <div class="sc-header">
+        <div>
+          <div class="sc-name">${spell.name}</div>
+          <div class="sc-form">${form ? form.name : '—'}</div>
+        </div>
+        <div class="sc-cost-col">
+          <div class="sc-cost-num">${spell.cost}</div>
+          <span class="sc-cost-rp">RP</span>
+        </div>
+      </div>
+      <div class="sc-tags">${tagHtml || '<span style="font-style:italic;font-size:0.72rem;color:rgba(26,20,16,0.28);">No augments</span>'}</div>
+      <div class="sc-footer">
+        ${spell.tierLabel ? `<span class="sc-tier-badge" style="color:${tc.color};border-color:${tc.color};background:${tc.bg};">${spell.tierLabel}</span>` : ''}
+        <span class="sc-level">${levelStr}</span>
+        <span class="sc-date">${dateStr}</span>
+        <div class="sc-actions">
+          <button class="btn-sc btn-sc-load" onclick="loadSpell(${spell.id})">Load</button>
+          <button class="btn-sc btn-sc-del" onclick="deleteSpell(${spell.id})">✕</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  container.innerHTML = '';
+  container.appendChild(grid);
+}
+
+// ── Table view ────────────────────────────────────────────────────
+function deriveSpellTableRow(spell) {
+  const form = SPELL_FORMS.find(f => f.id === spell.formId) || {};
+  const augs = spell.augs || [];
+  const mindAugs = spell.mindAugs || [];
+  const savedCond = spell.conditions || {};
+  const hasReach = augs.includes('greater_reach');
+
+  // Range / Area
+  let range;
+  switch (spell.formId) {
+    case 'cantrip':       range = hasReach ? '120 ft' : '60 ft'; break;
+    case 'simple':        range = hasReach ? '120 ft' : '60 ft'; break;
+    case 'close_burst':   range = '15 ft radius (self)'; break;
+    case 'ranged_burst':  range = `${hasReach ? 120 : 60} ft · 15 ft radius`; break;
+    case 'broad_wave':    range = hasReach ? '60 ft cone / 120 ft line' : '30 ft cone / 60 ft line'; break;
+    case 'self_channel':  range = 'Self'; break;
+    case 'arcane_wall':   range = hasReach ? '60 ft wall' : '30 ft wall'; break;
+    case 'binding_ring':  range = `${hasReach ? 120 : 60} ft · 10 ft ring`; break;
+    case 'sense_strands': range = 'Self / Ally'; break;
+    default:              range = '—';
+  }
+
+  // Damage
+  const dmgParts = [];
+  if (spell.formId === 'cantrip') dmgParts.push('1d6');
+  if (augs.includes('destructive')) dmgParts.push('2d6');
+  if (augs.includes('elemental')) dmgParts.push(`1d6 ${savedCond['elemental'] || 'Elemental'}`);
+  const damage = dmgParts.join(' + ') || '—';
+  const dmgDice = (spell.formId === 'cantrip' ? 1 : 0)
+    + (augs.includes('destructive') ? 2 : 0)
+    + (augs.includes('elemental') ? 1 : 0);
+
+  // Healing
+  const healing = augs.includes('restorative') ? '2d8' : '—';
+
+  // Conditions
+  const condParts = [];
+  if (augs.includes('minor_cond')) condParts.push(savedCond['minor_cond'] || 'Minor');
+  if (augs.includes('major_cond')) condParts.push(savedCond['major_cond'] || 'Major');
+  if (augs.includes('severe_cond')) condParts.push(savedCond['severe_cond'] || 'Severe');
+  const condition = condParts.join(', ') || '—';
+
+  // Class augment effects
+  const mindMap = {
+    kinetic_chain: 'Chain', flawless_strike: 'Flawless', flicker_warp: '+30 ft Warp',
+    haste_field: 'Haste', temporal_hitch: 'Temporal', displacement: 'Push/Pull ±15 ft',
+    astral_link: 'Astral Link',
+  };
+  const mindFx = mindAugs.map(id => {
+    if (mindMap[id]) return mindMap[id];
+    const a = findClassAugById(id);
+    return a ? a.name : null;
+  }).filter(Boolean).join(', ') || '—';
+
+  const tc = getTierColor(spell.cost);
+  return {
+    _id: spell.id,
+    _savedAt: spell.savedAt,
+    _dmgDice: dmgDice,
+    tc,
+    name: spell.name,
+    formName: form.name || '—',
+    action: form.action || '—',
+    range,
+    damage,
+    healing,
+    condition,
+    mindFx,
+    cost: spell.cost,
+    tierLabel: spell.tierLabel || '—',
+  };
+}
+
+function sortByTableCol(col) {
+  if (tableSortCol === col) {
+    tableSortDir = tableSortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    tableSortCol = col;
+    tableSortDir = ['cost', 'tier', 'damage', 'date'].includes(col) ? 'desc' : 'asc';
+  }
+  renderLibrary();
+}
+
+function sortTableRows(rows) {
+  return [...rows].sort((a, b) => {
+    let va, vb;
+    switch (tableSortCol) {
+      case 'name':      va = a.name;      vb = b.name;      break;
+      case 'form':      va = a.formName;  vb = b.formName;  break;
+      case 'action':    va = a.action;    vb = b.action;    break;
+      case 'range':     va = a.range;     vb = b.range;     break;
+      case 'damage':    va = a._dmgDice;  vb = b._dmgDice;  break;
+      case 'healing':   va = a.healing === '—' ? 0 : 1; vb = b.healing === '—' ? 0 : 1; break;
+      case 'condition': va = a.condition; vb = b.condition; break;
+      case 'mindfx':    va = a.mindFx;    vb = b.mindFx;    break;
+      case 'cost':      va = a.cost;      vb = b.cost;      break;
+      case 'tier':      va = a.cost;      vb = b.cost;      break;
+      default:          va = a._savedAt;  vb = b._savedAt;  break;
+    }
+    const cmp = typeof va === 'number' ? va - vb : String(va).localeCompare(String(vb));
+    return tableSortDir === 'asc' ? cmp : -cmp;
+  });
+}
+
+function renderLibraryTable(rows) {
+  const container = document.getElementById('library-content');
+  const cols = [
+    { key: 'name',      label: 'Name' },
+    { key: 'form',      label: 'Form' },
+    { key: 'action',    label: 'Action' },
+    { key: 'range',     label: 'Range / Area' },
+    { key: 'damage',    label: 'Damage' },
+    { key: 'healing',   label: 'Healing' },
+    { key: 'condition', label: 'Condition' },
+    { key: 'mindfx',    label: 'Mind FX' },
+    { key: 'cost',      label: 'Cost' },
+    { key: 'tier',      label: 'Tier' },
+    { key: null,        label: '' },
+  ];
+
+  const arrow = key => {
+    if (!key) return '';
+    if (tableSortCol !== key) return '<span class="sort-arrow">⇅</span>';
+    return `<span class="sort-arrow">${tableSortDir === 'asc' ? '↑' : '↓'}</span>`;
+  };
+
+  const thead = cols.map(c => {
+    if (!c.key) return '<th></th>';
+    const active = tableSortCol === c.key ? ' th-sorted' : '';
+    return `<th class="${active}" onclick="sortByTableCol('${c.key}')">${c.label}${arrow(c.key)}</th>`;
+  }).join('');
+
+  const tbody = rows.map(row => {
+    const tierCell = row.tierLabel !== '—'
+      ? `<span class="sc-tier-badge" style="color:${row.tc.color};border-color:${row.tc.color};background:${row.tc.bg};">${row.tierLabel}</span>`
+      : '<span class="td-dim">—</span>';
+    return `<tr>
+      <td class="td-name">${row.name}</td>
+      <td class="td-dim" style="white-space:nowrap;">${row.formName}</td>
+      <td class="td-dim" style="white-space:nowrap;">${row.action}</td>
+      <td style="white-space:nowrap;font-size:0.8rem;">${row.range}</td>
+      <td class="${row.damage !== '—' ? 'td-dmg' : 'td-dim'}">${row.damage}</td>
+      <td class="${row.healing !== '—' ? 'td-heal' : 'td-dim'}">${row.healing}</td>
+      <td class="${row.condition !== '—' ? '' : 'td-dim'}" style="font-size:0.78rem;">${row.condition}</td>
+      <td class="${row.mindFx !== '—' ? '' : 'td-dim'}" style="font-size:0.75rem;">${row.mindFx}</td>
+      <td class="td-cost">${row.cost} RP</td>
+      <td>${tierCell}</td>
+      <td class="td-actions">
+        <div style="display:flex;gap:0.3rem;">
+          <button class="btn-sc btn-sc-load" onclick="loadSpell(${row._id})">Load</button>
+          <button class="btn-sc btn-sc-del" onclick="deleteSpell(${row._id})">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  const wrap = document.createElement('div');
+  wrap.className = 'spell-table-wrap';
+  wrap.innerHTML = `<table class="spell-table"><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table>`;
+  container.innerHTML = '';
+  container.appendChild(wrap);
+}
+
+// ── Tab switching ────────────────────────────────────────────────
+function switchTab(tab) {
+  const isBuilder = tab === 'builder';
+  document.getElementById('layout-main').style.display = isBuilder ? '' : 'none';
+  document.getElementById('library-view').style.display = isBuilder ? 'none' : 'block';
+  document.getElementById('tab-builder').classList.toggle('active', isBuilder);
+  document.getElementById('tab-library').classList.toggle('active', !isBuilder);
+  if (!isBuilder) renderLibrary();
+}
+
+// ── Import / Export ──────────────────────────────────────────────
+function showIoMsg(text, ok) {
+  const el = document.getElementById('io-msg');
+  el.textContent = text;
+  el.className = 'io-msg ' + (ok ? 'ok' : 'err');
+  setTimeout(() => { el.textContent = ''; el.className = 'io-msg'; }, 3000);
+}
+
+function exportLibrary() {
+  if (savedSpells.length === 0) { showIoMsg('No spells to export.', false); return; }
+  const json = JSON.stringify(savedSpells, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'aethel-spell-library.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+}
+
+function importLibrary() {
+  document.getElementById('import-file-input').value = '';
+  document.getElementById('import-file-input').click();
+}
+
+function handleImportFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('Expected an array of spells.');
+      // Merge: add spells whose id doesn't already exist
+      const existingIds = new Set(savedSpells.map(s => s.id));
+      const newSpells = data.filter(s => s && s.id && s.formId && !existingIds.has(s.id));
+      if (newSpells.length === 0) { showIoMsg('No new spells found to import.', false); return; }
+      savedSpells = [...newSpells, ...savedSpells];
+      persistSpells();
+      updateLibraryTabCount();
+      renderLibrary();
+      showIoMsg(`Imported ${newSpells.length} spell${newSpells.length !== 1 ? 's' : ''}.`, true);
+    } catch (err) {
+      showIoMsg('Invalid file: ' + err.message, false);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Init
+renderAll();
+updateLibraryTabCount();
+</script>
+</body>
+</html>

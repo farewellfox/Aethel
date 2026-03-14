@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aethel — Character Dossier</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:          #16120e;
+  --ink-soft:     #2a221a;
+  --vellum:       #f0e6d0;
+  --vellum-mid:   #e8d9be;
+  --vellum-dark:  #ddc9a8;
+  --copper:       #b87333;
+  --copper-light: #d4924a;
+  --copper-pale:  #f0c87a;
+  --teal:         #1e5f5f;
+  --teal-light:   #2d8080;
+  --crimson:      #7a1a1a;
+  --crimson-soft: #a03030;
+  --shadow:       rgba(22,18,14,0.3);
+  --field-bg:     rgba(22,18,14,0.04);
+  --field-border: rgba(184,115,51,0.35);
+  --text-main:    #1e160e;
+  --text-soft:    rgba(30,22,14,0.55);
+  --text-label:   rgba(30,22,14,0.42);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #0e0b08;
+  font-family: 'Crimson Text', Georgia, serif;
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 0;
+  background-image:
+    radial-gradient(ellipse at 15% 0%, #1a1005 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, #051010 0%, transparent 55%);
+}
+
+/* ── NAV TABS ── */
+.tab-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #0e0b08;
+  border-bottom: 1px solid rgba(184,115,51,0.3);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  gap: 0;
+}
+
+.nav-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--copper);
+  text-transform: uppercase;
+  margin-right: auto;
+  padding: 1rem 0;
+  opacity: 0.8;
+}
+
+.tab-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(240,230,208,0.4);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+
+.tab-btn:hover { color: var(--copper-light); }
+.tab-btn.active {
+  color: var(--copper-pale);
+  border-bottom-color: var(--copper);
+}
+
+.save-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.4);
+  color: var(--copper-light);
+  padding: 0.4rem 0.9rem;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-left: 1.5rem;
+  transition: all 0.15s;
+}
+.save-btn:hover { background: var(--copper); color: var(--ink); border-color: var(--copper); }
+.save-msg { font-size: 0.7rem; color: var(--teal-light); margin-left: 0.75rem; opacity: 0; transition: opacity 0.3s; font-style: italic; }
+.save-msg.show { opacity: 1; }
+
+/* ── PAGES ── */
+.page { display: none; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* ── SECTION WRAPPER ── */
+.sheet-section {
+  background: var(--vellum);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  box-shadow: 0 4px 24px var(--shadow), inset 0 0 80px rgba(240,230,208,0.2);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.sheet-section::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(184,115,51,0.15);
+  border-radius: 1px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Aged paper texture overlay */
+.sheet-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.section-header {
+  background: linear-gradient(to right, var(--ink-soft), #1e160a);
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--copper);
+  position: relative;
+  z-index: 1;
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--copper-light);
+}
+
+.section-body {
+  padding: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── FIELD COMPONENTS ── */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.field-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-label);
+}
+
+.field-input {
+  background: var(--field-bg);
+  border: none;
+  border-bottom: 1px solid var(--field-border);
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  color: var(--text-main);
+  padding: 0.25rem 0.1rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: 0;
+}
+
+.field-input:focus { border-bottom-color: var(--copper); }
+.field-input::placeholder { color: rgba(30,22,14,0.2); font-style: italic; }
+
+.field-input.large {
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 0.3rem 0.1rem;
+}
+
+.field-input.center { text-align: center; }
+
+textarea.field-input {
+  resize: vertical;
+  min-height: 80px;
+  border: 1px solid var(--field-border);
+  background: var(--field-bg);
+  padding: 0.5rem 0.6rem;
+  line-height: 1.5;
+  border-radius: 1px;
+}
+
+textarea.field-input:focus { border-color: var(--copper); }
+
+/* ── HEADER SECTION ── */
+.char-header-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.char-identity { display: flex; flex-direction: column; gap: 0.9rem; }
+
+.identity-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 700px) {
+  .identity-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* Daily ability hex */
+.daily-hex-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hex-container {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.hex-shape {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, var(--ink-soft), var(--ink));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  position: relative;
+}
+
+.hex-border {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(135deg, var(--copper), var(--copper-light));
+  z-index: -1;
+  transform: scale(1.05);
+}
+
+.hex-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--copper-pale);
+  opacity: 0.7;
+  margin-bottom: 2px;
+}
+
+.hex-used-toggle {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--copper);
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-top: 2px;
+}
+
+.hex-used-toggle.used { background: var(--copper); }
+.hex-used-toggle.used::after { content: '✦'; font-size: 0.5rem; color: var(--ink); }
+
+.daily-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  text-align: center;
+}
+
+/* ── COMBAT STATS BAND ── */
+.combat-band {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--copper);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .combat-band { grid-template-columns: repeat(2, 1fr); }
+}
+
+.combat-stat {
+  background: var(--vellum);
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.combat-stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-label);
+}
+
+.combat-stat-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.combat-num {
+  width: 50px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--field-border);
+  color: var(--text-main);
+  font-family: 'Crimson Text', serif;
+  outline: none;
+  padding: 0.1rem;
+  transition: border-color 0.2s;
+}
+.combat-num:focus { border-bottom-color: var(--copper); }
+.combat-num::placeholder { color: rgba(30,22,14,0.2); font-size: 1rem; }
+
+.combat-divider {
+  font-size: 1.1rem;
+  color: var(--text-label);
+  line-height: 1;
+}
+
+.resource-label {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--text-soft);
+  margin-top: 0.1rem;
+}
+
+/* ── MAIN GRID ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .main-grid { grid-template-columns: 1fr; }
+}
+
+/* ── ABILITY SCORES ── */
+.ability-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ability-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 2.2rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  transition: background 0.15s;
+}
+
+.ability-row:hover { background: rgba(184,115,51,0.06); border-color: rgba(184,115,51,0.15); }
+
+.ability-abbr {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+}
+
+.ability-score-input {
+  width: 100%;
+  background: var(--field-bg);
+  border: none;
+  border-bottom: 1px solid var(--field-border);
+  font-family: 'Crimson Text', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+  padding: 0.15rem;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: 0;
+}
+.ability-score-input:focus { border-bottom-color: var(--copper); }
+
+.ability-mod {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--crimson-soft);
+  text-align: center;
+  min-width: 2rem;
+  background: rgba(120,26,26,0.07);
+  border-radius: 2px;
+  padding: 0.15rem 0.2rem;
+  transition: all 0.2s;
+}
+
+.ability-mod.positive { color: var(--teal); background: rgba(30,95,95,0.08); }
+.ability-mod.zero { color: var(--text-soft); background: rgba(30,22,14,0.05); }
+
+/* ── SAVING THROWS ── */
+.save-row {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed rgba(30,22,14,0.1);
+}
+.save-row:last-child { border-bottom: none; }
+
+.save-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.save-detail {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-soft);
+}
+
+/* ── SKILLS ── */
+.skills-list { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr 2rem 3rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  transition: background 0.12s;
+}
+
+.skill-row:hover { background: rgba(184,115,51,0.05); border-color: rgba(184,115,51,0.12); }
+
+.skill-name-wrap { display: flex; flex-direction: column; gap: 0.05rem; }
+
+.skill-name {
+  font-size: 0.88rem;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.skill-assoc {
+  font-size: 0.65rem;
+  color: var(--text-label);
+  font-style: italic;
+}
+
+.skill-pts-computed {
+  width: 2rem;
+  text-align: center;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--teal);
+  flex-shrink: 0;
+}
+
+.skill-total {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--teal);
+  background: rgba(30,95,95,0.08);
+  border-radius: 2px;
+  padding: 0.15rem 0.2rem;
+  min-width: 2.5rem;
+}
+
+.skills-header {
+  display: grid;
+  grid-template-columns: 1fr 2rem 3rem;
+  gap: 0.5rem;
+  padding: 0 0.4rem 0.4rem;
+  border-bottom: 1px solid rgba(184,115,51,0.25);
+  margin-bottom: 0.5rem;
+}
+
+.skills-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  text-align: center;
+}
+
+/* ── RIGHT COLUMN ── */
+.right-col { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .actions-grid { grid-template-columns: 1fr; }
+}
+
+/* ── PAGE 2 NOTES ── */
+.notes-intro {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(184,115,51,0.2);
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .notes-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .notes-grid { grid-template-columns: 1fr; }
+}
+
+.note-box { display: flex; flex-direction: column; gap: 0.3rem; }
+.note-title-input {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--copper-light);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(184,115,51,0.3);
+  outline: none;
+  padding: 0.2rem 0;
+  width: 100%;
+  text-transform: uppercase;
+}
+.note-title-input::placeholder { color: rgba(184,115,51,0.3); }
+.note-title-input:focus { border-bottom-color: var(--copper); }
+
+.note-row-table { border: 1px solid var(--field-border); border-radius: 2px; }
+.note-row-body {
+  max-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184,115,51,0.3) transparent;
+}
+.level-notes-body {
+  max-height: 110px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184,115,51,0.3) transparent;
+}
+
+/* ── DIVIDER ── */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184,115,51,0.3));
+}
+.ornament-divider::after { background: linear-gradient(to left, transparent, rgba(184,115,51,0.3)); }
+.ornament-glyph { color: var(--copper); font-size: 0.6rem; }
+
+/* ── SKILL CAP WARNING ── */
+.skill-pts-computed.over-cap {
+  color: var(--crimson-soft);
+}
+.skill-cap-warn {
+  font-size: 0.62rem;
+  color: var(--crimson-soft);
+  font-style: italic;
+  grid-column: 1 / -1;
+  padding: 0 0.4rem 0.2rem;
+  display: none;
+}
+.skill-cap-warn.visible { display: block; }
+
+.skill-pts-budget {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.72rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+.budget-item { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; }
+.budget-num { font-size: 1.1rem; font-weight: 700; line-height: 1; }
+.budget-num.ok { color: var(--teal); }
+.budget-num.warn { color: var(--crimson-soft); }
+.budget-lbl { font-size: 0.55rem; letter-spacing: 0.1em; color: var(--text-label); text-transform: uppercase; }
+
+/* ── LEVEL LOG ── */
+.level-log-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.level-entry {
+  background: var(--vellum);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+
+.level-entry-header {
+  background: linear-gradient(to right, var(--ink-soft), #1e160a);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--copper);
+  cursor: pointer;
+  user-select: none;
+}
+
+.level-entry-header:hover { background: linear-gradient(to right, #2a1f0a, #221508); }
+
+.level-entry-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--copper-light);
+}
+
+.level-entry-summary {
+  font-size: 0.72rem;
+  color: rgba(240,230,208,0.45);
+  font-style: italic;
+}
+
+.level-entry-chevron {
+  color: var(--copper);
+  font-size: 0.6rem;
+  transition: transform 0.2s;
+}
+.level-entry.collapsed .level-entry-chevron { transform: rotate(-90deg); }
+
+.level-entry-body {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.level-entry.collapsed .level-entry-body { display: none; }
+
+@media (max-width: 600px) {
+  .level-entry-body { grid-template-columns: 1fr; }
+}
+
+.level-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.level-stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  min-width: 5rem;
+}
+
+.level-num-input {
+  width: 60px;
+  text-align: center;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 2px;
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  padding: 0.2rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.level-num-input:focus { border-color: var(--copper); }
+
+.level-skills-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.level-skill-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+}
+
+.level-skill-name {
+  flex: 1;
+  color: var(--text-soft);
+  font-style: italic;
+  font-size: 0.78rem;
+}
+
+.level-skill-pts {
+  width: 36px;
+  text-align: center;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 2px;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--teal);
+  padding: 0.1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.level-skill-pts:focus { border-color: var(--copper); }
+.level-skill-pts.over { border-color: var(--crimson-soft); color: var(--crimson-soft); }
+
+.level-skills-header {
+  grid-column: 1 / -1;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(184,115,51,0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.level-pts-remaining {
+  font-size: 0.7rem;
+  font-style: italic;
+  font-family: 'Crimson Text', serif;
+  letter-spacing: 0;
+}
+
+.level-pts-remaining.ok { color: var(--teal-light); }
+.level-pts-remaining.over { color: var(--crimson-soft); }
+
+.add-level-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px dashed rgba(184,115,51,0.35);
+  border-radius: 2px;
+  color: var(--copper-light);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 0.5rem;
+}
+.add-level-btn:hover { background: rgba(184,115,51,0.08); border-style: solid; }
+
+/* ── CHEAT SHEET ── */
+.cs-block { margin-bottom: 0.25rem; }
+.cs-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(30,95,95,0.2);
+}
+.cs-body {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+.cs-table { display: flex; flex-direction: column; gap: 0.35rem; }
+.cs-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed rgba(30,22,14,0.08);
+}
+.cs-row:last-child { border-bottom: none; }
+.cs-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  background: rgba(30,22,14,0.06);
+  color: var(--text-soft);
+  border: 1px solid rgba(30,22,14,0.1);
+  margin-top: 0.1rem;
+  min-width: 5.5rem;
+  text-align: center;
+}
+.cs-tag.ok { background: rgba(30,95,95,0.1); color: var(--teal); border-color: rgba(30,95,95,0.2); }
+.cs-tag.warn { background: rgba(184,115,51,0.1); color: var(--copper); border-color: rgba(184,115,51,0.25); }
+.cs-tag.crit { background: rgba(120,26,26,0.1); color: var(--crimson-soft); border-color: rgba(120,26,26,0.2); }
+.cs-dice {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  background: rgba(30,22,14,0.06);
+  border: 1px solid rgba(30,22,14,0.12);
+  border-radius: 2px;
+  padding: 0.05rem 0.35rem;
+  color: var(--teal);
+  letter-spacing: 0.04em;
+}
+.cs-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(30,22,14,0.04);
+  border-radius: 2px;
+}
+.cs-ex { font-size: 0.85rem; color: var(--text-soft); display: flex; align-items: center; gap: 0.4rem; }
+
+/* ── ACTION TABLES ── */
+.action-table-wrap { display: flex; flex-direction: column; }
+
+.action-table-head {
+  display: flex;
+  background: rgba(22,18,14,0.07);
+  border-bottom: 1px solid var(--field-border);
+  padding: 0 0.5rem;
+}
+
+.action-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  padding: 0.35rem 0.4rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.action-table-body {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184,115,51,0.3) transparent;
+}
+
+.action-table-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(184,115,51,0.1);
+  padding: 0 0.5rem;
+  min-height: 2rem;
+}
+
+.action-table-row:last-child { border-bottom: none; }
+.action-table-row:hover { background: rgba(184,115,51,0.04); }
+
+.action-col-input {
+  background: transparent;
+  border: none;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  padding: 0.4rem 0.4rem;
+  width: 100%;
+  outline: none;
+  min-width: 0;
+}
+
+.action-col-input:focus { background: rgba(184,115,51,0.05); }
+.action-col-input::placeholder { color: rgba(30,22,14,0.2); font-style: italic; }
+
+.action-del-btn {
+  background: transparent;
+  border: none;
+  color: rgba(120,26,26,0.3);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.2rem;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.15s;
+  width: 20px;
+  text-align: center;
+}
+
+.action-del-btn:hover { color: var(--crimson); }
+
+.action-add-btn {
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(184,115,51,0.15);
+  color: var(--copper);
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.25rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.action-add-btn:hover { background: rgba(184,115,51,0.06); }
+
+/* ── PRINT HINT ── */
+.print-hint {
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(240,230,208,0.25);
+  font-style: italic;
+  margin-top: 2rem;
+  padding-bottom: 2rem;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="tab-nav">
+  <div class="nav-brand">Aethel ✦ Dossier</div>
+  <button class="tab-btn active" onclick="switchTab('sheet', this)">Character Sheet</button>
+  <button class="tab-btn" onclick="switchTab('notes', this)">Notes & Lore</button>
+  <button class="tab-btn" onclick="switchTab('levels', this)">Level Log</button>
+  <button class="tab-btn" onclick="switchTab('cheatsheet', this)">Cheat Sheet</button>
+  <button class="save-btn" onclick="saveAll()">Save</button>
+  <label class="save-btn" style="cursor:pointer;">Load<input type="file" accept=".json" style="display:none;" onchange="loadFromFile(this)"></label>
+  <span class="save-msg" id="save-msg">Saved.</span>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ PAGE 1: SHEET -->
+<div class="page active" id="page-sheet">
+
+  <!-- IDENTITY -->
+  <div class="sheet-section">
+    <div class="section-header"><div class="section-title">Identity</div></div>
+    <div class="section-body">
+      <div class="char-header-grid">
+        <div class="char-identity">
+          <div class="identity-row" style="grid-template-columns: 3fr 1fr;">
+            <div class="field-group">
+              <label class="field-label">Character Name</label>
+              <input type="text" class="field-input large" id="char-name" placeholder="Enter name…" data-save="char-name">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Level <span style="font-style:italic;font-weight:400;letter-spacing:0;color:var(--copper-light);">(from log)</span></label>
+              <input type="text" class="field-input large center" id="char-level" placeholder="—" readonly style="cursor:default;opacity:0.8;" data-save="char-level">
+            </div>
+          </div>
+          <div class="identity-row">
+            <div class="field-group">
+              <label class="field-label">Species</label>
+              <input type="text" class="field-input" id="char-species" placeholder="Human, Elf…" data-save="char-species">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Alignment</label>
+              <input type="text" class="field-input" id="char-alignment" placeholder="Lawful Good…" data-save="char-alignment">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Class</label>
+              <input type="text" class="field-input" id="char-class" placeholder="The Mind…" data-save="char-class">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Archetype</label>
+              <input type="text" class="field-input" id="char-archetype" placeholder="Arcanist…" data-save="char-archetype">
+            </div>
+          </div>
+          <div class="identity-row" style="grid-template-columns: 1fr 1fr;">
+            <div class="field-group">
+              <label class="field-label">Background</label>
+              <input type="text" class="field-input" id="char-background" placeholder="Scholar, Soldier…" data-save="char-background">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Player Name</label>
+              <input type="text" class="field-input" id="char-player" placeholder="Your name…" data-save="char-player">
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily hex -->
+        <div class="daily-hex-wrap">
+          <div class="hex-container">
+            <div class="hex-border"></div>
+            <div class="hex-shape">
+              <div class="hex-label">Daily</div>
+              <button class="hex-used-toggle" id="daily-toggle" onclick="toggleDaily()" title="Toggle used/available"></button>
+            </div>
+          </div>
+          <div class="daily-label">Archetype<br>Ability</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMBAT BAND -->
+  <div class="combat-band" style="margin-bottom:1.5rem;">
+    <div class="combat-stat">
+      <div class="combat-stat-label">Initiative</div>
+      <input type="text" class="combat-num" id="stat-initiative" placeholder="—" data-save="stat-initiative">
+    </div>
+    <div class="combat-stat">
+      <div class="combat-stat-label">Defense</div>
+      <input type="text" class="combat-num" id="stat-defense" placeholder="—" data-save="stat-defense">
+    </div>
+    <div class="combat-stat">
+      <div class="combat-stat-label">Hit Points</div>
+      <div class="combat-stat-inputs">
+        <input type="text" class="combat-num" id="stat-hp-cur" placeholder="—" data-save="stat-hp-cur">
+        <span class="combat-divider">/</span>
+        <input type="text" class="combat-num" id="stat-hp-max" placeholder="—" data-save="stat-hp-max">
+      </div>
+    </div>
+    <div class="combat-stat">
+      <div class="combat-stat-label">Resource</div>
+      <div class="combat-stat-inputs">
+        <input type="text" class="combat-num" id="stat-rp-cur" placeholder="—" data-save="stat-rp-cur">
+        <span class="combat-divider">/</span>
+        <input type="text" class="combat-num" id="stat-rp-max" placeholder="—" data-save="stat-rp-max">
+      </div>
+      <div class="resource-label" id="resource-label-display">AP / FP / RP</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- LEFT: STATS + SAVES + SKILLS -->
+    <div>
+
+      <!-- ABILITY SCORES -->
+      <div class="sheet-section">
+        <div class="section-header"><div class="section-title">Ability Scores</div></div>
+        <div class="section-body">
+          <div style="display:grid;grid-template-columns:2.5rem 3.5rem 2.2rem;gap:0.4rem;margin-bottom:0.5rem;padding:0 0.5rem;">
+            <div class="skills-col-label" style="text-align:left;">Stat</div>
+            <div class="skills-col-label">Score</div>
+            <div class="skills-col-label">MOD</div>
+          </div>
+          <div class="ability-grid" id="ability-grid">
+            <!-- rendered by JS -->
+          </div>
+          <div class="ornament-divider" style="margin-top:1rem;"><span class="ornament-glyph">✦</span></div>
+          <div style="margin-top:0.75rem;">
+            <div class="section-title" style="font-size:0.62rem;margin-bottom:0.6rem;color:var(--text-label);">Saving Throws <span style="font-weight:400;font-style:italic;">(modifier only — always roll 2d10+)</span></div>
+            <div class="save-row">
+              <div class="save-name">FORT</div>
+              <div style="display:flex;align-items:baseline;gap:0.5rem;flex:1;">
+                <div class="ability-mod" id="save-fort" style="min-width:2.5rem;text-align:center;">—</div>
+                <div class="save-detail">STR mod</div>
+              </div>
+            </div>
+            <div class="save-row">
+              <div class="save-name">REFLEX</div>
+              <div style="display:flex;align-items:baseline;gap:0.5rem;flex:1;">
+                <div class="ability-mod" id="save-reflex" style="min-width:2.5rem;text-align:center;">—</div>
+                <div class="save-detail" id="save-reflex-stat">DEX or INT (highest)</div>
+              </div>
+            </div>
+            <div class="save-row">
+              <div class="save-name">WILL</div>
+              <div style="display:flex;align-items:baseline;gap:0.5rem;flex:1;">
+                <div class="ability-mod" id="save-will" style="min-width:2.5rem;text-align:center;">—</div>
+                <div class="save-detail" id="save-will-stat">WIS or CHA (highest)</div>
+              </div>
+            </div>
+            <div class="ornament-divider" style="margin:0.75rem 0;"><span class="ornament-glyph">✦</span></div>
+            <div class="section-title" style="font-size:0.62rem;margin-bottom:0.6rem;color:var(--text-label);">Spell Save DC</div>
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:0.2rem;">
+                <div class="ability-mod positive" id="spell-save-dc" style="min-width:3rem;text-align:center;font-size:1.2rem;">—</div>
+                <div style="font-size:0.58rem;color:var(--text-label);font-family:'Cinzel',serif;letter-spacing:0.1em;text-transform:uppercase;">DC</div>
+              </div>
+              <div style="font-size:0.75rem;color:var(--text-soft);flex:1;">
+                8 + ⌈level÷2⌉ +
+                <select id="spell-save-stat" onchange="updateSavingThrows()" style="background:var(--field-bg);border:none;border-bottom:1px solid var(--field-border);font-family:'Crimson Text',serif;font-size:0.78rem;color:var(--text-main);outline:none;cursor:pointer;padding:0.1rem;">
+                  <option value="INT">INT mod</option>
+                  <option value="WIS">WIS mod</option>
+                  <option value="CHA">CHA mod</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="sheet-section">
+        <div class="section-header">
+          <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Skills</span>
+            <div class="skill-pts-budget" id="skill-pts-budget">
+              <div class="budget-item"><div class="budget-num ok" id="budget-available">—</div><div class="budget-lbl">Available</div></div>
+              <div class="budget-item"><div class="budget-num" id="budget-spent">0</div><div class="budget-lbl">Spent</div></div>
+              <div class="budget-item"><div class="budget-num ok" id="budget-remaining">—</div><div class="budget-lbl">Left</div></div>
+            </div>
+          </div>
+          <div style="font-size:0.6rem;color:var(--text-label);font-style:italic;padding-top:0.25rem;">
+            Cap per skill: 2 × level (<span id="skill-cap-display">—</span> pts max)
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="skills-header">
+            <div class="skills-col-label" style="text-align:left;">Skill</div>
+            <div class="skills-col-label">Pts</div>
+            <div class="skills-col-label">Total</div>
+          </div>
+          <div class="skills-list" id="skills-list">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-col">
+
+      <!-- ACTIONS -->
+      <div class="sheet-section">
+        <div class="section-header"><div class="section-title">Actions</div></div>
+        <div id="tbl-actions"></div>
+      </div>
+
+      <!-- REACTIONS -->
+      <div class="sheet-section">
+        <div class="section-header"><div class="section-title">Reactions</div></div>
+        <div id="tbl-reactions"></div>
+      </div>
+
+      <!-- BONUS ACTIONS + PASSIVES -->
+      <div class="actions-grid">
+        <div class="sheet-section">
+          <div class="section-header"><div class="section-title">Bonus Actions</div></div>
+          <div id="tbl-bonus"></div>
+        </div>
+        <div class="sheet-section">
+          <div class="section-header"><div class="section-title">Passives</div></div>
+          <div id="tbl-passives"></div>
+        </div>
+      </div>
+
+      <!-- DAILY ARCHETYPE ABILITY (detail) -->
+      <div class="sheet-section">
+        <div class="section-header"><div class="section-title">Daily Archetype Ability</div></div>
+        <div class="section-body">
+          <div class="field-group" style="margin-bottom:0.75rem;">
+            <label class="field-label">Ability Name</label>
+            <input type="text" class="field-input" id="daily-name" placeholder="Name of your archetype ability…" data-save="daily-name">
+          </div>
+          <textarea class="field-input" style="min-height:70px;" id="daily-desc" placeholder="Description, trigger, effect…" data-save="daily-desc"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PAGE 2: NOTES -->
+<div class="page" id="page-notes">
+  <div class="sheet-section">
+    <div class="section-header"><div class="section-title">Notes, Lore & Loadout</div></div>
+    <div class="section-body">
+      <div class="notes-intro">Each box is freely labelled and editable. Use them for equipment, faction standing, retainer info, backstory, treasures, or anything else your character needs to track.</div>
+      <div class="notes-grid" id="notes-grid">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PAGE 3: LEVEL LOG -->
+<div class="page" id="page-levels">
+  <div class="sheet-section">
+    <div class="section-header">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>Level Log</span>
+        <span style="font-size:0.6rem;color:var(--text-label);font-style:italic;font-weight:400;">Tracks HP gained, skill points earned, and where you placed them</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="level-log-grid" id="level-log-grid"></div>
+      <button class="add-level-btn" id="add-level-btn" onclick="addLevelEntry()">✦ Add Level</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PAGE 4: CHEAT SHEET -->
+<div class="page" id="page-cheatsheet">
+  <div class="sheet-section">
+    <div class="section-header"><div class="section-title">Combat Cheat Sheet</div></div>
+    <div class="section-body" style="display:flex;flex-direction:column;gap:1.25rem;">
+
+      <div class="cs-block">
+        <div class="cs-title">Attack Rolls</div>
+        <div class="cs-body">Roll <strong>2d10 + relevant modifiers</strong>. The total determines hit quality:
+          <div class="cs-table" style="margin-top:0.6rem;">
+            <div class="cs-row"><div class="cs-tag warn">≤ 12</div><div><strong>Graze</strong> — half the rolled damage</div></div>
+            <div class="cs-row"><div class="cs-tag ok">13+</div><div><strong>Hit</strong> — full rolled damage</div></div>
+            <div class="cs-row"><div class="cs-tag crit">18–20 (natural)</div><div><strong>Critical Hit</strong> — see below</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <div class="cs-title">Advantage & Disadvantage</div>
+        <div class="cs-body">
+          <div class="cs-table">
+            <div class="cs-row"><div class="cs-tag ok">Advantage</div><div>Roll <strong>3d10, use highest 2</strong> <span class="cs-dice">3d10kh2</span></div></div>
+            <div class="cs-row"><div class="cs-tag warn">Disadvantage</div><div>Roll <strong>3d10, use lowest 2</strong> <span class="cs-dice">3d10kl2</span></div></div>
+            <div class="cs-row"><div class="cs-tag">Both</div><div>They cancel entirely — roll standard <strong>2d10</strong>, even with multiple sources</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <div class="cs-title">Critical Hits <span style="font-weight:400;font-style:italic;font-size:0.85rem;">(natural 18–20)</span></div>
+        <div class="cs-body">
+          Deal <strong>half maximum damage dice + half normally rolled</strong>.<br>
+          <div class="cs-examples">
+            <div class="cs-ex"><span class="cs-dice">2d8</span> → <span class="cs-dice">8 + 1d8</span></div>
+            <div class="cs-ex"><span class="cs-dice">4d4</span> → <span class="cs-dice">8 + 2d4</span></div>
+            <div class="cs-ex"><span class="cs-dice">3d4</span> → <span class="cs-dice">8 + 1d4</span> <span style="font-style:italic;color:var(--text-soft)">(odd count rounds down)</span></div>
+          </div>
+          <div style="margin-top:0.6rem;padding:0.5rem 0.75rem;background:rgba(184,115,51,0.07);border-left:2px solid var(--copper);border-radius:1px;">
+            <strong>Alternatively — Stunt:</strong> Roll standard damage and instead perform a dramatic narrative action the GM permits (push a foe off a ledge, disarm, briefly stun, etc.)
+          </div>
+          <div style="margin-top:0.5rem;font-size:0.78rem;font-style:italic;color:var(--text-soft);">
+            Optional high-lethality rule: all dice deal maximum damage on a crit — likely fatal for Level 1 characters.
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <div class="cs-title">Defense Score</div>
+        <div class="cs-body">
+          Reduces incoming damage based on armor, DEX, and special abilities.
+          <div class="cs-table" style="margin-top:0.5rem;">
+            <div class="cs-row"><div class="cs-tag ok">Light / Medium</div><div>DEX modifier + Armor Value</div></div>
+            <div class="cs-row"><div class="cs-tag">Heavy</div><div>Armor Value only (no DEX)</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <div class="cs-title">Skill Check DCs</div>
+        <div class="cs-body">
+          Roll <strong>2d10 + Skill Level + Ability Modifier</strong>. Default DC is 13.
+          <div class="cs-table" style="margin-top:0.5rem;">
+            <div class="cs-row"><div class="cs-tag ok">9–12</div><div><strong>Easy</strong> — routine tasks or minor obstacles</div></div>
+            <div class="cs-row"><div class="cs-tag ok">13–16</div><div><strong>Standard</strong> — common challenges under pressure</div></div>
+            <div class="cs-row"><div class="cs-tag warn">17–20</div><div><strong>Hard</strong> — complex or risky tasks under duress</div></div>
+            <div class="cs-row"><div class="cs-tag crit">21+</div><div><strong>Extreme</strong> — near-impossible, highly specialized</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <div class="cs-title">Resting</div>
+        <div class="cs-body">
+          <div class="cs-table">
+            <div class="cs-row"><div class="cs-tag ok">Short Rest</div><div>Once between long rests. Outside combat. Restore <strong>½ max HP</strong> + <strong>½ max Resource</strong> (rounded down). Does not restore Once per Long Rest abilities.</div></div>
+            <div class="cs-row"><div class="cs-tag ok">Long Rest</div><div>8 hours in a settlement. Restores <strong>all HP</strong>, <strong>all Resources</strong>, and Once per Long Rest abilities.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <div class="cs-title">Conditions</div>
+        <div class="cs-body">
+          <div class="cs-table">
+            <div class="cs-row"><div class="cs-tag ok">Basic</div><div>Deafened, Distracted, Prone, Staggered, Frightened, Grappled — situational disadvantage, movement denial, minor roll debuffs</div></div>
+            <div class="cs-row"><div class="cs-tag warn">Advanced</div><div>Blinded, Poisoned, Restrained — severe disadvantage on core attacks, defenses, or saves</div></div>
+            <div class="cs-row"><div class="cs-tag crit">Expert</div><div>Stunned, Paralyzed, Petrified — total action denial and/or severe compromise of defenses</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="print-hint">Open in browser to use · Data saves to local storage · Share the .html file with your group</div>
+
+<script>
+const ABILITIES = [
+  { abbr: 'STR', name: 'Strength' },
+  { abbr: 'DEX', name: 'Dexterity' },
+  { abbr: 'INT', name: 'Intelligence' },
+  { abbr: 'WIS', name: 'Wisdom' },
+  { abbr: 'CHA', name: 'Charisma' },
+];
+
+// Original order preserved here for migrating old numeric-keyed save data
+const OLD_SKILL_ORDER = [
+  'Athletics', 'Intimidation', 'Acrobatics', 'Thievery', 'Stealth',
+  'Arcana', 'Tactics', 'Investigation', 'Crafting', 'Alchemy', 'Lore',
+  'Awareness', 'Survival', 'Treat Injury', 'Faith', 'Persuasion',
+];
+
+const SKILLS = [
+  { name: 'Acrobatics',   assoc: 'DEX' },
+  { name: 'Alchemy',      assoc: 'INT' },
+  { name: 'Arcana',       assoc: 'INT' },
+  { name: 'Athletics',    assoc: 'STR' },
+  { name: 'Awareness',    assoc: 'WIS' },
+  { name: 'Crafting',     assoc: 'INT / DEX' },
+  { name: 'Faith',        assoc: 'WIS / CHA' },
+  { name: 'Intimidation', assoc: 'STR / CHA' },
+  { name: 'Investigation',assoc: 'INT' },
+  { name: 'Lore',         assoc: 'INT' },
+  { name: 'Persuasion',   assoc: 'CHA' },
+  { name: 'Stealth',      assoc: 'DEX' },
+  { name: 'Survival',     assoc: 'WIS' },
+  { name: 'Tactics',      assoc: 'INT' },
+  { name: 'Thievery',     assoc: 'DEX' },
+  { name: 'Treat Injury', assoc: 'WIS' },
+];
+
+const NOTE_DEFAULTS = [
+  'Abilities & Features',
+  'Equipment & Gear',
+  'Treasure & Currency',
+  'Faction Standing',
+  'Retainer / Allies',
+  'Backstory & Notes',
+  '', '', '',
+];
+
+const LS_KEY = 'aethel-sheet-v1';
+
+function scoreToMod(score) {
+  if (!score || isNaN(score)) return null;
+  const s = parseInt(score);
+  if (s <= 3)  return -4;
+  if (s <= 5)  return -3;
+  if (s <= 7)  return -2;
+  if (s <= 9)  return -1;
+  if (s <= 11) return 0;
+  if (s <= 13) return 1;
+  if (s <= 15) return 2;
+  if (s <= 17) return 3;
+  if (s <= 19) return 4;
+  return 5;
+}
+
+function modDisplay(mod) {
+  if (mod === null) return '—';
+  return mod >= 0 ? `+${mod}` : `${mod}`;
+}
+
+function renderAbilities() {
+  const grid = document.getElementById('ability-grid');
+  grid.innerHTML = '';
+  ABILITIES.forEach(a => {
+    const key = `ability-${a.abbr.toLowerCase()}`;
+    const saved = getData(key) || '';
+    const mod = scoreToMod(saved);
+    const modClass = mod === null ? '' : mod > 0 ? ' positive' : mod === 0 ? ' zero' : '';
+    const row = document.createElement('div');
+    row.className = 'ability-row';
+    row.innerHTML = `
+      <div class="ability-abbr">${a.abbr}</div>
+      <input type="number" class="ability-score-input" id="${key}" value="${saved}" min="1" max="20" placeholder="—" data-save="${key}">
+      <div class="ability-mod${modClass}" id="mod-${a.abbr.toLowerCase()}">${modDisplay(mod)}</div>
+    `;
+    grid.appendChild(row);
+    row.querySelector('input').addEventListener('input', function() {
+      const m = scoreToMod(this.value);
+      const modEl = document.getElementById(`mod-${a.abbr.toLowerCase()}`);
+      modEl.textContent = modDisplay(m);
+      modEl.className = `ability-mod${m === null ? '' : m > 0 ? ' positive' : m === 0 ? ' zero' : ''}`;
+      updateSkillTotals();
+    });
+  });
+}
+
+function getCharLevel() {
+  const el = document.getElementById('char-level');
+  return Math.max(1, parseInt(el?.value) || 1);
+}
+
+function getIntMod() {
+  const el = document.getElementById('ability-int');
+  const m = scoreToMod(el?.value);
+  return m !== null ? m : 0;
+}
+
+function totalSkillPointsAvailable() {
+  const level = getCharLevel();
+  const intMod = getIntMod();
+  // Level 1: 4 + INT mod (min 2)
+  // Each subsequent level: INT mod (min 0 per level, so never lose points)
+  const level1pts = Math.max(2, 4 + intMod);
+  const laterPts = Math.max(0, intMod) * (level - 1);
+  return level1pts + laterPts;
+}
+
+function renderSkills() {
+  const list = document.getElementById('skills-list');
+  list.innerHTML = '';
+  SKILLS.forEach((sk, i) => {
+    const row = document.createElement('div');
+    row.className = 'skill-row';
+    row.style.flexWrap = 'wrap';
+    row.innerHTML = `
+      <div class="skill-name-wrap">
+        <span class="skill-name">${sk.name}</span>
+        <span class="skill-assoc">${sk.assoc}</span>
+      </div>
+      <div class="skill-pts-computed" id="skill-pts-${i}">—</div>
+      <div class="skill-total" id="skill-total-${i}">—</div>
+      <div class="skill-cap-warn" id="skill-cap-warn-${i}">Over cap for level</div>
+    `;
+    list.appendChild(row);
+  });
+  updateSkillTotals();
+}
+
+function getAbilityMod(abbr) {
+  const el = document.getElementById(`ability-${abbr.toLowerCase()}`);
+  if (!el) return 0;
+  const m = scoreToMod(el.value);
+  return m !== null ? m : 0;
+}
+
+function updateSkillTotals() {
+  const level = getCharLevel();
+  const cap = level * 2;
+  const available = totalSkillPointsAvailable();
+  let spent = 0;
+
+  SKILLS.forEach((sk, i) => {
+    const ptsEl = document.getElementById(`skill-pts-${i}`);
+    const totalEl = document.getElementById(`skill-total-${i}`);
+    const warnEl = document.getElementById(`skill-cap-warn-${i}`);
+    if (!totalEl) return;
+    // Sum points invested across all level entries
+    const pts = levelEntries.reduce((sum, entry) => sum + (parseInt(entry.skills[sk.name]) || 0), 0);
+    if (ptsEl) {
+      ptsEl.textContent = pts > 0 ? pts : '—';
+      ptsEl.classList.toggle('over-cap', pts > cap);
+    }
+    spent += pts;
+    const abbrs = sk.assoc.split(' / ').map(s => s.trim());
+    const mod = Math.max(...abbrs.map(a => getAbilityMod(a)));
+    const total = pts + mod;
+    totalEl.textContent = pts === 0 && mod === 0 ? '—' : (total >= 0 ? `+${total}` : `${total}`);
+    if (warnEl) warnEl.classList.toggle('visible', pts > cap);
+  });
+
+  // Update budget display
+  const remaining = available - spent;
+  const availEl = document.getElementById('budget-available');
+  const spentEl = document.getElementById('budget-spent');
+  const remEl   = document.getElementById('budget-remaining');
+  const capEl   = document.getElementById('skill-cap-display');
+  if (availEl) availEl.textContent = available;
+  if (spentEl) {
+    spentEl.textContent = spent;
+    spentEl.className = `budget-num ${spent > available ? 'warn' : ''}`;
+  }
+  if (remEl) {
+    remEl.textContent = remaining >= 0 ? remaining : `−${Math.abs(remaining)}`;
+    remEl.className = `budget-num ${remaining < 0 ? 'warn' : 'ok'}`;
+  }
+  if (capEl) capEl.textContent = cap;
+}
+
+function getNoteRows(boxIdx) {
+  try {
+    const raw = localStorage.getItem(`aethel-note-rows-${boxIdx}`);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  // Backward compat: migrate old textarea content
+  const oldBody = getData(`note-body-${boxIdx}`);
+  if (oldBody) return oldBody.split('\n').map(s => s.trim()).filter(Boolean);
+  return [];
+}
+
+function saveNoteRows(boxIdx, rows) {
+  localStorage.setItem(`aethel-note-rows-${boxIdx}`, JSON.stringify(rows));
+}
+
+function addNoteBoxRow(boxIdx) {
+  const rows = getNoteRows(boxIdx);
+  rows.push('');
+  saveNoteRows(boxIdx, rows);
+  renderNotes();
+  const inputs = document.querySelectorAll(`#note-box-${boxIdx} .note-row-input`);
+  if (inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function deleteNoteBoxRow(boxIdx, rowIdx) {
+  const rows = getNoteRows(boxIdx);
+  rows.splice(rowIdx, 1);
+  saveNoteRows(boxIdx, rows);
+  renderNotes();
+}
+
+function updateNoteBoxRow(boxIdx, rowIdx, val) {
+  const rows = getNoteRows(boxIdx);
+  rows[rowIdx] = val;
+  saveNoteRows(boxIdx, rows);
+}
+
+function renderNotes() {
+  const grid = document.getElementById('notes-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const titleKey = `note-title-${i}`;
+    const savedTitle = getData(titleKey) !== null ? getData(titleKey) : NOTE_DEFAULTS[i];
+    const rows = getNoteRows(i);
+    const rowsHtml = rows.map((row, rowIdx) => `
+      <div class="action-table-row">
+        <input class="action-col-input note-row-input" style="flex:1" type="text"
+          value="${(row || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
+          placeholder="Note…"
+          oninput="updateNoteBoxRow(${i},${rowIdx},this.value)">
+        <button class="action-del-btn" onclick="deleteNoteBoxRow(${i},${rowIdx})" title="Remove">✕</button>
+      </div>`).join('');
+    const box = document.createElement('div');
+    box.className = 'note-box';
+    box.id = `note-box-${i}`;
+    box.innerHTML = `
+      <input type="text" class="note-title-input" id="${titleKey}" value="${savedTitle}" placeholder="Label this box…" data-save="${titleKey}">
+      <div class="note-row-table action-table-wrap">
+        <div class="action-table-body note-row-body">${rowsHtml}</div>
+        <button class="action-add-btn" onclick="addNoteBoxRow(${i})">✦ Add Note</button>
+      </div>
+    `;
+    grid.appendChild(box);
+  }
+}
+
+// ── DAILY TOGGLE ──
+function toggleDaily() {
+  const btn = document.getElementById('daily-toggle');
+  btn.classList.toggle('used');
+  localStorage.setItem('aethel-sheet-daily-used', btn.classList.contains('used') ? '1' : '0');
+}
+
+// ── TABS ──
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`page-${tab}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── PERSISTENCE ──
+function getData(key) {
+  const raw = localStorage.getItem(LS_KEY);
+  if (!raw) return null;
+  try { const d = JSON.parse(raw); return d[key] !== undefined ? d[key] : null; }
+  catch { return null; }
+}
+
+function buildSaveData() {
+  const data = {};
+  document.querySelectorAll('[data-save]').forEach(el => {
+    data[el.dataset.save] = el.value;
+  });
+  return data;
+}
+
+function saveAll() {
+  const data = buildSaveData();
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+
+  // Also prompt a file download
+  const blob = new Blob([JSON.stringify({
+    fields: data,
+    levelLog: levelEntries,
+    dailyUsed: localStorage.getItem('aethel-sheet-daily-used') || '0',
+    actionTables: actionTableData,
+    noteBoxRows: Array.from({length: 9}, (_, i) => getNoteRows(i))
+  }, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const charName = document.getElementById('char-name')?.value || 'character';
+  a.href = url;
+  a.download = `${charName.replace(/\s+/g, '-').toLowerCase() || 'aethel-sheet'}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  const msg = document.getElementById('save-msg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2000);
+}
+
+function loadFromFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      // Support both wrapped format and bare fields object
+      const fields = parsed.fields || parsed;
+      localStorage.setItem(LS_KEY, JSON.stringify(fields));
+      if (parsed.levelLog !== undefined) {
+        localStorage.setItem('aethel-level-log', JSON.stringify(parsed.levelLog));
+        levelEntries = parsed.levelLog;
+      }
+      if (parsed.dailyUsed !== undefined) {
+        localStorage.setItem('aethel-sheet-daily-used', parsed.dailyUsed);
+      }
+      if (parsed.actionTables) {
+        Object.entries(parsed.actionTables).forEach(([tableId, rows]) => {
+          const cfg = ACTION_TABLE_CONFIGS[tableId];
+          if (cfg) {
+            actionTableData[tableId] = rows;
+            localStorage.setItem(cfg.key, JSON.stringify(rows));
+            renderActionTable(tableId);
+          }
+        });
+      }
+      loadAll();
+      renderAbilities();
+      renderSkills();
+      renderNotes();
+      renderLevelLog();
+      updateSkillTotals();
+      updateSavingThrows();
+      const msg = document.getElementById('save-msg');
+      msg.textContent = 'Loaded.';
+      msg.classList.add('show');
+      setTimeout(() => { msg.classList.remove('show'); msg.textContent = 'Saved.'; }, 2000);
+    } catch {
+      alert('Failed to load: invalid JSON file.');
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function loadAll() {
+  const raw = localStorage.getItem(LS_KEY);
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    Object.entries(data).forEach(([key, val]) => {
+      const el = document.getElementById(key);
+      if (el) el.value = val;
+    });
+  } catch {}
+
+  const dailyUsed = localStorage.getItem('aethel-sheet-daily-used');
+  if (dailyUsed === '1') document.getElementById('daily-toggle')?.classList.add('used');
+}
+
+// ── SAVING THROWS & SPELL SAVE DC ──
+function updateSavingThrows() {
+  const strMod = getAbilityMod('STR');
+  const dexMod = getAbilityMod('DEX');
+  const intMod = getAbilityMod('INT');
+  const wisMod = getAbilityMod('WIS');
+  const chaMod = getAbilityMod('CHA');
+
+  const fortMod  = strMod;
+  const reflexMod = Math.max(dexMod, intMod);
+  const willMod   = Math.max(wisMod, chaMod);
+
+  function applyMod(id, mod) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const hasScore = mod !== 0 || document.getElementById(`ability-str`)?.value || document.getElementById(`ability-int`)?.value;
+    el.textContent = modDisplay(mod);
+    el.className = `ability-mod${mod > 0 ? ' positive' : mod === 0 ? ' zero' : ''}`;
+  }
+
+  applyMod('save-fort', fortMod);
+  applyMod('save-reflex', reflexMod);
+  applyMod('save-will', willMod);
+
+  // Label which stat won for reflex/will
+  const refEl = document.getElementById('save-reflex-stat');
+  if (refEl) refEl.textContent = dexMod >= intMod ? 'DEX mod' : 'INT mod';
+  const wilEl = document.getElementById('save-will-stat');
+  if (wilEl) wilEl.textContent = wisMod >= chaMod ? 'WIS mod' : 'CHA mod';
+
+  // Spell Save DC: 8 + ceil(level/2) + governing mod
+  const level = getCharLevel();
+  const statSel = document.getElementById('spell-save-stat')?.value || 'INT';
+  const govMod = getAbilityMod(statSel);
+  const levelBonus = Math.ceil(level / 2);
+  const dc = 8 + levelBonus + govMod;
+  const dcEl = document.getElementById('spell-save-dc');
+  if (dcEl) {
+    dcEl.textContent = dc;
+    dcEl.className = `ability-mod positive`;
+  }
+}
+
+// ── LEVEL LOG ──
+const HIT_DICE = { mind: 6, body: 10, spirit: 8 };
+let levelEntries = JSON.parse(localStorage.getItem('aethel-level-log') || '[]');
+
+function saveLevelLog() {
+  localStorage.setItem('aethel-level-log', JSON.stringify(levelEntries));
+  syncLevelToSheet();
+}
+
+function syncLevelToSheet() {
+  const lvl = levelEntries.length;
+  const el = document.getElementById('char-level');
+  if (el) el.value = lvl > 0 ? lvl : '';
+  updateSkillTotals();
+  updateSavingThrows();
+}
+
+function getClassHitDie() {
+  const cls = document.getElementById('char-class')?.value.toLowerCase() || '';
+  if (cls.includes('mind')) return HIT_DICE.mind;
+  if (cls.includes('body')) return HIT_DICE.body;
+  if (cls.includes('spirit')) return HIT_DICE.spirit;
+  return null;
+}
+
+function levelPtsForEntry(lvl) {
+  const intMod = getIntMod();
+  if (lvl === 1) return Math.max(2, 4 + intMod);
+  return Math.max(0, intMod);
+}
+
+function addLevelEntry() {
+  const nextLvl = levelEntries.length + 1;
+  if (nextLvl > 20) return;
+  levelEntries.push({ level: nextLvl, hp: '', notes: '', skills: {} });
+  saveLevelLog();
+  renderLevelLog();
+}
+
+function deleteLevelEntry(lvl) {
+  if (!confirm(`Remove Level ${lvl} from the log? This cannot be undone.`)) return;
+  // Remove and renumber
+  levelEntries = levelEntries.filter(e => e.level !== lvl);
+  levelEntries.forEach((e, i) => { e.level = i + 1; });
+  saveLevelLog();
+  renderLevelLog();
+}
+
+function updateLevelEntry(lvl, field, val) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry) return;
+  if (field.startsWith('skill-')) {
+    const skillName = field.slice(6); // strip 'skill-' prefix → skill name
+    entry.skills[skillName] = val;
+  } else {
+    entry[field] = val;
+  }
+  saveLevelLog();
+  refreshLevelSkillWarnings(lvl);
+}
+
+function addLevelNoteRow(lvl) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry) return;
+  if (!entry.noteRows) entry.noteRows = [];
+  entry.noteRows.push('');
+  saveLevelLog();
+  renderLevelLog();
+  const inputs = document.querySelectorAll(`#level-entry-${lvl} .note-row-input`);
+  if (inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function deleteLevelNoteRow(lvl, rowIdx) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry || !entry.noteRows) return;
+  entry.noteRows.splice(rowIdx, 1);
+  saveLevelLog();
+  renderLevelLog();
+}
+
+function updateLevelNoteRow(lvl, rowIdx, val) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry) return;
+  if (!entry.noteRows) entry.noteRows = [];
+  entry.noteRows[rowIdx] = val;
+  saveLevelLog();
+}
+
+function refreshLevelSkillWarnings(lvl) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry) return;
+  const pts = levelPtsForEntry(lvl);
+  let used = Object.values(entry.skills).reduce((s, v) => s + (parseInt(v) || 0), 0);
+  const remEl = document.getElementById(`lvl-rem-${lvl}`);
+  if (remEl) {
+    const rem = pts - used;
+    remEl.textContent = rem >= 0 ? `${rem} left` : `${Math.abs(rem)} over`;
+    remEl.className = `level-pts-remaining ${rem < 0 ? 'over' : 'ok'}`;
+  }
+}
+
+function toggleLevelCollapse(lvl) {
+  const el = document.getElementById(`level-entry-${lvl}`);
+  el?.classList.toggle('collapsed');
+}
+
+function renderLevelLog() {
+  const grid = document.getElementById('level-log-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  levelEntries.forEach(entry => {
+    // Migrate old string notes to row array
+    if (!entry.noteRows) {
+      entry.noteRows = entry.notes ? [entry.notes] : [];
+      delete entry.notes;
+    }
+    // Migrate numeric-keyed skills to name-keyed
+    if (entry.skills && Object.keys(entry.skills).some(k => !isNaN(parseInt(k)))) {
+      const named = {};
+      Object.keys(entry.skills).forEach(k => {
+        const idx = parseInt(k);
+        if (!isNaN(idx) && OLD_SKILL_ORDER[idx]) named[OLD_SKILL_ORDER[idx]] = entry.skills[k];
+      });
+      entry.skills = named;
+    }
+
+    const lvl = entry.level;
+    const pts = levelPtsForEntry(lvl);
+    const die = getClassHitDie();
+    const dieLabel = die ? `d${die}` : 'Hit Die';
+    const usedSkillPts = Object.values(entry.skills).reduce((s, v) => s + (parseInt(v) || 0), 0);
+    const rem = pts - usedSkillPts;
+    const isLvl1 = lvl === 1;
+
+    const el = document.createElement('div');
+    el.className = 'level-entry';
+    el.id = `level-entry-${lvl}`;
+
+    const skillsHtml = SKILLS.map(sk => {
+      const val = entry.skills[sk.name] || '';
+      return `<div class="level-skill-item">
+        <span class="level-skill-name">${sk.name}</span>
+        <input type="number" class="level-skill-pts" value="${val}" min="0" max="40" placeholder="0"
+          onchange="updateLevelEntry(${lvl},'skill-${sk.name}',this.value)" oninput="updateLevelEntry(${lvl},'skill-${sk.name}',this.value)">
+      </div>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="level-entry-header" onclick="toggleLevelCollapse(${lvl})">
+        <div style="display:flex;flex-direction:column;gap:0.1rem;">
+          <div class="level-entry-title">Level ${lvl}</div>
+          <div class="level-entry-summary">${pts} skill pt${pts !== 1 ? 's' : ''} · ${isLvl1 ? 'STR + ' + dieLabel + ' max HP' : dieLabel + ' HP'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <button onclick="event.stopPropagation();deleteLevelEntry(${lvl})"
+            style="background:transparent;border:1px solid rgba(120,26,26,0.3);border-radius:2px;color:var(--crimson-soft);font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.1em;padding:0.2rem 0.5rem;cursor:pointer;text-transform:uppercase;transition:all 0.15s;"
+            onmouseover="this.style.background='var(--crimson)';this.style.color='var(--vellum)'"
+            onmouseout="this.style.background='transparent';this.style.color='var(--crimson-soft)'">
+            Delete
+          </button>
+          <div class="level-entry-chevron">▼</div>
+        </div>
+      </div>
+      <div class="level-entry-body">
+        <div>
+          <div class="level-stat-row" style="margin-bottom:0.75rem;">
+            <span class="level-stat-label">${isLvl1 ? 'Base HP' : 'HP Gained'}</span>
+            <input type="number" class="level-num-input" value="${entry.hp || ''}" placeholder="${isLvl1 ? 'STR+' + dieLabel : 'Roll ' + dieLabel}"
+              onchange="updateLevelEntry(${lvl},'hp',this.value)" oninput="updateLevelEntry(${lvl},'hp',this.value)">
+          </div>
+          <div style="margin-top:0.1rem;">
+            <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Notes</span>
+            <div class="note-row-table action-table-wrap">
+              <div class="action-table-body level-notes-body">${(entry.noteRows || []).map((row, rowIdx) => `
+                <div class="action-table-row">
+                  <input class="action-col-input note-row-input" style="flex:1" type="text"
+                    value="${(row || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
+                    placeholder="New features, augments…"
+                    oninput="updateLevelNoteRow(${lvl},${rowIdx},this.value)">
+                  <button class="action-del-btn" onclick="deleteLevelNoteRow(${lvl},${rowIdx})" title="Remove">✕</button>
+                </div>`).join('')}</div>
+              <button class="action-add-btn" onclick="addLevelNoteRow(${lvl})">✦ Add Note</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="level-skills-grid">
+            <div class="level-skills-header">
+              <span>Skill Points Placed</span>
+              <span class="level-pts-remaining ${rem < 0 ? 'over' : 'ok'}" id="lvl-rem-${lvl}">${rem >= 0 ? rem + ' left' : Math.abs(rem) + ' over'}</span>
+            </div>
+            ${skillsHtml}
+          </div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(el);
+  });
+
+  // Update add button
+  const btn = document.getElementById('add-level-btn');
+  if (btn) {
+    const next = levelEntries.length + 1;
+    btn.textContent = next <= 20 ? `✦ Add Level ${next}` : '✦ Max Level Reached';
+    btn.disabled = next > 20;
+  }
+
+  syncLevelToSheet();
+}
+
+// ── ACTION TABLES ──
+const ACTION_TABLE_CONFIGS = {
+  actions: {
+    key: 'aethel-actions',
+    maxHeight: '210px',
+    cols: [
+      { field: 'name',   label: 'Action',         placeholder: 'Attack, spell, ability…', flex: 2 },
+      { field: 'tohit',  label: 'To Hit / DC',     placeholder: '+5 / DC 14',             flex: 1 },
+      { field: 'damage', label: 'Damage / Effect', placeholder: '1d8+3 piercing',         flex: 1.5 },
+      { field: 'notes',  label: 'Notes',           placeholder: 'Range, tags…',           flex: 1.5 },
+    ]
+  },
+  reactions: {
+    key: 'aethel-reactions',
+    maxHeight: '160px',
+    cols: [
+      { field: 'name',    label: 'Reaction', placeholder: 'Name…',         flex: 1.5 },
+      { field: 'trigger', label: 'Trigger',  placeholder: 'When…',         flex: 2 },
+      { field: 'effect',  label: 'Effect',   placeholder: 'What happens…', flex: 2.5 },
+    ]
+  },
+  bonus: {
+    key: 'aethel-bonus',
+    maxHeight: '160px',
+    cols: [
+      { field: 'name',   label: 'Bonus Action', placeholder: 'Name…',         flex: 2 },
+      { field: 'effect', label: 'Effect',       placeholder: 'What it does…', flex: 4 },
+    ]
+  },
+  passives: {
+    key: 'aethel-passives',
+    maxHeight: '160px',
+    cols: [
+      { field: 'name', label: 'Passive / Trait', placeholder: 'Name…',         flex: 2 },
+      { field: 'desc', label: 'Description',     placeholder: 'What it does…', flex: 4 },
+    ]
+  },
+};
+
+let actionTableData = {};
+
+function loadActionTables() {
+  Object.entries(ACTION_TABLE_CONFIGS).forEach(([tableId, cfg]) => {
+    const raw = localStorage.getItem(cfg.key);
+    actionTableData[tableId] = raw ? JSON.parse(raw) : [];
+    renderActionTable(tableId);
+  });
+}
+
+function saveActionTable(tableId) {
+  const cfg = ACTION_TABLE_CONFIGS[tableId];
+  localStorage.setItem(cfg.key, JSON.stringify(actionTableData[tableId]));
+}
+
+function renderActionTable(tableId) {
+  const cfg = ACTION_TABLE_CONFIGS[tableId];
+  const container = document.getElementById(`tbl-${tableId}`);
+  if (!container) return;
+  const rows = actionTableData[tableId];
+
+  const headCols = cfg.cols.map(col =>
+    `<div class="action-col-label" style="flex:${col.flex}">${col.label}</div>`
+  ).join('') + '<div style="width:20px;flex-shrink:0;"></div>';
+
+  const bodyRows = rows.map((row, idx) => {
+    const cells = cfg.cols.map(col =>
+      `<input class="action-col-input" style="flex:${col.flex}" type="text"
+        value="${(row[col.field] || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
+        placeholder="${col.placeholder}"
+        oninput="updateActionRow('${tableId}',${idx},'${col.field}',this.value)">`
+    ).join('');
+    return `<div class="action-table-row">
+      ${cells}
+      <button class="action-del-btn" onclick="deleteActionRow('${tableId}',${idx})" title="Remove row">✕</button>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="action-table-wrap">
+      <div class="action-table-head">${headCols}</div>
+      <div class="action-table-body" style="max-height:${cfg.maxHeight}">${bodyRows || ''}</div>
+      <button class="action-add-btn" onclick="addActionRow('${tableId}')">✦ Add Row</button>
+    </div>
+  `;
+}
+
+function addActionRow(tableId) {
+  const cfg = ACTION_TABLE_CONFIGS[tableId];
+  const newRow = {};
+  cfg.cols.forEach(col => { newRow[col.field] = ''; });
+  actionTableData[tableId].push(newRow);
+  saveActionTable(tableId);
+  renderActionTable(tableId);
+  const body = document.querySelector(`#tbl-${tableId} .action-table-body`);
+  if (body) body.scrollTop = body.scrollHeight;
+  const allRows = document.querySelectorAll(`#tbl-${tableId} .action-table-row`);
+  if (allRows.length) allRows[allRows.length - 1].querySelector('input')?.focus();
+}
+
+function deleteActionRow(tableId, idx) {
+  actionTableData[tableId].splice(idx, 1);
+  saveActionTable(tableId);
+  renderActionTable(tableId);
+}
+
+function updateActionRow(tableId, idx, field, value) {
+  if (!actionTableData[tableId]?.[idx]) return;
+  actionTableData[tableId][idx][field] = value;
+  saveActionTable(tableId);
+}
+
+// ── INIT ──
+renderAbilities();
+renderSkills();
+renderNotes();
+renderLevelLog();
+loadActionTables();
+loadAll();
+syncLevelToSheet();
+updateSkillTotals();
+updateSavingThrows();
+
+// Wire ability score changes to saving throws
+document.getElementById('ability-grid')?.addEventListener('input', updateSavingThrows);
+
+// Wire spell save stat dropdown
+document.getElementById('spell-save-stat')?.addEventListener('change', updateSavingThrows);
+
+// Sync resource label from class input
+document.getElementById('char-class')?.addEventListener('input', function() {
+  const val = this.value.toLowerCase();
+  const label = document.getElementById('resource-label-display');
+  if (!label) return;
+  if (val.includes('mind')) label.textContent = 'AP — Arcane Points';
+  else if (val.includes('body')) label.textContent = 'FP — Feat Points';
+  else if (val.includes('spirit')) label.textContent = 'RP — Resolve Points';
+  else label.textContent = 'AP / FP / RP';
+  renderLevelLog();
+});
+</script>
+</body>
+</html>
