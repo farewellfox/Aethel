@@ -1,4 +1,4 @@
-# Aethel Tools
+# Aethel Apps
 
 A pair of web apps for the **Aethel** tabletop RPG system.
 
