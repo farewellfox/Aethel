@@ -2,13 +2,15 @@
 
 A pair of web apps for the **Aethel** tabletop RPG system.
 
-## How to Use
+## Apps
 
-Each tool is a standalone HTML file. To use either app:
+**[Pasqually's Spell Slinger](https://farewellfox.github.io/Aethel/pasqually-spell-slinger.html)**
+Spell builder and library for The Mind and The Spirit classes.
 
-1. Click the file in the repository
-2. Click **Download raw file**
-3. Open the downloaded file
+**[Aethel Character Sheet](https://farewellfox.github.io/Aethel/aethel-character-sheet.html)**
+Full digital character sheet with live calculations and level tracking.
+
+Open either link in your browser — no download or installation required.
 
 ---
 
