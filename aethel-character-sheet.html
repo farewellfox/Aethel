@@ -650,10 +650,10 @@ textarea.field-input:focus { border-color: var(--copper); }
   letter-spacing: 0.04em;
 }
 .budget-item { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; }
-.budget-num { font-size: 1.1rem; font-weight: 700; line-height: 1; }
-.budget-num.ok { color: var(--teal); }
-.budget-num.warn { color: var(--crimson-soft); }
-.budget-lbl { font-size: 0.55rem; letter-spacing: 0.1em; color: var(--text-label); text-transform: uppercase; }
+.budget-num { font-size: 1.1rem; font-weight: 700; line-height: 1; color: rgba(240,230,208,0.85); }
+.budget-num.ok { color: #5ecece; }
+.budget-num.warn { color: #e07070; }
+.budget-lbl { font-size: 0.55rem; letter-spacing: 0.1em; color: rgba(240,230,208,0.45); text-transform: uppercase; }
 
 /* ── LEVEL LOG ── */
 .level-log-grid {
@@ -925,7 +925,7 @@ textarea.field-input:focus { border-color: var(--copper); }
 
 .action-table-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   border-bottom: 1px solid rgba(184,115,51,0.1);
   padding: 0 0.5rem;
   min-height: 2rem;
@@ -948,6 +948,19 @@ textarea.field-input:focus { border-color: var(--copper); }
 
 .action-col-input:focus { background: rgba(184,115,51,0.05); }
 .action-col-input::placeholder { color: rgba(30,22,14,0.2); font-style: italic; }
+
+textarea.action-col-input {
+  resize: none;
+  min-height: 2.2rem;
+  max-height: 8rem;
+  overflow-y: auto;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184,115,51,0.3) transparent;
+  vertical-align: top;
+}
 
 .action-del-btn {
   background: transparent;
@@ -1174,7 +1187,7 @@ textarea.field-input:focus { border-color: var(--copper); }
               <div class="budget-item"><div class="budget-num ok" id="budget-remaining">—</div><div class="budget-lbl">Left</div></div>
             </div>
           </div>
-          <div style="font-size:0.6rem;color:var(--text-label);font-style:italic;padding-top:0.25rem;">
+          <div style="font-size:0.6rem;color:rgba(240,230,208,0.45);font-style:italic;padding-top:0.25rem;">
             Cap per skill: 2 × level (<span id="skill-cap-display">—</span> pts max)
           </div>
         </div>
@@ -1590,14 +1603,16 @@ function renderNotes() {
     const titleKey = `note-title-${i}`;
     const savedTitle = getData(titleKey) !== null ? getData(titleKey) : NOTE_DEFAULTS[i];
     const rows = getNoteRows(i);
-    const rowsHtml = rows.map((row, rowIdx) => `
+    const rowsHtml = rows.map((row, rowIdx) => {
+      const val = (row || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `
       <div class="action-table-row">
-        <input class="action-col-input note-row-input" style="flex:1" type="text"
-          value="${(row || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
+        <textarea class="action-col-input note-row-input" style="flex:1"
           placeholder="Note…"
-          oninput="updateNoteBoxRow(${i},${rowIdx},this.value)">
+          oninput="updateNoteBoxRow(${i},${rowIdx},this.value)">${val}</textarea>
         <button class="action-del-btn" onclick="deleteNoteBoxRow(${i},${rowIdx})" title="Remove">✕</button>
-      </div>`).join('');
+      </div>`;
+    }).join('');
     const box = document.createElement('div');
     box.className = 'note-box';
     box.id = `note-box-${i}`;
@@ -1643,25 +1658,46 @@ function buildSaveData() {
   return data;
 }
 
-function saveAll() {
+async function saveAll() {
   const data = buildSaveData();
   localStorage.setItem(LS_KEY, JSON.stringify(data));
 
-  // Also prompt a file download
-  const blob = new Blob([JSON.stringify({
+  const charName = document.getElementById('char-name')?.value || 'character';
+  const defaultName = `${charName.replace(/\s+/g, '-').toLowerCase() || 'aethel-sheet'}.json`;
+  const payload = JSON.stringify({
     fields: data,
     levelLog: levelEntries,
     dailyUsed: localStorage.getItem('aethel-sheet-daily-used') || '0',
     actionTables: actionTableData,
     noteBoxRows: Array.from({length: 9}, (_, i) => getNoteRows(i))
-  }, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const charName = document.getElementById('char-name')?.value || 'character';
-  a.href = url;
-  a.download = `${charName.replace(/\s+/g, '-').toLowerCase() || 'aethel-sheet'}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  }, null, 2);
+
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: defaultName,
+        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(payload);
+      await writable.close();
+    } catch (e) {
+      if (e.name === 'AbortError') return; // user cancelled — don't show "Saved"
+      // Fallback if something went wrong after picker
+      const blob = new Blob([payload], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = defaultName; a.click();
+      URL.revokeObjectURL(url);
+    }
+  } else {
+    // Fallback for browsers without File System Access API
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = defaultName; a.click();
+    URL.revokeObjectURL(url);
+  }
 
   const msg = document.getElementById('save-msg');
   msg.classList.add('show');
@@ -1693,6 +1729,11 @@ function loadFromFile(input) {
             localStorage.setItem(cfg.key, JSON.stringify(rows));
             renderActionTable(tableId);
           }
+        });
+      }
+      if (parsed.noteBoxRows) {
+        parsed.noteBoxRows.forEach((rows, i) => {
+          saveNoteRows(i, rows);
         });
       }
       loadAll();
@@ -1946,14 +1987,16 @@ function renderLevelLog() {
           <div style="margin-top:0.1rem;">
             <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Notes</span>
             <div class="note-row-table action-table-wrap">
-              <div class="action-table-body level-notes-body">${(entry.noteRows || []).map((row, rowIdx) => `
+              <div class="action-table-body level-notes-body">${(entry.noteRows || []).map((row, rowIdx) => {
+                const val = (row || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                return `
                 <div class="action-table-row">
-                  <input class="action-col-input note-row-input" style="flex:1" type="text"
-                    value="${(row || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
+                  <textarea class="action-col-input note-row-input" style="flex:1"
                     placeholder="New features, augments…"
-                    oninput="updateLevelNoteRow(${lvl},${rowIdx},this.value)">
+                    oninput="updateLevelNoteRow(${lvl},${rowIdx},this.value)">${val}</textarea>
                   <button class="action-del-btn" onclick="deleteLevelNoteRow(${lvl},${rowIdx})" title="Remove">✕</button>
-                </div>`).join('')}</div>
+                </div>`;
+              }).join('')}</div>
               <button class="action-add-btn" onclick="addLevelNoteRow(${lvl})">✦ Add Note</button>
             </div>
           </div>
@@ -2048,12 +2091,12 @@ function renderActionTable(tableId) {
   ).join('') + '<div style="width:20px;flex-shrink:0;"></div>';
 
   const bodyRows = rows.map((row, idx) => {
-    const cells = cfg.cols.map(col =>
-      `<input class="action-col-input" style="flex:${col.flex}" type="text"
-        value="${(row[col.field] || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
+    const cells = cfg.cols.map(col => {
+      const val = (row[col.field] || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `<textarea class="action-col-input" style="flex:${col.flex}"
         placeholder="${col.placeholder}"
-        oninput="updateActionRow('${tableId}',${idx},'${col.field}',this.value)">`
-    ).join('');
+        oninput="updateActionRow('${tableId}',${idx},'${col.field}',this.value)">${val}</textarea>`;
+    }).join('');
     return `<div class="action-table-row">
       ${cells}
       <button class="action-del-btn" onclick="deleteActionRow('${tableId}',${idx})" title="Remove row">✕</button>
@@ -2079,7 +2122,7 @@ function addActionRow(tableId) {
   const body = document.querySelector(`#tbl-${tableId} .action-table-body`);
   if (body) body.scrollTop = body.scrollHeight;
   const allRows = document.querySelectorAll(`#tbl-${tableId} .action-table-row`);
-  if (allRows.length) allRows[allRows.length - 1].querySelector('input')?.focus();
+  if (allRows.length) allRows[allRows.length - 1].querySelector('textarea')?.focus();
 }
 
 function deleteActionRow(tableId, idx) {
