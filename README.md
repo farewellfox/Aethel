@@ -10,7 +10,7 @@ Spell builder and library for The Mind and The Spirit classes.
 **[Aethel Character Sheet](https://farewellfox.github.io/Aethel/aethel-character-sheet.html)**
 Full digital character sheet with live calculations and level tracking.
 
-Open either link in your browser — no download or installation required.
+Open either link in your browser. No download or installation required.
 
 ---
 

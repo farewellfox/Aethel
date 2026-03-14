@@ -809,6 +809,29 @@ textarea.field-input:focus { border-color: var(--copper); }
 .level-pts-remaining.ok { color: var(--teal-light); }
 .level-pts-remaining.over { color: var(--crimson-soft); }
 
+.level-resource-val {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--teal);
+  background: rgba(30,95,95,0.08);
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+  min-width: 60px;
+  text-align: center;
+}
+
+select.field-input {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23b87333' opacity='0.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.4rem center;
+  padding-right: 1.4rem;
+}
+
 .add-level-btn {
   display: flex;
   align-items: center;
@@ -1051,7 +1074,12 @@ textarea.action-col-input {
             </div>
             <div class="field-group">
               <label class="field-label">Class</label>
-              <input type="text" class="field-input" id="char-class" placeholder="The Mind…" data-save="char-class">
+              <select class="field-input" id="char-class" data-save="char-class">
+                <option value="">— Choose Class —</option>
+                <option value="The Mind">The Mind (d6 · AP)</option>
+                <option value="The Body">The Body (d10 · FP)</option>
+                <option value="The Spirit">The Spirit (d8 · RP)</option>
+              </select>
             </div>
             <div class="field-group">
               <label class="field-label">Archetype</label>
@@ -1557,6 +1585,7 @@ function updateSkillTotals() {
     remEl.className = `budget-num ${remaining < 0 ? 'warn' : 'ok'}`;
   }
   if (capEl) capEl.textContent = cap;
+  refreshResourceDisplays();
 }
 
 function getNoteRows(boxIdx) {
@@ -1813,6 +1842,42 @@ function updateSavingThrows() {
   }
 }
 
+// ── CLASS RESOURCE INFO ──
+function getAbilityScore(abbr) {
+  return parseInt(document.getElementById(`ability-${abbr.toLowerCase()}`)?.value) || 0;
+}
+
+function getClassResourceInfo() {
+  const cls = (document.getElementById('char-class')?.value || '').toLowerCase();
+  if (cls.includes('mind')) {
+    return { score: getAbilityScore('INT'), mod: getAbilityMod('INT'), label: 'AP', stat: 'INT' };
+  }
+  if (cls.includes('body')) {
+    return { score: getAbilityScore('STR'), mod: getAbilityMod('STR'), label: 'FP', stat: 'STR' };
+  }
+  if (cls.includes('spirit')) {
+    const wisScore = getAbilityScore('WIS'), chaScore = getAbilityScore('CHA');
+    const wis = getAbilityMod('WIS'), cha = getAbilityMod('CHA');
+    const useWis = wisScore >= chaScore;
+    return { score: useWis ? wisScore : chaScore, mod: useWis ? wis : cha, label: 'RP', stat: useWis ? 'WIS' : 'CHA' };
+  }
+  return null;
+}
+
+function refreshResourceDisplays() {
+  const res = getClassResourceInfo();
+  levelEntries.forEach(entry => {
+    const el = document.getElementById(`lvl-res-${entry.level}`);
+    if (!el) return;
+    if (!res) { el.textContent = '—'; el.title = ''; return; }
+    const isLvl1 = entry.level === 1;
+    el.textContent = isLvl1
+      ? `${res.score} ${res.label}`
+      : `${res.mod >= 0 ? '+' : ''}${res.mod} ${res.label}`;
+    el.title = isLvl1 ? `${res.stat} score` : `${res.stat} modifier`;
+  });
+}
+
 // ── LEVEL LOG ──
 const HIT_DICE = { mind: 6, body: 10, spirit: 8 };
 let levelEntries = JSON.parse(localStorage.getItem('aethel-level-log') || '[]');
@@ -1947,6 +2012,15 @@ function renderLevelLog() {
     const usedSkillPts = Object.values(entry.skills).reduce((s, v) => s + (parseInt(v) || 0), 0);
     const rem = pts - usedSkillPts;
     const isLvl1 = lvl === 1;
+    const res = getClassResourceInfo();
+    const resDisplay = res
+      ? (isLvl1 ? `${res.score} ${res.label}` : `${res.mod >= 0 ? '+' : ''}${res.mod} ${res.label}`)
+      : '—';
+    const resTitle = res ? (isLvl1 ? `${res.stat} score` : `${res.stat} modifier`) : '';
+    const resSummary = res ? ` · ${resDisplay} ${res.stat}` : '';
+    const hpPlaceholder = isLvl1
+      ? (die ? `STR + ${die} (max)` : 'STR + hit die max')
+      : (die ? `STR mod + d${die}` : 'STR mod + hit die');
 
     const el = document.createElement('div');
     el.className = 'level-entry';
@@ -1965,7 +2039,7 @@ function renderLevelLog() {
       <div class="level-entry-header" onclick="toggleLevelCollapse(${lvl})">
         <div style="display:flex;flex-direction:column;gap:0.1rem;">
           <div class="level-entry-title">Level ${lvl}</div>
-          <div class="level-entry-summary">${pts} skill pt${pts !== 1 ? 's' : ''} · ${isLvl1 ? 'STR + ' + dieLabel + ' max HP' : dieLabel + ' HP'}</div>
+          <div class="level-entry-summary">${pts} skill pt${pts !== 1 ? 's' : ''} · ${isLvl1 ? 'STR + ' + dieLabel + ' max HP' : dieLabel + ' HP'}${resSummary}</div>
         </div>
         <div style="display:flex;align-items:center;gap:0.75rem;">
           <button onclick="event.stopPropagation();deleteLevelEntry(${lvl})"
@@ -1981,8 +2055,12 @@ function renderLevelLog() {
         <div>
           <div class="level-stat-row" style="margin-bottom:0.75rem;">
             <span class="level-stat-label">${isLvl1 ? 'Base HP' : 'HP Gained'}</span>
-            <input type="number" class="level-num-input" value="${entry.hp || ''}" placeholder="${isLvl1 ? 'STR+' + dieLabel : 'Roll ' + dieLabel}"
+            <input type="number" class="level-num-input" value="${entry.hp || ''}" placeholder="${hpPlaceholder}"
               onchange="updateLevelEntry(${lvl},'hp',this.value)" oninput="updateLevelEntry(${lvl},'hp',this.value)">
+          </div>
+          <div class="level-stat-row" style="margin-bottom:0.75rem;">
+            <span class="level-stat-label">${isLvl1 ? 'Base Resource' : 'Resource +'}</span>
+            <span class="level-resource-val" id="lvl-res-${lvl}" title="${resTitle}">${resDisplay}</span>
           </div>
           <div style="margin-top:0.1rem;">
             <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Notes</span>
@@ -2155,15 +2233,17 @@ document.getElementById('ability-grid')?.addEventListener('input', updateSavingT
 document.getElementById('spell-save-stat')?.addEventListener('change', updateSavingThrows);
 
 // Sync resource label from class input
-document.getElementById('char-class')?.addEventListener('input', function() {
+document.getElementById('char-class')?.addEventListener('change', function() {
   const val = this.value.toLowerCase();
   const label = document.getElementById('resource-label-display');
-  if (!label) return;
-  if (val.includes('mind')) label.textContent = 'AP — Arcane Points';
-  else if (val.includes('body')) label.textContent = 'FP — Feat Points';
-  else if (val.includes('spirit')) label.textContent = 'RP — Resolve Points';
-  else label.textContent = 'AP / FP / RP';
+  if (label) {
+    if (val.includes('mind')) label.textContent = 'AP — Arcane Points';
+    else if (val.includes('body')) label.textContent = 'FP — Feat Points';
+    else if (val.includes('spirit')) label.textContent = 'RP — Resolve Points';
+    else label.textContent = 'AP / FP / RP';
+  }
   renderLevelLog();
+  refreshResourceDisplays();
 });
 </script>
 </body>
