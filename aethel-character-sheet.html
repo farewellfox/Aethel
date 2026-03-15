@@ -853,6 +853,186 @@ select.field-input {
 }
 .add-level-btn:hover { background: rgba(184,115,51,0.08); border-style: solid; }
 
+/* ── LEVEL LOG SUMMARY PANEL ── */
+.level-summary-panel {
+  border: 1px solid rgba(184,115,51,0.4);
+  border-radius: 2px;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  background: rgba(22,18,14,0.03);
+}
+.level-summary-header {
+  background: linear-gradient(to right, rgba(22,18,14,0.45), rgba(30,22,10,0.35));
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(184,115,51,0.3);
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--copper-light);
+}
+.level-summary-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.summary-totals-row {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(184,115,51,0.15);
+}
+.summary-stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.summary-stat-value {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--teal);
+  line-height: 1;
+}
+.summary-stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-label);
+}
+.summary-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  margin-bottom: 0.5rem;
+}
+.summary-budget-bar {
+  background: linear-gradient(to right, var(--ink-soft), #1e160a);
+  border-radius: 2px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.summary-budget-sep {
+  font-size: 1.1rem;
+  color: rgba(240,230,208,0.25);
+  padding-bottom: 0.4rem;
+  line-height: 1;
+}
+.grant-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  border: 1px solid rgba(184,115,51,0.15);
+  margin-bottom: 0.25rem;
+  background: rgba(30,95,95,0.04);
+}
+.grant-amount {
+  font-family: 'Cinzel', serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--teal);
+  min-width: 2.2rem;
+  text-align: right;
+}
+.grant-source {
+  flex: 1;
+  font-size: 0.86rem;
+  color: var(--text-soft);
+  font-style: italic;
+}
+.grant-form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin: 0.4rem 0;
+  padding: 0.65rem 0.75rem;
+  background: rgba(184,115,51,0.06);
+  border: 1px solid rgba(184,115,51,0.2);
+  border-radius: 2px;
+}
+.grant-form-field { display: flex; flex-direction: column; gap: 0.2rem; }
+.grant-confirm-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(30,95,95,0.15);
+  border: 1px solid rgba(30,95,95,0.4);
+  color: var(--teal-light);
+  padding: 0.3rem 0.7rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.grant-confirm-btn:hover { background: var(--teal); color: var(--vellum); }
+.grant-cancel-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(120,26,26,0.25);
+  color: rgba(160,48,48,0.7);
+  padding: 0.3rem 0.7rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.grant-cancel-btn:hover { background: var(--crimson); color: var(--vellum); border-color: var(--crimson); }
+.summary-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 0.35rem;
+}
+.summary-skill-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  transition: background 0.12s;
+}
+.summary-skill-item:hover { background: rgba(184,115,51,0.05); border-color: rgba(184,115,51,0.12); }
+.summary-skill-name-wrap { display: flex; flex-direction: column; gap: 0.02rem; flex: 1; min-width: 0; }
+.summary-skill-input {
+  width: 44px;
+  text-align: center;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 2px;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--teal);
+  padding: 0.15rem;
+  outline: none;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
+}
+.summary-skill-input:focus { border-color: var(--copper); }
+.summary-skill-input.over-cap { border-color: var(--crimson-soft); color: var(--crimson-soft); }
+.sum-cap-warn {
+  font-size: 0.58rem;
+  color: var(--crimson-soft);
+  font-style: italic;
+  white-space: nowrap;
+  display: none;
+}
+.sum-cap-warn.visible { display: block; }
+
 /* ── CHEAT SHEET ── */
 .cs-block { margin-bottom: 0.25rem; }
 .cs-title {
@@ -1019,6 +1199,698 @@ textarea.action-col-input {
 
 .action-add-btn:hover { background: rgba(184,115,51,0.06); }
 
+/* ── COMBAT DELTA CONTROLS ── */
+.combat-mod-btn {
+  background: transparent;
+  border: 1px solid rgba(30,22,14,0.18);
+  border-radius: 2px;
+  color: var(--text-label);
+  font-family: 'Crimson Text', serif;
+  font-size: 1.1rem;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.combat-mod-btn.minus:hover { border-color: var(--crimson-soft); color: var(--crimson-soft); background: rgba(120,26,26,0.07); }
+.combat-mod-btn.plus:hover  { border-color: var(--teal); color: var(--teal); background: rgba(30,95,95,0.07); }
+
+.combat-delta-row {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+  border-top: 1px dashed rgba(30,22,14,0.13);
+}
+.combat-delta-row.visible { display: flex; }
+
+.combat-delta-sign {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 0.75rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.combat-delta-sign.minus { color: var(--crimson-soft); }
+.combat-delta-sign.plus  { color: var(--teal); }
+
+.combat-delta-input {
+  width: 50px;
+  text-align: center;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: 2px;
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  padding: 0.15rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.combat-delta-input:focus { border-color: var(--copper); }
+
+.combat-delta-apply {
+  background: transparent;
+  border: 1px solid rgba(30,95,95,0.35);
+  border-radius: 2px;
+  color: var(--teal-light);
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.combat-delta-apply:hover { background: var(--teal); color: var(--vellum); border-color: var(--teal); }
+
+.combat-delta-cancel {
+  background: transparent;
+  border: none;
+  color: var(--text-label);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.1rem 0.2rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.combat-delta-cancel:hover { color: var(--crimson-soft); }
+
+.temp-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(30,22,14,0.13);
+}
+.temp-stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.temp-stat-input {
+  width: 48px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(184,115,51,0.3);
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--copper-light);
+  padding: 0.1rem 0.1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.temp-stat-input:focus { border-bottom-color: var(--copper); }
+.temp-stat-input::placeholder { color: rgba(184,115,51,0.22); font-size: 0.85rem; font-style: italic; }
+
+/* ── REST BAR ── */
+.rest-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.rest-note {
+  flex: 1;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--text-soft);
+  min-width: 0;
+}
+.rest-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.45rem 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.rest-btn.short {
+  background: transparent;
+  border: 1px solid rgba(30,95,95,0.45);
+  color: var(--teal-light);
+}
+.rest-btn.short:hover:not([disabled]) { background: var(--teal); color: var(--vellum); border-color: var(--teal); }
+.rest-btn.short[disabled] {
+  opacity: 0.4;
+  cursor: default;
+  border-color: rgba(30,22,14,0.2);
+  color: var(--text-label);
+}
+.rest-btn.long {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.4);
+  color: var(--copper-light);
+}
+.rest-btn.long:hover { background: var(--copper); color: var(--ink); border-color: var(--copper); }
+
+/* ── THREE-PANEL COMBAT STATS ── */
+.cstat-band {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--copper);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 24px var(--shadow);
+}
+@media (max-width: 800px) {
+  .cstat-band { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .cstat-band { grid-template-columns: 1fr; }
+}
+
+.cstat-panel {
+  background: var(--vellum);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.cstat-panel-header {
+  background: linear-gradient(to right, var(--ink-soft), #1e160a);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--copper);
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--copper-light);
+  flex-shrink: 0;
+}
+
+.cstat-body {
+  padding: 0.75rem 0.65rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cstat-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.38rem 0;
+  border-bottom: 1px solid rgba(184,115,51,0.15);
+}
+.cstat-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cstat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+
+.cstat-derived {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.cstat-save-val {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cstat-save-val.positive { color: var(--teal); }
+.cstat-save-val.zero     { color: rgba(30,22,14,0.55); }
+.cstat-save-val.negative { color: var(--crimson); }
+
+.cstat-stat-hint {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.cstat-input {
+  background: rgba(22,18,14,0.05);
+  border: none;
+  border-bottom: 2px solid rgba(184,115,51,0.5);
+  border-radius: 2px 2px 0 0;
+  font-family: 'Crimson Text', serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: right;
+  width: 68px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  padding: 0.1rem 0.4rem 0.05rem;
+}
+.cstat-input:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.06); }
+.cstat-input::placeholder { color: rgba(30,22,14,0.2); font-size: 1rem; }
+
+.cstat-divider {
+  height: 1px;
+  background: rgba(184,115,51,0.3);
+  margin: 0.2rem 0;
+}
+
+/* Panel 3 — HP / Resource split */
+.cstat-hp-rp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cstat-hp-rp-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--copper);
+  flex: 1;
+}
+
+.cstat-hp-rp-col {
+  background: var(--vellum);
+  display: flex;
+  flex-direction: column;
+}
+
+.cstat-hp-rp-header {
+  background: linear-gradient(to right, var(--ink-soft), #1e160a);
+  padding: 0.3rem 0.65rem;
+  border-bottom: 1px solid var(--copper);
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--copper-light);
+  flex-shrink: 0;
+}
+
+.cstat-hp-rp-body {
+  padding: 0.45rem 0.75rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.cstat-curmax {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.cstat-curmax-cur {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: rgba(22,18,14,0.05);
+  border: none;
+  border-bottom: 2px solid rgba(184,115,51,0.5);
+  border-radius: 2px 2px 0 0;
+  outline: none;
+  width: 52px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+  padding: 0.1rem 0.4rem 0.05rem;
+}
+.cstat-curmax-cur:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.06); }
+.cstat-curmax-cur::placeholder { color: rgba(30,22,14,0.2); font-size: 1rem; }
+
+.cstat-curmax-sep {
+  color: var(--text-label);
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.cstat-curmax-max {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(30,22,14,0.55);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(184,115,51,0.35);
+  outline: none;
+  width: 38px;
+  text-align: center;
+  transition: border-color 0.2s;
+  padding: 0.05rem 0.15rem 0;
+}
+.cstat-curmax-max:focus { border-bottom-color: var(--copper); }
+.cstat-curmax-max::placeholder { color: rgba(30,22,14,0.2); font-size: 0.85rem; }
+
+.cstat-mod-btns {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0;
+}
+
+/* ── NEW COMBAT BAND WRAPPER LAYOUT ── */
+.cstat-band-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  margin-bottom: 1.5rem;
+}
+
+.cstat-rest-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 0 0 110px;
+}
+
+.cstat-rest-side-btn {
+  background: var(--copper);
+  color: var(--ink);
+  border: none;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  flex: 1;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s;
+  box-shadow: 0 2px 8px rgba(22,18,14,0.35);
+  padding: 0.4rem 0.3rem;
+}
+.cstat-rest-side-btn:hover:not([disabled]) {
+  background: var(--copper-light);
+  color: var(--ink);
+}
+.cstat-rest-side-btn[disabled] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* Long Rest — dark ink background */
+.cstat-rest-long {
+  background: linear-gradient(to bottom, var(--ink-soft), var(--ink));
+  color: var(--copper-light);
+}
+.cstat-rest-long:hover:not([disabled]) {
+  background: linear-gradient(to bottom, #3a2e20, #2a1e10) !important;
+  color: var(--copper-pale) !important;
+}
+
+.cstat-rest-note {
+  font-size: 0.58rem;
+  font-style: italic;
+  color: var(--text-soft);
+  text-align: center;
+  padding: 0.2rem 0.1rem;
+  display: none;
+}
+.cstat-rest-note.visible { display: block; }
+
+.cstat-main-panels {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--copper);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px var(--shadow);
+  min-width: 0;
+}
+
+.cstat-resource-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 0 0 190px;
+}
+
+.cstat-resource-card {
+  background: var(--vellum);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px var(--shadow);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cstat-resource-card-body {
+  padding: 0.45rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+}
+
+.cstat-rc-vals {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.cstat-rc-val-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cstat-rc-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  margin-bottom: 0.1rem;
+  white-space: nowrap;
+}
+
+.cstat-rc-temp-group {
+  border-left: 1px solid rgba(184,115,51,0.2);
+  padding-left: 0.35rem;
+  margin-left: 0.1rem;
+}
+
+.cstat-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-top: 1px solid rgba(184,115,51,0.15);
+  padding-top: 0.3rem;
+}
+
+.cstat-ctrl-btn {
+  background: transparent;
+  border: 1px solid rgba(30,22,14,0.2);
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.cstat-ctrl-btn.minus:hover { border-color: var(--crimson-soft); color: var(--crimson-soft); background: rgba(120,26,26,0.07); }
+.cstat-ctrl-btn.plus:hover  { border-color: var(--teal);         color: var(--teal);         background: rgba(30,95,95,0.07); }
+
+.cstat-delta-inline {
+  flex: 1;
+  min-width: 0;
+  background: rgba(22,18,14,0.04);
+  border: none;
+  border-bottom: 1px solid rgba(184,115,51,0.3);
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  padding: 0.1rem 0.2rem;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  color: var(--text-main);
+}
+.cstat-delta-inline::-webkit-outer-spin-button,
+.cstat-delta-inline::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.cstat-no-spin { -moz-appearance: textfield !important; appearance: textfield !important; }
+.cstat-no-spin::-webkit-outer-spin-button,
+.cstat-no-spin::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Legacy rest bar — kept for compat, hidden in new layout */
+.cstat-rest-bar {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--copper);
+  border-top: 1px solid var(--copper);
+}
+
+.cstat-rest-btn {
+  border: none;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: center;
+}
+
+/* "ft" unit suffix */
+.cstat-unit {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-soft);
+  flex-shrink: 0;
+}
+
+/* DC stat select */
+.cstat-dc-stat-select {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--field-border);
+  font-family: 'Crimson Text', serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--text-soft);
+  outline: none;
+  cursor: pointer;
+  padding: 0.05rem 0;
+  text-align: right;
+  direction: rtl;
+}
+
+/* "Saving Throws" micro label */
+.cstat-saves-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-main);
+  padding-top: 0.25rem;
+  margin-bottom: 0.15rem;
+  border-top: 1px solid rgba(184,115,51,0.18);
+  margin-top: 0.1rem;
+}
+
+/* Save value + stat hint on one line */
+.cstat-save-right {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+/* HP / RP panel body */
+.cstat-resource-body {
+  padding: 0.6rem 0.75rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+/* DC formula hint — computed values e.g. "8 + 2 + 4" */
+.cstat-dc-formula {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-soft);
+  margin-top: 0.2rem;
+  letter-spacing: 0;
+}
+
+/* DC written formula description */
+.cstat-dc-desc {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-soft);
+  margin-top: 0.1rem;
+  letter-spacing: 0;
+}
+
+/* Prominent temp HP / RP rows */
+.cstat-temp-row {
+  border-top: 1px solid rgba(184,115,51,0.25);
+  padding-top: 0.2rem;
+  margin-top: 0.05rem;
+}
+.cstat-temp-label {
+  font-family: 'Cinzel', serif !important;
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  color: var(--text-main) !important;
+  text-transform: uppercase !important;
+}
+.cstat-temp-input {
+  font-family: 'Crimson Text', serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: var(--vellum) !important;
+  width: 64px !important;
+  background: var(--ink) !important;
+  border: none !important;
+  border-radius: 3px !important;
+  padding: 0.2rem 0.4rem !important;
+  text-align: center !important;
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+.cstat-temp-input::-webkit-outer-spin-button,
+.cstat-temp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* ── PRINT HINT ── */
 .print-hint {
   text-align: center;
@@ -1114,32 +1986,149 @@ textarea.action-col-input {
   </div>
 
   <!-- COMBAT BAND -->
-  <div class="combat-band" style="margin-bottom:1.5rem;">
-    <div class="combat-stat">
-      <div class="combat-stat-label">Initiative</div>
-      <input type="text" class="combat-num" id="stat-initiative" placeholder="—" data-save="stat-initiative">
+  <div class="cstat-band-wrapper">
+
+    <!-- Left: Rest buttons -->
+    <div class="cstat-rest-col">
+      <button class="cstat-rest-side-btn" id="short-rest-btn" onclick="doShortRest()">Short Rest</button>
+      <button class="cstat-rest-side-btn cstat-rest-long" onclick="doLongRest()">Long Rest</button>
+      <div class="cstat-rest-note" id="rest-note"></div>
     </div>
-    <div class="combat-stat">
-      <div class="combat-stat-label">Defense</div>
-      <input type="text" class="combat-num" id="stat-defense" placeholder="—" data-save="stat-defense">
-    </div>
-    <div class="combat-stat">
-      <div class="combat-stat-label">Hit Points</div>
-      <div class="combat-stat-inputs">
-        <input type="text" class="combat-num" id="stat-hp-cur" placeholder="—" data-save="stat-hp-cur">
-        <span class="combat-divider">/</span>
-        <input type="text" class="combat-num" id="stat-hp-max" placeholder="—" data-save="stat-hp-max">
+
+    <!-- Center: Offense + Defense -->
+    <div class="cstat-main-panels">
+
+      <!-- Offense -->
+      <div class="cstat-panel">
+        <div class="cstat-panel-header">Offense</div>
+        <div class="cstat-body">
+          <div class="cstat-row">
+            <span class="cstat-label">Initiative</span>
+            <input type="text" class="cstat-input" id="stat-initiative" placeholder="—" data-save="stat-initiative">
+          </div>
+          <div class="cstat-row">
+            <span class="cstat-label">Speed</span>
+            <div style="display:flex;align-items:baseline;gap:0.2rem;">
+              <input type="text" class="cstat-input" id="stat-speed" placeholder="30" data-save="stat-speed">
+              <span class="cstat-unit">ft</span>
+            </div>
+          </div>
+          <div class="cstat-divider"></div>
+          <div class="cstat-row" style="align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;gap:0.15rem;">
+              <span class="cstat-label">Spell Save DC</span>
+              <div class="cstat-dc-desc">8 + (level / 2, Rounded up) + Spell casting Modifier</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="cstat-save-val positive" id="spell-save-dc">—</div>
+              <select id="spell-save-stat" onchange="updateSavingThrows()" class="cstat-dc-stat-select">
+                <option value="INT">INT mod</option>
+                <option value="WIS">WIS mod</option>
+                <option value="CHA">CHA mod</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="combat-stat">
-      <div class="combat-stat-label">Resource</div>
-      <div class="combat-stat-inputs">
-        <input type="text" class="combat-num" id="stat-rp-cur" placeholder="—" data-save="stat-rp-cur">
-        <span class="combat-divider">/</span>
-        <input type="text" class="combat-num" id="stat-rp-max" placeholder="—" data-save="stat-rp-max">
+
+      <!-- Defense -->
+      <div class="cstat-panel">
+        <div class="cstat-panel-header">Defense</div>
+        <div class="cstat-body">
+          <div class="cstat-row">
+            <span class="cstat-label">Defense</span>
+            <input type="text" class="cstat-input" id="stat-defense" placeholder="—" data-save="stat-defense">
+          </div>
+          <div class="cstat-saves-label">Saving Throws</div>
+          <div class="cstat-row" style="align-items:baseline;">
+            <span class="cstat-label">Fortitude</span>
+            <div class="cstat-save-right">
+              <span class="cstat-save-val" id="save-fort">—</span>
+              <span class="cstat-stat-hint">STR mod</span>
+            </div>
+          </div>
+          <div class="cstat-row" style="align-items:baseline;">
+            <span class="cstat-label">Reflex</span>
+            <div class="cstat-save-right">
+              <span class="cstat-save-val" id="save-reflex">—</span>
+              <span class="cstat-stat-hint" id="save-reflex-stat">DEX mod</span>
+            </div>
+          </div>
+          <div class="cstat-row" style="align-items:baseline;">
+            <span class="cstat-label">Will</span>
+            <div class="cstat-save-right">
+              <span class="cstat-save-val" id="save-will">—</span>
+              <span class="cstat-stat-hint" id="save-will-stat">WIS mod</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="resource-label" id="resource-label-display">AP / FP / RP</div>
+
     </div>
+
+    <!-- Right: HP + Resource cards -->
+    <div class="cstat-resource-col">
+
+      <!-- Hit Points card -->
+      <div class="cstat-resource-card">
+        <div class="cstat-panel-header">Hit Points</div>
+        <div class="cstat-resource-card-body">
+          <div class="cstat-rc-vals">
+            <div class="cstat-rc-val-group">
+              <div class="cstat-rc-lbl">Current</div>
+              <input type="text" class="cstat-curmax-cur" id="stat-hp-cur" placeholder="—" data-save="stat-hp-cur">
+            </div>
+            <div class="cstat-rc-val-group">
+              <div class="cstat-rc-lbl">Max</div>
+              <div style="display:flex;align-items:baseline;gap:0.1rem;">
+                <span class="cstat-curmax-sep">/</span>
+                <input type="text" class="cstat-curmax-max" id="stat-hp-max" placeholder="—" data-save="stat-hp-max">
+              </div>
+            </div>
+            <div class="cstat-rc-val-group cstat-rc-temp-group">
+              <div class="cstat-rc-lbl">Temp</div>
+              <input type="number" class="cstat-curmax-cur cstat-no-spin" id="stat-hp-temp" min="0" placeholder="0" data-save="stat-hp-temp">
+            </div>
+          </div>
+          <div class="cstat-ctrl-row">
+            <button class="cstat-ctrl-btn minus" onclick="quickApply('hp',-1)" title="Take damage">−</button>
+            <input type="number" class="cstat-delta-inline" id="hp-delta-input" min="0" placeholder="">
+            <button class="cstat-ctrl-btn plus" onclick="quickApply('hp',+1)" title="Heal">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resource Points card -->
+      <div class="cstat-resource-card">
+        <div class="cstat-panel-header" id="resource-label-display">Resource Points</div>
+        <div class="cstat-resource-card-body">
+          <div class="cstat-rc-vals">
+            <div class="cstat-rc-val-group">
+              <div class="cstat-rc-lbl">Current</div>
+              <input type="text" class="cstat-curmax-cur" id="stat-rp-cur" placeholder="—" data-save="stat-rp-cur">
+            </div>
+            <div class="cstat-rc-val-group">
+              <div class="cstat-rc-lbl">Max</div>
+              <div style="display:flex;align-items:baseline;gap:0.1rem;">
+                <span class="cstat-curmax-sep">/</span>
+                <input type="text" class="cstat-curmax-max" id="stat-rp-max" placeholder="—" data-save="stat-rp-max">
+              </div>
+            </div>
+            <div class="cstat-rc-val-group cstat-rc-temp-group">
+              <div class="cstat-rc-lbl">Temp</div>
+              <input type="number" class="cstat-curmax-cur cstat-no-spin" id="stat-rp-temp" min="0" placeholder="0" data-save="stat-rp-temp">
+            </div>
+          </div>
+          <div class="cstat-ctrl-row">
+            <button class="cstat-ctrl-btn minus" onclick="quickApply('rp',-1)" title="Spend resource">−</button>
+            <input type="number" class="cstat-delta-inline" id="rp-delta-input" min="0" placeholder="">
+            <button class="cstat-ctrl-btn plus" onclick="quickApply('rp',+1)" title="Regain resource">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
   <!-- MAIN GRID -->
@@ -1159,47 +2148,6 @@ textarea.action-col-input {
           </div>
           <div class="ability-grid" id="ability-grid">
             <!-- rendered by JS -->
-          </div>
-          <div class="ornament-divider" style="margin-top:1rem;"><span class="ornament-glyph">✦</span></div>
-          <div style="margin-top:0.75rem;">
-            <div class="section-title" style="font-size:0.62rem;margin-bottom:0.6rem;color:var(--text-label);">Saving Throws <span style="font-weight:400;font-style:italic;">(modifier only — always roll 2d10+)</span></div>
-            <div class="save-row">
-              <div class="save-name">FORT</div>
-              <div style="display:flex;align-items:baseline;gap:0.5rem;flex:1;">
-                <div class="ability-mod" id="save-fort" style="min-width:2.5rem;text-align:center;">—</div>
-                <div class="save-detail">STR mod</div>
-              </div>
-            </div>
-            <div class="save-row">
-              <div class="save-name">REFLEX</div>
-              <div style="display:flex;align-items:baseline;gap:0.5rem;flex:1;">
-                <div class="ability-mod" id="save-reflex" style="min-width:2.5rem;text-align:center;">—</div>
-                <div class="save-detail" id="save-reflex-stat">DEX or INT (highest)</div>
-              </div>
-            </div>
-            <div class="save-row">
-              <div class="save-name">WILL</div>
-              <div style="display:flex;align-items:baseline;gap:0.5rem;flex:1;">
-                <div class="ability-mod" id="save-will" style="min-width:2.5rem;text-align:center;">—</div>
-                <div class="save-detail" id="save-will-stat">WIS or CHA (highest)</div>
-              </div>
-            </div>
-            <div class="ornament-divider" style="margin:0.75rem 0;"><span class="ornament-glyph">✦</span></div>
-            <div class="section-title" style="font-size:0.62rem;margin-bottom:0.6rem;color:var(--text-label);">Spell Save DC</div>
-            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
-              <div style="display:flex;flex-direction:column;align-items:center;gap:0.2rem;">
-                <div class="ability-mod positive" id="spell-save-dc" style="min-width:3rem;text-align:center;font-size:1.2rem;">—</div>
-                <div style="font-size:0.58rem;color:var(--text-label);font-family:'Cinzel',serif;letter-spacing:0.1em;text-transform:uppercase;">DC</div>
-              </div>
-              <div style="font-size:0.75rem;color:var(--text-soft);flex:1;">
-                8 + ⌈level÷2⌉ +
-                <select id="spell-save-stat" onchange="updateSavingThrows()" style="background:var(--field-bg);border:none;border-bottom:1px solid var(--field-border);font-family:'Crimson Text',serif;font-size:0.78rem;color:var(--text-main);outline:none;cursor:pointer;padding:0.1rem;">
-                  <option value="INT">INT mod</option>
-                  <option value="WIS">WIS mod</option>
-                  <option value="CHA">CHA mod</option>
-                </select>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -1299,6 +2247,7 @@ textarea.action-col-input {
       </div>
     </div>
     <div class="section-body">
+      <div id="level-log-summary"></div>
       <div class="level-log-grid" id="level-log-grid"></div>
       <button class="add-level-btn" id="add-level-btn" onclick="addLevelEntry()">✦ Add Level</button>
     </div>
@@ -1449,6 +2398,10 @@ const NOTE_DEFAULTS = [
 
 const LS_KEY = 'aethel-sheet-v1';
 
+function escHtml(str) {
+  return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function scoreToMod(score) {
   if (!score || isNaN(score)) return null;
   const s = parseInt(score);
@@ -1506,14 +2459,16 @@ function getIntMod() {
   return m !== null ? m : 0;
 }
 
+function totalSkillPointsEarned() {
+  return levelEntries.reduce((sum, e) => sum + levelPtsForEntry(e.level), 0);
+}
+
+function totalSkillPointsGranted() {
+  return skillGrants.reduce((sum, g) => sum + (parseInt(g.amount) || 0), 0);
+}
+
 function totalSkillPointsAvailable() {
-  const level = getCharLevel();
-  const intMod = getIntMod();
-  // Level 1: 4 + INT mod (min 2)
-  // Each subsequent level: INT mod (min 0 per level, so never lose points)
-  const level1pts = Math.max(2, 4 + intMod);
-  const laterPts = Math.max(0, intMod) * (level - 1);
-  return level1pts + laterPts;
+  return totalSkillPointsEarned() + totalSkillPointsGranted();
 }
 
 function renderSkills() {
@@ -1555,8 +2510,8 @@ function updateSkillTotals() {
     const totalEl = document.getElementById(`skill-total-${i}`);
     const warnEl = document.getElementById(`skill-cap-warn-${i}`);
     if (!totalEl) return;
-    // Sum points invested across all level entries
-    const pts = levelEntries.reduce((sum, entry) => sum + (parseInt(entry.skills[sk.name]) || 0), 0);
+    // Read from unified skillInvestments
+    const pts = parseInt(skillInvestments[sk.name]) || 0;
     if (ptsEl) {
       ptsEl.textContent = pts > 0 ? pts : '—';
       ptsEl.classList.toggle('over-cap', pts > cap);
@@ -1569,7 +2524,7 @@ function updateSkillTotals() {
     if (warnEl) warnEl.classList.toggle('visible', pts > cap);
   });
 
-  // Update budget display
+  // Update budget display on character sheet page
   const remaining = available - spent;
   const availEl = document.getElementById('budget-available');
   const spentEl = document.getElementById('budget-spent');
@@ -1586,6 +2541,7 @@ function updateSkillTotals() {
   }
   if (capEl) capEl.textContent = cap;
   refreshResourceDisplays();
+  updateSummaryPanel();
 }
 
 function getNoteRows(boxIdx) {
@@ -1696,7 +2652,10 @@ async function saveAll() {
   const payload = JSON.stringify({
     fields: data,
     levelLog: levelEntries,
+    skillInvestments: skillInvestments,
+    skillGrants: skillGrants,
     dailyUsed: localStorage.getItem('aethel-sheet-daily-used') || '0',
+    shortRestUsed: localStorage.getItem('aethel-short-rest-used') || '0',
     actionTables: actionTableData,
     noteBoxRows: Array.from({length: 9}, (_, i) => getNoteRows(i))
   }, null, 2);
@@ -1747,8 +2706,20 @@ function loadFromFile(input) {
         localStorage.setItem('aethel-level-log', JSON.stringify(parsed.levelLog));
         levelEntries = parsed.levelLog;
       }
+      if (parsed.skillInvestments !== undefined) {
+        skillInvestments = parsed.skillInvestments;
+        localStorage.setItem('aethel-skill-investments', JSON.stringify(skillInvestments));
+      }
+      if (parsed.skillGrants !== undefined) {
+        skillGrants = parsed.skillGrants;
+        localStorage.setItem('aethel-skill-grants', JSON.stringify(skillGrants));
+      }
       if (parsed.dailyUsed !== undefined) {
         localStorage.setItem('aethel-sheet-daily-used', parsed.dailyUsed);
+      }
+      if (parsed.shortRestUsed !== undefined) {
+        shortRestUsed = parsed.shortRestUsed === '1';
+        localStorage.setItem('aethel-short-rest-used', parsed.shortRestUsed);
       }
       if (parsed.actionTables) {
         Object.entries(parsed.actionTables).forEach(([tableId, rows]) => {
@@ -1772,6 +2743,7 @@ function loadFromFile(input) {
       renderLevelLog();
       updateSkillTotals();
       updateSavingThrows();
+      updateRestBar();
       const msg = document.getElementById('save-msg');
       msg.textContent = 'Loaded.';
       msg.classList.add('show');
@@ -1814,9 +2786,8 @@ function updateSavingThrows() {
   function applyMod(id, mod) {
     const el = document.getElementById(id);
     if (!el) return;
-    const hasScore = mod !== 0 || document.getElementById(`ability-str`)?.value || document.getElementById(`ability-int`)?.value;
     el.textContent = modDisplay(mod);
-    el.className = `ability-mod${mod > 0 ? ' positive' : mod === 0 ? ' zero' : ''}`;
+    el.className = `cstat-save-val${mod > 0 ? ' positive' : mod === 0 ? ' zero' : ' negative'}`;
   }
 
   applyMod('save-fort', fortMod);
@@ -1838,7 +2809,7 @@ function updateSavingThrows() {
   const dcEl = document.getElementById('spell-save-dc');
   if (dcEl) {
     dcEl.textContent = dc;
-    dcEl.className = `ability-mod positive`;
+    dcEl.className = `cstat-save-val positive`;
   }
 }
 
@@ -1881,6 +2852,35 @@ function refreshResourceDisplays() {
 // ── LEVEL LOG ──
 const HIT_DICE = { mind: 6, body: 10, spirit: 8 };
 let levelEntries = JSON.parse(localStorage.getItem('aethel-level-log') || '[]');
+let skillInvestments = {};
+let skillGrants = [];
+let _grantFormVisible = false;
+
+function loadLevelSummaryData() {
+  try {
+    const rawInv = localStorage.getItem('aethel-skill-investments');
+    if (rawInv) skillInvestments = JSON.parse(rawInv);
+  } catch {}
+  try {
+    const rawGrants = localStorage.getItem('aethel-skill-grants');
+    if (rawGrants) skillGrants = JSON.parse(rawGrants);
+  } catch {}
+  // Migration: if skillInvestments is empty but levelEntries have per-level skills, merge them
+  if (Object.keys(skillInvestments).length === 0 && levelEntries.length > 0) {
+    SKILLS.forEach(sk => {
+      const total = levelEntries.reduce((sum, e) => sum + (parseInt((e.skills || {})[sk.name]) || 0), 0);
+      if (total > 0) skillInvestments[sk.name] = total;
+    });
+    if (Object.keys(skillInvestments).length > 0) {
+      localStorage.setItem('aethel-skill-investments', JSON.stringify(skillInvestments));
+    }
+  }
+}
+
+function saveLevelSummaryData() {
+  localStorage.setItem('aethel-skill-investments', JSON.stringify(skillInvestments));
+  localStorage.setItem('aethel-skill-grants', JSON.stringify(skillGrants));
+}
 
 function saveLevelLog() {
   localStorage.setItem('aethel-level-log', JSON.stringify(levelEntries));
@@ -1906,13 +2906,13 @@ function getClassHitDie() {
 function levelPtsForEntry(lvl) {
   const intMod = getIntMod();
   if (lvl === 1) return Math.max(2, 4 + intMod);
-  return Math.max(0, intMod);
+  return Math.max(1, intMod);
 }
 
 function addLevelEntry() {
   const nextLvl = levelEntries.length + 1;
   if (nextLvl > 20) return;
-  levelEntries.push({ level: nextLvl, hp: '', notes: '', skills: {} });
+  levelEntries.push({ level: nextLvl, hp: '', noteRows: [], skillInvestmentNotes: '' });
   saveLevelLog();
   renderLevelLog();
 }
@@ -1929,14 +2929,8 @@ function deleteLevelEntry(lvl) {
 function updateLevelEntry(lvl, field, val) {
   const entry = levelEntries.find(e => e.level === lvl);
   if (!entry) return;
-  if (field.startsWith('skill-')) {
-    const skillName = field.slice(6); // strip 'skill-' prefix → skill name
-    entry.skills[skillName] = val;
-  } else {
-    entry[field] = val;
-  }
+  entry[field] = val;
   saveLevelLog();
-  refreshLevelSkillWarnings(lvl);
 }
 
 function addLevelNoteRow(lvl) {
@@ -1967,16 +2961,8 @@ function updateLevelNoteRow(lvl, rowIdx, val) {
 }
 
 function refreshLevelSkillWarnings(lvl) {
-  const entry = levelEntries.find(e => e.level === lvl);
-  if (!entry) return;
-  const pts = levelPtsForEntry(lvl);
-  let used = Object.values(entry.skills).reduce((s, v) => s + (parseInt(v) || 0), 0);
-  const remEl = document.getElementById(`lvl-rem-${lvl}`);
-  if (remEl) {
-    const rem = pts - used;
-    remEl.textContent = rem >= 0 ? `${rem} left` : `${Math.abs(rem)} over`;
-    remEl.className = `level-pts-remaining ${rem < 0 ? 'over' : 'ok'}`;
-  }
+  // No-op: per-level skill grids removed; warnings now live in the summary panel
+  void lvl;
 }
 
 function toggleLevelCollapse(lvl) {
@@ -1995,7 +2981,7 @@ function renderLevelLog() {
       entry.noteRows = entry.notes ? [entry.notes] : [];
       delete entry.notes;
     }
-    // Migrate numeric-keyed skills to name-keyed
+    // Migrate numeric-keyed skills (old format) — no longer used per-entry but keep for migration in loadLevelSummaryData
     if (entry.skills && Object.keys(entry.skills).some(k => !isNaN(parseInt(k)))) {
       const named = {};
       Object.keys(entry.skills).forEach(k => {
@@ -2004,13 +2990,12 @@ function renderLevelLog() {
       });
       entry.skills = named;
     }
+    if (entry.skillInvestmentNotes === undefined) entry.skillInvestmentNotes = '';
 
     const lvl = entry.level;
     const pts = levelPtsForEntry(lvl);
     const die = getClassHitDie();
     const dieLabel = die ? `d${die}` : 'Hit Die';
-    const usedSkillPts = Object.values(entry.skills).reduce((s, v) => s + (parseInt(v) || 0), 0);
-    const rem = pts - usedSkillPts;
     const isLvl1 = lvl === 1;
     const res = getClassResourceInfo();
     const resDisplay = res
@@ -2026,12 +3011,13 @@ function renderLevelLog() {
     el.className = 'level-entry';
     el.id = `level-entry-${lvl}`;
 
-    const skillsHtml = SKILLS.map(sk => {
-      const val = entry.skills[sk.name] || '';
-      return `<div class="level-skill-item">
-        <span class="level-skill-name">${sk.name}</span>
-        <input type="number" class="level-skill-pts" value="${val}" min="0" max="40" placeholder="0"
-          onchange="updateLevelEntry(${lvl},'skill-${sk.name}',this.value)" oninput="updateLevelEntry(${lvl},'skill-${sk.name}',this.value)">
+    const featuresHtml = (entry.noteRows || []).map((row, rowIdx) => {
+      const v = escHtml(row || '');
+      return `<div class="action-table-row">
+        <textarea class="action-col-input note-row-input" style="flex:1"
+          placeholder="Features gained, augments…"
+          oninput="updateLevelNoteRow(${lvl},${rowIdx},this.value)">${v}</textarea>
+        <button class="action-del-btn" onclick="deleteLevelNoteRow(${lvl},${rowIdx})" title="Remove">✕</button>
       </div>`;
     }).join('');
 
@@ -2051,41 +3037,32 @@ function renderLevelLog() {
           <div class="level-entry-chevron">▼</div>
         </div>
       </div>
-      <div class="level-entry-body">
-        <div>
-          <div class="level-stat-row" style="margin-bottom:0.75rem;">
+      <div class="level-entry-body" style="grid-template-columns:1fr;">
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div class="level-stat-row">
             <span class="level-stat-label">${isLvl1 ? 'Base HP' : 'HP Gained'}</span>
             <input type="number" class="level-num-input" value="${entry.hp || ''}" placeholder="${hpPlaceholder}"
               onchange="updateLevelEntry(${lvl},'hp',this.value)" oninput="updateLevelEntry(${lvl},'hp',this.value)">
           </div>
-          <div class="level-stat-row" style="margin-bottom:0.75rem;">
+          <div class="level-stat-row">
             <span class="level-stat-label">${isLvl1 ? 'Base Resource' : 'Resource +'}</span>
             <span class="level-resource-val" id="lvl-res-${lvl}" title="${resTitle}">${resDisplay}</span>
           </div>
-          <div style="margin-top:0.1rem;">
-            <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Notes</span>
+          <div class="level-stat-row">
+            <span class="level-stat-label">SP Gained</span>
+            <span class="level-resource-val" title="${isLvl1 ? '4 + INT mod (min 2)' : 'INT mod (min 1)'}">${pts}</span>
+          </div>
+          <div>
+            <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Features</span>
             <div class="note-row-table action-table-wrap">
-              <div class="action-table-body level-notes-body">${(entry.noteRows || []).map((row, rowIdx) => {
-                const val = (row || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                return `
-                <div class="action-table-row">
-                  <textarea class="action-col-input note-row-input" style="flex:1"
-                    placeholder="New features, augments…"
-                    oninput="updateLevelNoteRow(${lvl},${rowIdx},this.value)">${val}</textarea>
-                  <button class="action-del-btn" onclick="deleteLevelNoteRow(${lvl},${rowIdx})" title="Remove">✕</button>
-                </div>`;
-              }).join('')}</div>
-              <button class="action-add-btn" onclick="addLevelNoteRow(${lvl})">✦ Add Note</button>
+              <div class="action-table-body level-notes-body">${featuresHtml}</div>
+              <button class="action-add-btn" onclick="addLevelNoteRow(${lvl})">✦ Add Feature</button>
             </div>
           </div>
-        </div>
-        <div>
-          <div class="level-skills-grid">
-            <div class="level-skills-header">
-              <span>Skill Points Placed</span>
-              <span class="level-pts-remaining ${rem < 0 ? 'over' : 'ok'}" id="lvl-rem-${lvl}">${rem >= 0 ? rem + ' left' : Math.abs(rem) + ' over'}</span>
-            </div>
-            ${skillsHtml}
+          <div>
+            <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Skill Investment <span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;">(notes only)</span></span>
+            <textarea class="field-input" style="min-height:52px;font-size:0.88rem;" placeholder="e.g. 2 Arcana, 1 Lore…"
+              oninput="updateLevelEntry(${lvl},'skillInvestmentNotes',this.value)">${escHtml(entry.skillInvestmentNotes || '')}</textarea>
           </div>
         </div>
       </div>
@@ -2101,7 +3078,248 @@ function renderLevelLog() {
     btn.disabled = next > 20;
   }
 
+  renderLevelSummary();
   syncLevelToSheet();
+}
+
+// ── LEVEL LOG SUMMARY ──
+
+function getTotalResource() {
+  const res = getClassResourceInfo();
+  if (!res || levelEntries.length === 0) return null;
+  return levelEntries.reduce((sum, e) => sum + (e.level === 1 ? res.score : res.mod), 0);
+}
+
+function updateSkillInvestment(skillName, val) {
+  const pts = parseInt(val) || 0;
+  if (pts <= 0) {
+    delete skillInvestments[skillName];
+  } else {
+    skillInvestments[skillName] = pts;
+  }
+  saveLevelSummaryData();
+  updateSkillTotals();
+}
+
+
+function addSkillGrant(amount, source) {
+  skillGrants.push({ amount: parseInt(amount) || 0, source: (source || '').trim() });
+  saveLevelSummaryData();
+  _grantFormVisible = false;
+  renderLevelSummary();
+  updateSkillTotals();
+}
+
+function deleteSkillGrant(idx) {
+  skillGrants.splice(idx, 1);
+  saveLevelSummaryData();
+  renderLevelSummary();
+  updateSkillTotals();
+}
+
+function toggleGrantForm() {
+  _grantFormVisible = !_grantFormVisible;
+  const container = document.getElementById('grant-form-container');
+  if (!container) return;
+  if (_grantFormVisible) {
+    container.innerHTML = `
+      <div class="grant-form">
+        <div class="grant-form-field">
+          <label class="field-label">Points</label>
+          <input type="number" id="grant-input-amount" class="level-num-input" min="1" placeholder="1" style="width:58px;">
+        </div>
+        <div class="grant-form-field" style="flex:1;min-width:120px;">
+          <label class="field-label">Source</label>
+          <input type="text" id="grant-input-source" class="field-input" placeholder="Noble Background, GM Grant…">
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-end;">
+          <button class="grant-confirm-btn" onclick="confirmAddGrant()">Confirm</button>
+          <button class="grant-cancel-btn" onclick="_grantFormVisible=false;document.getElementById('grant-form-container').innerHTML=''">Cancel</button>
+        </div>
+      </div>`;
+    document.getElementById('grant-input-amount')?.focus();
+  } else {
+    container.innerHTML = '';
+  }
+}
+
+function confirmAddGrant() {
+  const amount = parseInt(document.getElementById('grant-input-amount')?.value) || 0;
+  const source = document.getElementById('grant-input-source')?.value || '';
+  if (amount <= 0) { alert('Please enter a positive number of points.'); return; }
+  addSkillGrant(amount, source);
+}
+
+function renderLevelSummary() {
+  const container = document.getElementById('level-log-summary');
+  if (!container) return;
+
+  const totalHP = levelEntries.reduce((sum, e) => sum + (parseInt(e.hp) || 0), 0);
+  const res = getClassResourceInfo();
+  const totalRes = getTotalResource();
+  const resLabel = res ? res.label : 'Resource';
+
+  const earned = totalSkillPointsEarned();
+  const granted = totalSkillPointsGranted();
+  const available = earned + granted;
+  const level = getCharLevel();
+  const cap = level * 2;
+  const spent = SKILLS.reduce((sum, sk) => sum + (parseInt(skillInvestments[sk.name]) || 0), 0);
+  const remaining = available - spent;
+
+  const grantsListHtml = skillGrants.length === 0
+    ? `<div style="font-size:0.82rem;color:var(--text-label);font-style:italic;padding:0.1rem 0 0.3rem;">None recorded.</div>`
+    : skillGrants.map((g, idx) => `
+        <div class="grant-item">
+          <span class="grant-amount">+${g.amount}</span>
+          <span class="grant-source">${escHtml(g.source || '—')}</span>
+          <button class="action-del-btn" onclick="deleteSkillGrant(${idx})" title="Delete">✕</button>
+        </div>`).join('');
+
+  const skillGridHtml = SKILLS.map(sk => {
+    const pts = parseInt(skillInvestments[sk.name]) || 0;
+    const overCap = cap > 0 && pts > cap;
+    const safeId = sk.name.replace(/[^a-z0-9]/gi, '-');
+    return `
+      <div class="summary-skill-item">
+        <div class="summary-skill-name-wrap">
+          <span class="skill-name" style="font-size:0.84rem;">${sk.name}</span>
+          <span class="skill-assoc">${sk.assoc}</span>
+        </div>
+        <span class="sum-cap-warn${overCap ? ' visible' : ''}" id="sum-cap-warn-${safeId}">cap ${cap}</span>
+        <input type="number" id="sum-sk-${safeId}" class="summary-skill-input${overCap ? ' over-cap' : ''}"
+          value="${pts || ''}" min="0" placeholder="0"
+          oninput="updateSkillInvestment('${sk.name}',this.value)"
+          onchange="updateSkillInvestment('${sk.name}',this.value)">
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="level-summary-panel">
+      <div class="level-summary-header">Level Log Summary</div>
+      <div class="level-summary-body">
+
+        <!-- HP & Resource totals -->
+        <div class="summary-totals-row">
+          <div class="summary-stat-block">
+            <div class="summary-stat-value" id="summary-total-hp">${levelEntries.length > 0 ? (totalHP || 0) : '—'}</div>
+            <div class="summary-stat-label">Total HP</div>
+          </div>
+          <div class="summary-stat-block">
+            <div class="summary-stat-value" id="summary-total-res">${totalRes !== null ? totalRes : '—'}</div>
+            <div class="summary-stat-label">Total ${resLabel}</div>
+          </div>
+        </div>
+
+        <!-- Skill point budget -->
+        <div>
+          <div class="summary-section-title">Skill Points</div>
+          <div class="summary-budget-bar">
+            <div class="budget-item">
+              <div class="budget-num ok" id="summary-earned">${earned}</div>
+              <div class="budget-lbl">Through Level Up</div>
+            </div>
+            <div class="summary-budget-sep">+</div>
+            <div class="budget-item">
+              <div class="budget-num ok" id="summary-granted">${granted}</div>
+              <div class="budget-lbl">Additional</div>
+            </div>
+            <div class="summary-budget-sep">=</div>
+            <div class="budget-item">
+              <div class="budget-num ok" id="summary-available">${available}</div>
+              <div class="budget-lbl">Available</div>
+            </div>
+            <div class="summary-budget-sep" style="opacity:0.4;">·</div>
+            <div class="budget-item">
+              <div class="budget-num${spent > available ? ' warn' : ''}" id="summary-spent">${spent}</div>
+              <div class="budget-lbl">Invested</div>
+            </div>
+            <div class="summary-budget-sep" style="opacity:0.4;">·</div>
+            <div class="budget-item">
+              <div class="budget-num ${remaining < 0 ? 'warn' : 'ok'}" id="summary-remaining">${remaining >= 0 ? remaining : '−'+Math.abs(remaining)}</div>
+              <div class="budget-lbl">Remaining</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional skill points -->
+        <div>
+          <div class="summary-section-title">Additional Skill Points</div>
+          ${grantsListHtml}
+          <div id="grant-form-container">${_grantFormVisible ? `
+            <div class="grant-form">
+              <div class="grant-form-field">
+                <label class="field-label">Points</label>
+                <input type="number" id="grant-input-amount" class="level-num-input" min="1" placeholder="1" style="width:58px;">
+              </div>
+              <div class="grant-form-field" style="flex:1;min-width:120px;">
+                <label class="field-label">Source</label>
+                <input type="text" id="grant-input-source" class="field-input" placeholder="Noble Background, GM Grant…">
+              </div>
+              <div style="display:flex;gap:0.5rem;align-items:flex-end;">
+                <button class="grant-confirm-btn" onclick="confirmAddGrant()">Confirm</button>
+                <button class="grant-cancel-btn" onclick="_grantFormVisible=false;document.getElementById('grant-form-container').innerHTML=''">Cancel</button>
+              </div>
+            </div>` : ''}</div>
+          <button class="action-add-btn" style="border-top:none;padding:0.4rem 0;" onclick="toggleGrantForm()">✦ Add Skill Points</button>
+        </div>
+
+        <!-- Unified skill investment grid -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.25rem;">
+            <div class="summary-section-title" style="margin-bottom:0;">Skill Investment</div>
+            <div id="summary-cap-label" style="font-size:0.62rem;color:var(--text-label);font-style:italic;">Cap per skill: ${cap} (2 × level ${level || '?'})</div>
+          </div>
+          <div class="summary-skills-grid">${skillGridHtml}</div>
+        </div>
+
+      </div>
+    </div>`;
+}
+
+function updateSummaryPanel() {
+  const totalHP = levelEntries.reduce((sum, e) => sum + (parseInt(e.hp) || 0), 0);
+  const totalRes = getTotalResource();
+
+  const earned = totalSkillPointsEarned();
+  const granted = totalSkillPointsGranted();
+  const available = earned + granted;
+  const level = getCharLevel();
+  const cap = level * 2;
+  const spent = SKILLS.reduce((sum, sk) => sum + (parseInt(skillInvestments[sk.name]) || 0), 0);
+  const remaining = available - spent;
+
+  const set = (id, val, cls) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val;
+    if (cls !== undefined) el.className = cls;
+  };
+
+  set('summary-total-hp', levelEntries.length > 0 ? (totalHP || 0) : '—');
+  set('summary-total-res', totalRes !== null ? totalRes : '—');
+  set('summary-earned', earned, 'budget-num ok');
+  set('summary-granted', granted, 'budget-num ok');
+  set('summary-available', available, 'budget-num ok');
+  set('summary-spent', spent, `budget-num${spent > available ? ' warn' : ''}`);
+  set('summary-remaining', remaining >= 0 ? remaining : `−${Math.abs(remaining)}`, `budget-num ${remaining < 0 ? 'warn' : 'ok'}`);
+
+  const capLabel = document.getElementById('summary-cap-label');
+  if (capLabel) capLabel.textContent = `Cap per skill: ${cap} (2 × level ${level || '?'})`;
+
+  SKILLS.forEach(sk => {
+    const safeId = sk.name.replace(/[^a-z0-9]/gi, '-');
+    const inputEl = document.getElementById(`sum-sk-${safeId}`);
+    if (!inputEl) return;
+    const pts = parseInt(skillInvestments[sk.name]) || 0;
+    const overCap = cap > 0 && pts > cap;
+    inputEl.classList.toggle('over-cap', overCap);
+    const warnEl = document.getElementById(`sum-cap-warn-${safeId}`);
+    if (warnEl) {
+      warnEl.textContent = `cap ${cap}`;
+      warnEl.classList.toggle('visible', overCap);
+    }
+  });
 }
 
 // ── ACTION TABLES ──
@@ -2215,16 +3433,162 @@ function updateActionRow(tableId, idx, field, value) {
   saveActionTable(tableId);
 }
 
+// ── COMBAT DELTA ──
+const _deltaMode = { hp: null, rp: null };
+
+function openDelta(stat, mode) {
+  _deltaMode[stat] = mode;
+  // Close the other stat's delta row if open
+  const other = stat === 'hp' ? 'rp' : 'hp';
+  closeDelta(other);
+
+  const row   = document.getElementById(`${stat}-delta-row`);
+  const sign  = document.getElementById(`${stat}-delta-sign`);
+  const input = document.getElementById(`${stat}-delta-input`);
+  if (!row) return;
+
+  // Toggle: clicking the same button again closes it
+  if (row.classList.contains('visible') && _deltaMode[stat] === mode) {
+    closeDelta(stat);
+    return;
+  }
+
+  row.classList.add('visible');
+  if (sign) {
+    sign.textContent = mode === 'minus' ? '−' : '+';
+    sign.className = `combat-delta-sign ${mode}`;
+  }
+  if (input) { input.value = ''; input.focus(); }
+}
+
+function closeDelta(stat) {
+  const row = document.getElementById(`${stat}-delta-row`);
+  if (row) row.classList.remove('visible');
+  _deltaMode[stat] = null;
+}
+
+function applyDelta(stat) {
+  const mode = _deltaMode[stat];
+  if (!mode) return;
+  const input = document.getElementById(`${stat}-delta-input`);
+  const amount = parseInt(input?.value) || 0;
+  if (amount <= 0) { closeDelta(stat); return; }
+
+  const curEl  = document.getElementById(`stat-${stat}-cur`);
+  const maxEl  = document.getElementById(`stat-${stat}-max`);
+  const tempEl = document.getElementById(`stat-${stat}-temp`);
+
+  const cur  = parseInt(curEl?.value)  || 0;
+  const max  = parseInt(maxEl?.value)  || 0;
+  const temp = parseInt(tempEl?.value) || 0;
+
+  if (mode === 'minus') {
+    const tempUsed  = Math.min(amount, temp);
+    const remainder = amount - tempUsed;
+    if (tempEl) tempEl.value = (temp - tempUsed) || '';
+    if (curEl)  curEl.value  = Math.max(0, cur - remainder);
+  } else {
+    if (curEl) curEl.value = max ? Math.min(cur + amount, max) : cur + amount;
+  }
+
+  closeDelta(stat);
+  localStorage.setItem(LS_KEY, JSON.stringify(buildSaveData()));
+}
+
+// ── RESTING ──
+let shortRestUsed = localStorage.getItem('aethel-short-rest-used') === '1';
+
+function updateRestBar() {
+  const btn = document.getElementById('short-rest-btn');
+  const note = document.getElementById('rest-note');
+  if (!btn) return;
+  if (shortRestUsed) {
+    btn.disabled = true;
+    btn.textContent = 'Short Rest (Used)';
+    if (note) { note.textContent = 'Short rest used — take a long rest to restore it.'; note.classList.add('visible'); }
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'Short Rest';
+    if (note) { note.textContent = ''; note.classList.remove('visible'); }
+  }
+}
+
+function quickApply(stat, dir) {
+  const curEl   = document.getElementById(`stat-${stat}-cur`);
+  const maxEl   = document.getElementById(`stat-${stat}-max`);
+  const tempEl  = document.getElementById(`stat-${stat}-temp`);
+  const inputEl = document.getElementById(`${stat}-delta-input`);
+  const amount  = Math.max(1, parseInt(inputEl?.value) || 1);
+  const cur  = parseInt(curEl?.value)  || 0;
+  const max  = parseInt(maxEl?.value)  || 0;
+  const temp = parseInt(tempEl?.value) || 0;
+  if (dir === -1) {
+    const tempUsed  = Math.min(amount, temp);
+    const remainder = amount - tempUsed;
+    if (tempEl) tempEl.value = (temp - tempUsed) || '';
+    if (curEl)  curEl.value  = Math.max(0, cur - remainder);
+  } else {
+    if (curEl) curEl.value = max ? Math.min(cur + amount, max) : cur + amount;
+  }
+  localStorage.setItem(LS_KEY, JSON.stringify(buildSaveData()));
+}
+
+function doShortRest() {
+  if (shortRestUsed) return;
+  if (!confirm('Take a short rest?\nYou will recover ½ max HP and ½ max RP.')) return;
+  const hpCur = document.getElementById('stat-hp-cur');
+  const hpMax = document.getElementById('stat-hp-max');
+  const rpCur = document.getElementById('stat-rp-cur');
+  const rpMax = document.getElementById('stat-rp-max');
+
+  const maxHP = parseInt(hpMax?.value) || 0;
+  const maxRP = parseInt(rpMax?.value) || 0;
+  const curHP = parseInt(hpCur?.value) || 0;
+  const curRP = parseInt(rpCur?.value) || 0;
+
+  if (hpCur && maxHP) hpCur.value = Math.min(curHP + Math.floor(maxHP / 2), maxHP);
+  if (rpCur && maxRP) rpCur.value = Math.min(curRP + Math.floor(maxRP / 2), maxRP);
+
+  shortRestUsed = true;
+  localStorage.setItem('aethel-short-rest-used', '1');
+  localStorage.setItem(LS_KEY, JSON.stringify(buildSaveData()));
+  updateRestBar();
+}
+
+function doLongRest() {
+  if (!confirm('Take a long rest?\nThis will restore all HP and RP, and reset your short rest.')) return;
+  const hpCur = document.getElementById('stat-hp-cur');
+  const hpMax = document.getElementById('stat-hp-max');
+  const rpCur = document.getElementById('stat-rp-cur');
+  const rpMax = document.getElementById('stat-rp-max');
+
+  if (hpMax?.value) hpCur.value = hpMax.value;
+  if (rpMax?.value) rpCur.value = rpMax.value;
+
+  // Restore daily archetype ability
+  const daily = document.getElementById('daily-toggle');
+  if (daily) daily.classList.remove('used');
+  localStorage.setItem('aethel-sheet-daily-used', '0');
+
+  // Reset short rest availability
+  shortRestUsed = false;
+  localStorage.setItem('aethel-short-rest-used', '0');
+  localStorage.setItem(LS_KEY, JSON.stringify(buildSaveData()));
+  updateRestBar();
+}
+
 // ── INIT ──
 renderAbilities();
 renderSkills();
 renderNotes();
+loadLevelSummaryData();
 renderLevelLog();
 loadActionTables();
 loadAll();
 syncLevelToSheet();
 updateSkillTotals();
 updateSavingThrows();
+updateRestBar();
 
 // Wire ability score changes to saving throws
 document.getElementById('ability-grid')?.addEventListener('input', updateSavingThrows);
@@ -2240,7 +3604,7 @@ document.getElementById('char-class')?.addEventListener('change', function() {
     if (val.includes('mind')) label.textContent = 'AP — Arcane Points';
     else if (val.includes('body')) label.textContent = 'FP — Feat Points';
     else if (val.includes('spirit')) label.textContent = 'RP — Resolve Points';
-    else label.textContent = 'AP / FP / RP';
+    else label.textContent = 'Resource Points';
   }
   renderLevelLog();
   refreshResourceDisplays();
