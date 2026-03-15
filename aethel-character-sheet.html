@@ -1891,6 +1891,289 @@ textarea.action-col-input {
   margin: 0;
 }
 
+/* ── FEATURES TAB ── */
+.feat-sort-btn {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.35);
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(240,230,208,0.55);
+  padding: 0.15rem 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.feat-sort-btn:hover { background: rgba(184,115,51,0.1); color: var(--copper-light); }
+.feat-sort-active { background: rgba(184,115,51,0.12); color: var(--copper-light) !important; border-color: var(--copper) !important; }
+
+.feat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.feat-header {
+  display: grid;
+  grid-template-columns: 2fr 1.1fr 2.5rem 3fr;
+  background: linear-gradient(to right, rgba(22,18,14,0.12), rgba(22,18,14,0.06));
+  border-bottom: 1px solid rgba(184,115,51,0.35);
+  padding: 0.3rem 0.65rem;
+  gap: 0.5rem;
+}
+.feat-header .feat-cell {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+.feat-row {
+  display: grid;
+  grid-template-columns: 2fr 1.1fr 2.5rem 3fr;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid rgba(184,115,51,0.1);
+  cursor: pointer;
+  transition: background 0.12s;
+  align-items: start;
+}
+.feat-row:hover { background: rgba(184,115,51,0.05); }
+.feat-row:last-child { border-bottom: none; }
+.feat-cell {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+.feat-name { font-weight: 600; }
+.feat-level {
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-soft);
+}
+.feat-source-badge {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+  border: 1px solid;
+}
+.feat-src-class        { color: var(--teal);        border-color: rgba(30,95,95,0.4);     background: rgba(30,95,95,0.07); }
+.feat-src-subclass     { color: var(--teal-light);  border-color: rgba(45,128,128,0.4);   background: rgba(45,128,128,0.07); }
+.feat-src-background   { color: var(--copper);      border-color: rgba(184,115,51,0.4);   background: rgba(184,115,51,0.07); }
+.feat-src-species      { color: var(--crimson-soft);border-color: rgba(160,48,48,0.4);    background: rgba(160,48,48,0.07); }
+.feat-src-other        { color: var(--text-soft);   border-color: rgba(30,22,14,0.25);    background: rgba(30,22,14,0.04); }
+.feat-desc-full { display: none; }
+.feat-row.expanded .feat-desc-short { display: none; }
+.feat-row.expanded .feat-desc-full  { display: block; white-space: pre-wrap; }
+.features-empty {
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  color: var(--text-label);
+  font-size: 0.9rem;
+  padding: 1.5rem 0.65rem;
+  text-align: center;
+}
+
+/* ── LEVEL LOG: STRUCTURED FEATURE ENTRY ── */
+.feat-entry-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.4rem 0.5rem;
+  background: rgba(22,18,14,0.03);
+  border-radius: 2px;
+  border: 1px solid rgba(184,115,51,0.12);
+  margin-bottom: 0.35rem;
+}
+.feat-entry-fields {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.feat-name-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(184,115,51,0.35);
+  font-family: 'Crimson Text', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+  outline: none;
+  padding: 0.05rem 0.2rem;
+  min-width: 0;
+}
+.feat-name-input:focus { border-bottom-color: var(--copper); }
+.feat-name-input::placeholder { color: rgba(30,22,14,0.3); font-style: italic; font-weight: 400; }
+.feat-source-select {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.3);
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  outline: none;
+  cursor: pointer;
+  padding: 0.1rem 0.25rem;
+  flex-shrink: 0;
+}
+.feat-desc-textarea {
+  background: rgba(22,18,14,0.04);
+  border: none;
+  border-bottom: 1px solid rgba(184,115,51,0.2);
+  font-family: 'Crimson Text', serif;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  outline: none;
+  width: 100%;
+  resize: vertical;
+  min-height: 42px;
+  padding: 0.2rem 0.3rem;
+  line-height: 1.4;
+}
+.feat-desc-textarea::placeholder { color: rgba(30,22,14,0.3); font-style: italic; }
+.feat-desc-textarea:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.04); }
+
+/* ── INVENTORY TAB ── */
+.inv-defense-panel {
+  background: var(--vellum);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  padding: 0.65rem 1rem 0.55rem;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+.inv-def-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 0.25rem;
+}
+.inv-def-body { display: flex; align-items: baseline; gap: 0.45rem; flex-wrap: wrap; }
+.inv-def-formula { font-family: 'Crimson Text', serif; font-size: 0.95rem; color: var(--text-soft); font-style: italic; }
+.inv-def-arrow  { font-family: 'Crimson Text', serif; font-size: 0.95rem; color: var(--text-label); }
+.inv-def-value  { font-family: 'Crimson Text', serif; font-size: 1.65rem; font-weight: 700; color: var(--teal); line-height: 1; }
+.inv-def-note   { font-family: 'Crimson Text', serif; font-size: 0.72rem; font-style: italic; color: var(--text-label); margin-top: 0.2rem; }
+.inv-section { margin-bottom: 0.65rem; border-radius: 2px; overflow: hidden; box-shadow: 0 2px 8px var(--shadow); }
+.inv-sec-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to right, var(--ink-soft), #1e160a);
+  color: var(--copper-light);
+  font-family: 'Cinzel', serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 0.5rem 1rem; cursor: pointer; user-select: none;
+  border: 1px solid var(--copper); border-radius: 2px;
+  transition: background 0.15s;
+}
+.inv-sec-hdr:hover { background: linear-gradient(to right, #3a2e20, #2a1e10); }
+.inv-chevron { font-size: 0.55rem; opacity: 0.7; }
+.inv-sec-body {
+  background: var(--vellum);
+  border: 1px solid var(--copper); border-top: none;
+  border-radius: 0 0 2px 2px; overflow: hidden;
+}
+.inv-subsection { padding: 0.45rem 0.75rem 0.2rem; }
+.inv-subsection + .inv-subsection { border-top: 1px solid rgba(184,115,51,0.22); }
+.inv-subsection-label {
+  font-family: 'Cinzel', serif; font-size: 0.56rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-soft);
+  margin-bottom: 0.3rem; padding-bottom: 0.18rem;
+  border-bottom: 1px solid rgba(184,115,51,0.18);
+}
+.inv-item-row {
+  display: flex; align-items: flex-start; gap: 0.5rem;
+  padding: 0.38rem 0.4rem;
+  border-bottom: 1px solid rgba(184,115,51,0.1);
+  transition: background 0.12s;
+}
+.inv-item-row:last-of-type { border-bottom: none; }
+.inv-item-row:hover { background: rgba(184,115,51,0.04); }
+.inv-item-row.equipped { background: rgba(184,115,51,0.07); border-left: 2px solid var(--copper); padding-left: 0.3rem; }
+.inv-item-main { flex: 1; min-width: 0; }
+.inv-item-name { font-family: 'Crimson Text', serif; font-size: 0.95rem; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+.inv-item-meta { font-family: 'Crimson Text', serif; font-size: 0.8rem; font-style: italic; color: var(--text-soft); margin-top: 0.04rem; line-height: 1.4; }
+.inv-item-actions { display: flex; gap: 0.28rem; flex-shrink: 0; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.inv-btn {
+  background: transparent; border: 1px solid rgba(30,22,14,0.2); border-radius: 2px;
+  font-family: 'Cinzel', serif; font-size: 0.5rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft);
+  padding: 0.14rem 0.4rem; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.inv-btn:hover       { background: rgba(184,115,51,0.08); border-color: var(--copper);      color: var(--copper); }
+.inv-btn.del:hover   { background: rgba(120,26,26,0.08);  border-color: var(--crimson-soft); color: var(--crimson-soft); }
+.inv-btn.equip-on    { background: rgba(184,115,51,0.12); border-color: var(--copper);      color: var(--copper); }
+.inv-empty { font-family: 'Crimson Text', serif; font-style: italic; color: var(--text-label); font-size: 0.85rem; padding: 0.55rem 0.4rem; }
+.inv-add-row { padding: 0.3rem 0.4rem; border-top: 1px solid rgba(184,115,51,0.1); }
+.inv-items-wrap { padding: 0.2rem 0.4rem 0; }
+.inv-edit-form {
+  background: rgba(184,115,51,0.04);
+  border-top: 1px solid rgba(184,115,51,0.15); border-bottom: 1px solid rgba(184,115,51,0.15);
+  padding: 0.6rem 0.75rem;
+}
+.inv-edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem 0.9rem; margin-bottom: 0.4rem; }
+.inv-edit-grid.cols1 { grid-template-columns: 1fr; }
+.inv-edit-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.inv-edit-group { display: flex; flex-direction: column; gap: 0.18rem; }
+.inv-edit-group.full { grid-column: 1 / -1; }
+.inv-edit-label { font-family: 'Cinzel', serif; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-label); }
+.inv-edit-input, .inv-edit-select, .inv-edit-textarea {
+  background: var(--field-bg); border: none; border-bottom: 1px solid var(--field-border);
+  border-radius: 2px 2px 0 0; font-family: 'Crimson Text', serif; font-size: 0.9rem;
+  color: var(--text-main); padding: 0.18rem 0.3rem; outline: none; width: 100%;
+  transition: border-color 0.15s, background 0.15s;
+}
+.inv-edit-input:focus, .inv-edit-select:focus, .inv-edit-textarea:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.06); }
+.inv-edit-textarea { min-height: 50px; resize: vertical; }
+.inv-edit-actions { display: flex; gap: 0.45rem; justify-content: flex-end; border-top: 1px solid rgba(184,115,51,0.15); padding-top: 0.4rem; margin-top: 0.25rem; }
+.inv-confirm-btn {
+  background: var(--teal); border: none; border-radius: 2px;
+  font-family: 'Cinzel', serif; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(240,230,208,0.95); padding: 0.28rem 0.75rem; cursor: pointer; transition: background 0.15s;
+}
+.inv-confirm-btn:hover { background: var(--teal-light); }
+.inv-cancel-btn {
+  background: transparent; border: 1px solid rgba(30,22,14,0.25); border-radius: 2px;
+  font-family: 'Cinzel', serif; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-soft); padding: 0.28rem 0.75rem; cursor: pointer; transition: all 0.15s;
+}
+.inv-cancel-btn:hover { background: rgba(30,22,14,0.06); }
+.inv-qty-ctrl { display: flex; align-items: center; gap: 0.28rem; }
+.inv-qty-btn {
+  background: transparent; border: 1px solid rgba(30,22,14,0.2); border-radius: 2px;
+  font-family: 'Cinzel', serif; font-size: 0.82rem; font-weight: 700; color: var(--text-soft);
+  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+}
+.inv-qty-btn:hover { border-color: var(--copper); color: var(--copper); background: rgba(184,115,51,0.06); }
+.inv-qty-val { font-family: 'Crimson Text', serif; font-size: 1rem; font-weight: 700; min-width: 1.4rem; text-align: center; color: var(--text-main); }
+.inv-currency-row { display: flex; gap: 1.5rem; align-items: flex-end; padding: 0.6rem 0.75rem 0.4rem; }
+.inv-currency-field { display: flex; flex-direction: column; align-items: center; gap: 0.28rem; }
+.inv-currency-label { font-family: 'Cinzel', serif; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-label); }
+.inv-currency-ctrl { display: flex; align-items: center; gap: 0.28rem; }
+.inv-currency-input {
+  background: var(--field-bg); border: none; border-bottom: 2px solid var(--field-border);
+  border-radius: 2px 2px 0 0; font-family: 'Crimson Text', serif; font-size: 1.3rem; font-weight: 700;
+  color: var(--text-main); text-align: center; width: 62px; outline: none; padding: 0.1rem 0.2rem;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.inv-currency-input::-webkit-outer-spin-button, .inv-currency-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.inv-currency-input:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.06); }
+.inv-currency-total { font-family: 'Crimson Text', serif; font-size: 0.88rem; font-style: italic; color: var(--text-soft); padding: 0 0.75rem 0.3rem; }
+.inv-currency-note  { font-family: 'Crimson Text', serif; font-size: 0.7rem; font-style: italic; color: var(--text-label); padding: 0 0.75rem 0.6rem; }
+
 /* ── PRINT HINT ── */
 .print-hint {
   text-align: center;
@@ -1908,8 +2191,10 @@ textarea.action-col-input {
 <nav class="tab-nav">
   <div class="nav-brand">Aethel ✦ Dossier</div>
   <button class="tab-btn active" onclick="switchTab('sheet', this)">Character Sheet</button>
-  <button class="tab-btn" onclick="switchTab('notes', this)">Notes & Lore</button>
+  <button class="tab-btn" onclick="switchTab('features', this)">Features</button>
+  <button class="tab-btn" onclick="switchTab('inventory', this)">Inventory</button>
   <button class="tab-btn" onclick="switchTab('levels', this)">Level Log</button>
+  <button class="tab-btn" onclick="switchTab('notes', this)">Notes & Lore</button>
   <button class="tab-btn" onclick="switchTab('cheatsheet', this)">Cheat Sheet</button>
   <button class="save-btn" onclick="saveAll()">Save</button>
   <label class="save-btn" style="cursor:pointer;">Load<input type="file" accept=".json" style="display:none;" onchange="loadFromFile(this)"></label>
@@ -2224,12 +2509,36 @@ textarea.action-col-input {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════ PAGE 2: NOTES -->
+<!-- ═══════════════════════════════════════════════ PAGE 2: FEATURES -->
+<div class="page" id="page-features">
+  <div class="sheet-section">
+    <div class="section-header">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>Features</span>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <span style="font-size:0.58rem;color:rgba(240,230,208,0.45);font-style:italic;letter-spacing:0.05em;">Sort by:</span>
+          <button class="feat-sort-btn" id="sort-name-btn" onclick="sortFeatures('name')">Name</button>
+          <button class="feat-sort-btn" id="sort-source-btn" onclick="sortFeatures('source')">Source</button>
+          <button class="feat-sort-btn feat-sort-active" id="sort-level-btn" onclick="sortFeatures('level')">Level ▲</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div id="features-table-wrap"><!-- rendered by JS --></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PAGE 3: INVENTORY -->
+<div class="page" id="page-inventory">
+  <div id="inv-content"><!-- rendered by JS --></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PAGE 4: NOTES & LORE -->
 <div class="page" id="page-notes">
   <div class="sheet-section">
-    <div class="section-header"><div class="section-title">Notes, Lore & Loadout</div></div>
+    <div class="section-header"><div class="section-title">Notes &amp; Lore</div></div>
     <div class="section-body">
-      <div class="notes-intro">Each box is freely labelled and editable. Use them for equipment, faction standing, retainer info, backstory, treasures, or anything else your character needs to track.</div>
       <div class="notes-grid" id="notes-grid">
         <!-- rendered by JS -->
       </div>
@@ -2583,8 +2892,11 @@ function updateNoteBoxRow(boxIdx, rowIdx, val) {
 
 function renderNotes() {
   const grid = document.getElementById('notes-grid');
-  grid.innerHTML = '';
+  if (grid) grid.innerHTML = '';
+
   for (let i = 0; i < 9; i++) {
+    // Boxes 1 & 2 (Equipment & Gear, Treasure & Currency) moved to Inventory tab
+    if (i === 1 || i === 2) continue;
     const titleKey = `note-title-${i}`;
     const savedTitle = getData(titleKey) !== null ? getData(titleKey) : NOTE_DEFAULTS[i];
     const rows = getNoteRows(i);
@@ -2608,7 +2920,7 @@ function renderNotes() {
         <button class="action-add-btn" onclick="addNoteBoxRow(${i})">✦ Add Note</button>
       </div>
     `;
-    grid.appendChild(box);
+    if (grid) grid.appendChild(box);
   }
 }
 
@@ -2657,7 +2969,8 @@ async function saveAll() {
     dailyUsed: localStorage.getItem('aethel-sheet-daily-used') || '0',
     shortRestUsed: localStorage.getItem('aethel-short-rest-used') || '0',
     actionTables: actionTableData,
-    noteBoxRows: Array.from({length: 9}, (_, i) => getNoteRows(i))
+    noteBoxRows: Array.from({length: 9}, (_, i) => getNoteRows(i)),
+    inventory: inventoryData
   }, null, 2);
 
   if (window.showSaveFilePicker) {
@@ -2736,11 +3049,20 @@ function loadFromFile(input) {
           saveNoteRows(i, rows);
         });
       }
+      if (parsed.inventory) {
+        ['armor','shields','weapons','consumables','gear','magicItems'].forEach(k => {
+          if (Array.isArray(parsed.inventory[k])) inventoryData[k] = parsed.inventory[k];
+        });
+        if (parsed.inventory.currency) inventoryData.currency = { ...inventoryData.currency, ...parsed.inventory.currency };
+        saveInventory();
+      }
       loadAll();
       renderAbilities();
       renderSkills();
       renderNotes();
       renderLevelLog();
+      renderFeaturesTab();
+      renderInventoryTab();
       updateSkillTotals();
       updateSavingThrows();
       updateRestBar();
@@ -3011,13 +3333,29 @@ function renderLevelLog() {
     el.className = 'level-entry';
     el.id = `level-entry-${lvl}`;
 
-    const featuresHtml = (entry.noteRows || []).map((row, rowIdx) => {
+    const notesHtml = (entry.noteRows || []).map((row, rowIdx) => {
       const v = escHtml(row || '');
       return `<div class="action-table-row">
         <textarea class="action-col-input note-row-input" style="flex:1"
-          placeholder="Features gained, augments…"
+          placeholder="Free-form notes…"
           oninput="updateLevelNoteRow(${lvl},${rowIdx},this.value)">${v}</textarea>
         <button class="action-del-btn" onclick="deleteLevelNoteRow(${lvl},${rowIdx})" title="Remove">✕</button>
+      </div>`;
+    }).join('');
+
+    if (!entry.features) entry.features = [];
+    const structFeatHtml = entry.features.map((f, idx) => {
+      const srcOpts = ['Class','Subclass','Background','Species','Other']
+        .map(s => `<option value="${s}"${f.source===s?' selected':''}>${s}</option>`).join('');
+      return `<div class="feat-entry-row">
+        <div class="feat-entry-fields">
+          <input type="text" class="feat-name-input" placeholder="Feature name…" value="${escHtml(f.name||'')}"
+            oninput="updateFeatureInLevel(${lvl},${idx},'name',this.value)">
+          <select class="feat-source-select" onchange="updateFeatureInLevel(${lvl},${idx},'source',this.value)">${srcOpts}</select>
+          <button class="action-del-btn" onclick="deleteFeatureFromLevel(${lvl},${idx})" title="Remove">✕</button>
+        </div>
+        <textarea class="feat-desc-textarea" placeholder="Description…"
+          oninput="updateFeatureInLevel(${lvl},${idx},'description',this.value)">${escHtml(f.description||'')}</textarea>
       </div>`;
     }).join('');
 
@@ -3054,9 +3392,16 @@ function renderLevelLog() {
           </div>
           <div>
             <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Features</span>
+            <div class="action-table-wrap">
+              <div id="feat-entries-${lvl}">${structFeatHtml}</div>
+              <button class="action-add-btn" onclick="addFeatureToLevel(${lvl})">✦ Add Feature</button>
+            </div>
+          </div>
+          <div>
+            <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Notes</span>
             <div class="note-row-table action-table-wrap">
-              <div class="action-table-body level-notes-body">${featuresHtml}</div>
-              <button class="action-add-btn" onclick="addLevelNoteRow(${lvl})">✦ Add Feature</button>
+              <div class="action-table-body level-notes-body">${notesHtml}</div>
+              <button class="action-add-btn" onclick="addLevelNoteRow(${lvl})">✦ Add Note</button>
             </div>
           </div>
           <div>
@@ -3577,12 +3922,597 @@ function doLongRest() {
   updateRestBar();
 }
 
+// ══════════════════════════════════════════════════════
+// ── INVENTORY SYSTEM ──
+// ══════════════════════════════════════════════════════
+
+const INV_LS_KEY = 'aethel-inventory';
+let inventoryData = {
+  armor: [], shields: [], weapons: [],
+  consumables: [], gear: [], magicItems: [],
+  currency: { gold: 0, silver: 0, copper: 0 }
+};
+let _invCollapsed = { armorshields: true, weapons: false, consumables: false, gear: true, magic: true, currency: false };
+let _invEditing   = { armor: null, shields: null, weapons: null, consumables: null, gear: null, magic: null };
+
+function _invId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+function saveInventory() { localStorage.setItem(INV_LS_KEY, JSON.stringify(inventoryData)); }
+
+function loadInventory() {
+  try {
+    const raw = localStorage.getItem(INV_LS_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    ['armor','shields','weapons','consumables','gear','magicItems'].forEach(k => {
+      if (Array.isArray(d[k])) inventoryData[k] = d[k];
+    });
+    if (d.currency) inventoryData.currency = { ...inventoryData.currency, ...d.currency };
+  } catch {}
+}
+
+function toggleInvSection(sec) {
+  Object.keys(_invEditing).forEach(k => { _invEditing[k] = null; });
+  _invCollapsed[sec] = !_invCollapsed[sec];
+  renderInventoryTab();
+}
+
+// ── Suggested Defense ──
+function getSuggestedDefense() {
+  const dex = getAbilityMod('DEX');
+  const arm = inventoryData.armor.find(a => a.equipped);
+  const shd = inventoryData.shields.find(s => s.equipped);
+  let val = 0, parts = [];
+  if (!arm || arm.subtype === 'DEX mod') {
+    val = dex;
+    parts.push(`DEX mod (${dex})`);
+  } else if (arm.subtype === 'DEX mod +') {
+    const fv = parseInt(arm.formulaValue) || 0;
+    val = dex + fv;
+    parts.push(`DEX mod (${dex}) + ${escHtml(arm.name || 'Armor')} (+${fv})`);
+  } else {
+    const fv = parseInt(arm.formulaValue) || 0;
+    val = fv;
+    parts.push(`${escHtml(arm.name || 'Armor')} (${fv})`);
+  }
+  if (shd) { val += 1; parts.push(`${escHtml(shd.name || 'Shield')} (+1)`); }
+  return { value: val, formula: parts.join(' + ') };
+}
+
+// ── Main render ──
+function renderInventoryTab() {
+  const wrap = document.getElementById('inv-content');
+  if (!wrap) return;
+  const def = getSuggestedDefense();
+  const sections = [
+    { key: 'armorshields', label: 'Armor &amp; Shields', fn: _invArmorShieldsHtml },
+    { key: 'weapons',      label: 'Weapons',             fn: _invWeaponsHtml },
+    { key: 'consumables',  label: 'Consumables',         fn: _invConsumablesHtml },
+    { key: 'gear',         label: 'Adventuring Gear',    fn: _invGearHtml },
+    { key: 'magic',        label: 'Magic Items',         fn: _invMagicHtml },
+    { key: 'currency',     label: 'Currency',            fn: _invCurrencyHtml },
+  ];
+  wrap.innerHTML = `
+    <div class="inv-defense-panel">
+      <div class="inv-def-title">Suggested Defense</div>
+      <div class="inv-def-body">
+        <span class="inv-def-formula">${def.formula}</span>
+        <span class="inv-def-arrow"> → </span>
+        <span class="inv-def-value">${def.value}</span>
+      </div>
+      <div class="inv-def-note">Enter this value manually in Defense on the Character Sheet.</div>
+    </div>
+    ${sections.map(({ key, label, fn }) => {
+      const coll = _invCollapsed[key];
+      return `<div class="inv-section">
+        <div class="inv-sec-hdr" onclick="toggleInvSection('${key}')">
+          <span>${label}</span><span class="inv-chevron">${coll ? '▶' : '▼'}</span>
+        </div>
+        <div class="inv-sec-body"${coll ? ' style="display:none;"' : ''}>${fn()}</div>
+      </div>`;
+    }).join('')}`;
+}
+
+// ── Armor & Shields section ──
+function _invArmorShieldsHtml() {
+  return `<div class="inv-subsection">${_invArmorSubHtml()}</div>
+          <div class="inv-subsection">${_invShieldsSubHtml()}</div>`;
+}
+
+function _invArmorSubHtml() {
+  const items = inventoryData.armor;
+  let rows = '';
+  if (items.length === 0 && _invEditing.armor === null) rows = `<div class="inv-empty">No armor added.</div>`;
+  else {
+    items.forEach(item => { rows += _invEditing.armor === item.id ? _invArmorForm(item) : _invArmorRow(item); });
+    if (_invEditing.armor === '__new__armor') rows += _invArmorForm(null);
+  }
+  return `<div class="inv-subsection-label">Armor</div>
+    <div class="inv-items-wrap">${rows}</div>
+    <div class="inv-add-row"><button class="action-add-btn" onclick="addInvItem('armor')">✦ Add Armor</button></div>`;
+}
+
+function _invArmorRow(item) {
+  const sub = item.subtype === 'DEX mod' ? 'DEX mod'
+    : item.subtype === 'DEX mod +' ? `DEX mod + ${item.formulaValue || 0}`
+    : `Flat ${item.formulaValue || 0}`;
+  const meta = [sub, item.featReq && `Feat: ${item.featReq}`, item.stealthPenalty && `Stealth: ${item.stealthPenalty}`].filter(Boolean).join(' · ');
+  return `<div class="inv-item-row${item.equipped ? ' equipped' : ''}">
+    <div class="inv-item-main">
+      <div class="inv-item-name">${escHtml(item.name || 'Unnamed')}</div>
+      <div class="inv-item-meta">${escHtml(meta)}</div>
+    </div>
+    <div class="inv-item-actions">
+      <button class="inv-btn${item.equipped ? ' equip-on' : ''}" onclick="toggleEquipArmor('${item.id}')">${item.equipped ? '✦ Equipped' : 'Equip'}</button>
+      <button class="inv-btn" onclick="editInvItem('armor','${item.id}')">Edit</button>
+      <button class="inv-btn del" onclick="deleteInvItem('armor','${item.id}')">✕</button>
+    </div>
+  </div>`;
+}
+
+function _invArmorForm(item) {
+  const id = item?.id || '__new__armor';
+  const sub = item?.subtype || 'DEX mod';
+  const subtypeOpts = ['DEX mod','DEX mod +','Flat'].map(s => `<option value="${s}"${sub===s?' selected':''}>${s}</option>`).join('');
+  const fvHide = sub === 'DEX mod' ? ' style="display:none;"' : '';
+  return `<div class="inv-edit-form">
+    <div class="inv-edit-grid cols3">
+      <div class="inv-edit-group"><div class="inv-edit-label">Name</div><input class="inv-edit-input" id="ief-name-${id}" value="${escHtml(item?.name||'')}"></div>
+      <div class="inv-edit-group"><div class="inv-edit-label">Subtype</div><select class="inv-edit-select" id="ief-sub-${id}" onchange="_invArmorSubChange('${id}')">${subtypeOpts}</select></div>
+      <div class="inv-edit-group" id="ief-fvg-${id}"${fvHide}><div class="inv-edit-label">Value</div><input type="number" class="inv-edit-input" id="ief-fv-${id}" value="${escHtml(String(item?.formulaValue||''))}"></div>
+    </div>
+    <div class="inv-edit-grid">
+      <div class="inv-edit-group"><div class="inv-edit-label">Feat Requirement</div><input class="inv-edit-input" id="ief-feat-${id}" value="${escHtml(item?.featReq||'')}"></div>
+      <div class="inv-edit-group"><div class="inv-edit-label">Stealth Penalty</div><input class="inv-edit-input" id="ief-ste-${id}" value="${escHtml(item?.stealthPenalty||'')}"></div>
+    </div>
+    <div class="inv-edit-actions">
+      <button class="inv-cancel-btn" onclick="cancelInvEdit('armor')">Cancel</button>
+      <button class="inv-confirm-btn" onclick="_confirmArmor('${id}')">Save</button>
+    </div>
+  </div>`;
+}
+
+function _invArmorSubChange(id) {
+  const sub = document.getElementById(`ief-sub-${id}`)?.value;
+  const g = document.getElementById(`ief-fvg-${id}`);
+  if (g) g.style.display = sub === 'DEX mod' ? 'none' : '';
+}
+
+function _invShieldsSubHtml() {
+  const items = inventoryData.shields;
+  let rows = '';
+  if (items.length === 0 && _invEditing.shields === null) rows = `<div class="inv-empty">No shields added.</div>`;
+  else {
+    items.forEach(item => { rows += _invEditing.shields === item.id ? _invShieldForm(item) : _invShieldRow(item); });
+    if (_invEditing.shields === '__new__shields') rows += _invShieldForm(null);
+  }
+  return `<div class="inv-subsection-label">Shields</div>
+    <div class="inv-items-wrap">${rows}</div>
+    <div class="inv-add-row"><button class="action-add-btn" onclick="addInvItem('shields')">✦ Add Shield</button></div>`;
+}
+
+function _invShieldRow(item) {
+  return `<div class="inv-item-row${item.equipped ? ' equipped' : ''}">
+    <div class="inv-item-main">
+      <div class="inv-item-name">${escHtml(item.name || 'Unnamed')}</div>
+      ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
+    </div>
+    <div class="inv-item-actions">
+      <button class="inv-btn${item.equipped ? ' equip-on' : ''}" onclick="toggleEquipShield('${item.id}')">${item.equipped ? '✦ Equipped' : 'Equip'}</button>
+      <button class="inv-btn" onclick="editInvItem('shields','${item.id}')">Edit</button>
+      <button class="inv-btn del" onclick="deleteInvItem('shields','${item.id}')">✕</button>
+    </div>
+  </div>`;
+}
+
+function _invShieldForm(item) {
+  const id = item?.id || '__new__shields';
+  return `<div class="inv-edit-form">
+    <div class="inv-edit-grid">
+      <div class="inv-edit-group"><div class="inv-edit-label">Name</div><input class="inv-edit-input" id="ief-name-${id}" value="${escHtml(item?.name||'')}"></div>
+      <div class="inv-edit-group"><div class="inv-edit-label">Description</div><input class="inv-edit-input" id="ief-desc-${id}" value="${escHtml(item?.description||'')}"></div>
+    </div>
+    <div class="inv-edit-actions">
+      <button class="inv-cancel-btn" onclick="cancelInvEdit('shields')">Cancel</button>
+      <button class="inv-confirm-btn" onclick="_confirmShield('${id}')">Save</button>
+    </div>
+  </div>`;
+}
+
+// ── Weapons ──
+function _invWeaponsHtml() {
+  const items = inventoryData.weapons;
+  let rows = '';
+  if (items.length === 0 && _invEditing.weapons === null) rows = `<div class="inv-empty">No weapons added.</div>`;
+  else {
+    items.forEach(item => { rows += _invEditing.weapons === item.id ? _invWeaponForm(item) : _invWeaponRow(item); });
+    if (_invEditing.weapons === '__new__weapons') rows += _invWeaponForm(null);
+  }
+  return `<div class="inv-items-wrap">${rows}</div>
+    <div class="inv-add-row"><button class="action-add-btn" onclick="addInvItem('weapons')">✦ Add Weapon</button></div>`;
+}
+
+function _invWeaponRow(item) {
+  const rangePart = item.range ? `Range ${escHtml(item.range)}` : 'Melee';
+  const meta = [escHtml(item.damage||'—'), escHtml(item.damageType||''), rangePart, item.feature && escHtml(item.feature)].filter(Boolean).join(' · ');
+  return `<div class="inv-item-row">
+    <div class="inv-item-main">
+      <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
+      <div class="inv-item-meta">${meta}</div>
+    </div>
+    <div class="inv-item-actions">
+      <button class="inv-btn" onclick="editInvItem('weapons','${item.id}')">Edit</button>
+      <button class="inv-btn del" onclick="deleteInvItem('weapons','${item.id}')">✕</button>
+    </div>
+  </div>`;
+}
+
+function _invWeaponForm(item) {
+  const id = item?.id || '__new__weapons';
+  const dtOpts = ['Slashing','Piercing','Bludgeoning'].map(s => `<option value="${s}"${(item?.damageType||'Slashing')===s?' selected':''}>${s}</option>`).join('');
+  return `<div class="inv-edit-form">
+    <div class="inv-edit-grid">
+      <div class="inv-edit-group"><div class="inv-edit-label">Name</div><input class="inv-edit-input" id="ief-name-${id}" value="${escHtml(item?.name||'')}"></div>
+      <div class="inv-edit-group"><div class="inv-edit-label">Damage (e.g. 2d6)</div><input class="inv-edit-input" id="ief-dmg-${id}" value="${escHtml(item?.damage||'')}"></div>
+      <div class="inv-edit-group"><div class="inv-edit-label">Damage Type</div><select class="inv-edit-select" id="ief-dt-${id}">${dtOpts}</select></div>
+      <div class="inv-edit-group"><div class="inv-edit-label">Range (blank = melee)</div><input class="inv-edit-input" id="ief-range-${id}" placeholder="60/120" value="${escHtml(item?.range||'')}"></div>
+    </div>
+    <div class="inv-edit-grid cols1">
+      <div class="inv-edit-group"><div class="inv-edit-label">Feature</div><input class="inv-edit-input" id="ief-feat-${id}" value="${escHtml(item?.feature||'')}"></div>
+    </div>
+    <div class="inv-edit-actions">
+      <button class="inv-cancel-btn" onclick="cancelInvEdit('weapons')">Cancel</button>
+      <button class="inv-confirm-btn" onclick="_confirmWeapon('${id}')">Save</button>
+    </div>
+  </div>`;
+}
+
+// ── Consumables ──
+function _invConsumablesHtml() {
+  const items = inventoryData.consumables;
+  let rows = '';
+  if (items.length === 0 && _invEditing.consumables === null) rows = `<div class="inv-empty">No consumables added.</div>`;
+  else {
+    items.forEach(item => { rows += _invEditing.consumables === item.id ? _invConsumableForm(item) : _invConsumableRow(item); });
+    if (_invEditing.consumables === '__new__consumables') rows += _invConsumableForm(null);
+  }
+  return `<div class="inv-items-wrap">${rows}</div>
+    <div class="inv-add-row"><button class="action-add-btn" onclick="addInvItem('consumables')">✦ Add Consumable</button></div>`;
+}
+
+function _invConsumableRow(item) {
+  const qty = item.quantity ?? 1;
+  return `<div class="inv-item-row">
+    <div class="inv-item-main">
+      <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
+      ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
+    </div>
+    <div class="inv-item-actions">
+      <div class="inv-qty-ctrl">
+        <button class="inv-qty-btn" onclick="adjustInvQty('consumables','${item.id}',-1)">−</button>
+        <span class="inv-qty-val">${qty}</span>
+        <button class="inv-qty-btn" onclick="adjustInvQty('consumables','${item.id}',1)">+</button>
+      </div>
+      <button class="inv-btn" onclick="editInvItem('consumables','${item.id}')">Edit</button>
+      <button class="inv-btn del" onclick="deleteInvItem('consumables','${item.id}')">✕</button>
+    </div>
+  </div>`;
+}
+
+function _invConsumableForm(item) {
+  const id = item?.id || '__new__consumables';
+  return `<div class="inv-edit-form">
+    <div class="inv-edit-grid">
+      <div class="inv-edit-group"><div class="inv-edit-label">Name</div><input class="inv-edit-input" id="ief-name-${id}" value="${escHtml(item?.name||'')}"></div>
+      <div class="inv-edit-group"><div class="inv-edit-label">Quantity</div><input type="number" class="inv-edit-input" id="ief-qty-${id}" min="0" value="${item?.quantity??1}"></div>
+    </div>
+    <div class="inv-edit-grid cols1">
+      <div class="inv-edit-group"><div class="inv-edit-label">Description</div><textarea class="inv-edit-textarea" id="ief-desc-${id}">${escHtml(item?.description||'')}</textarea></div>
+    </div>
+    <div class="inv-edit-actions">
+      <button class="inv-cancel-btn" onclick="cancelInvEdit('consumables')">Cancel</button>
+      <button class="inv-confirm-btn" onclick="_confirmConsumable('${id}')">Save</button>
+    </div>
+  </div>`;
+}
+
+// ── Gear & Magic (shared simple pattern) ──
+function _invGearHtml()  { return _invSimpleHtml('gear',  'Item'); }
+function _invMagicHtml() { return _invSimpleHtml('magic', 'Magic Item'); }
+
+function _invSimpleHtml(editKey, addLabel) {
+  const dataKey = editKey === 'magic' ? 'magicItems' : editKey;
+  const items = inventoryData[dataKey];
+  let rows = '';
+  if (items.length === 0 && _invEditing[editKey] === null) rows = `<div class="inv-empty">No items added.</div>`;
+  else {
+    items.forEach(item => { rows += _invEditing[editKey] === item.id ? _invSimpleForm(item, editKey) : _invSimpleRow(item, editKey); });
+    if (_invEditing[editKey] === `__new__${editKey}`) rows += _invSimpleForm(null, editKey);
+  }
+  return `<div class="inv-items-wrap">${rows}</div>
+    <div class="inv-add-row"><button class="action-add-btn" onclick="addInvItem('${editKey}')">✦ Add ${addLabel}</button></div>`;
+}
+
+function _invSimpleRow(item, editKey) {
+  return `<div class="inv-item-row">
+    <div class="inv-item-main">
+      <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
+      ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
+    </div>
+    <div class="inv-item-actions">
+      <button class="inv-btn" onclick="editInvItem('${editKey}','${item.id}')">Edit</button>
+      <button class="inv-btn del" onclick="deleteInvItem('${editKey}','${item.id}')">✕</button>
+    </div>
+  </div>`;
+}
+
+function _invSimpleForm(item, editKey) {
+  const id = item?.id || `__new__${editKey}`;
+  return `<div class="inv-edit-form">
+    <div class="inv-edit-grid cols1">
+      <div class="inv-edit-group"><div class="inv-edit-label">Name</div><input class="inv-edit-input" id="ief-name-${id}" value="${escHtml(item?.name||'')}"></div>
+    </div>
+    <div class="inv-edit-grid cols1">
+      <div class="inv-edit-group"><div class="inv-edit-label">Description</div><textarea class="inv-edit-textarea" id="ief-desc-${id}">${escHtml(item?.description||'')}</textarea></div>
+    </div>
+    <div class="inv-edit-actions">
+      <button class="inv-cancel-btn" onclick="cancelInvEdit('${editKey}')">Cancel</button>
+      <button class="inv-confirm-btn" onclick="_confirmSimple('${editKey}','${id}')">Save</button>
+    </div>
+  </div>`;
+}
+
+// ── Currency ──
+function _invCurrencyHtml() {
+  const c = inventoryData.currency;
+  const g = c.gold||0, s = c.silver||0, cp = c.copper||0;
+  const totalStr = [g && `${g} gp`, s && `${s} sp`, cp && `${cp} cp`].filter(Boolean).join(', ') || '—';
+  return `<div class="inv-currency-row">
+    ${['gold','silver','copper'].map(coin => `
+      <div class="inv-currency-field">
+        <div class="inv-currency-label">${coin.charAt(0).toUpperCase()+coin.slice(1)}</div>
+        <div class="inv-currency-ctrl">
+          <button class="inv-qty-btn" onclick="adjustCurrency('${coin}',-1)">−</button>
+          <input type="number" class="inv-currency-input" id="inv-cur-${coin}" value="${c[coin]||0}" min="0"
+            onchange="setCurrency('${coin}',this.value)" oninput="setCurrency('${coin}',this.value)">
+          <button class="inv-qty-btn" onclick="adjustCurrency('${coin}',1)">+</button>
+        </div>
+      </div>`).join('')}
+  </div>
+  <div class="inv-currency-total" id="inv-cur-total">Total: ${totalStr}</div>
+  <div class="inv-currency-note">1 gp = 10 sp · 1 sp = 10 cp</div>`;
+}
+
+// ── Add / Edit / Delete ──
+function addInvItem(section) {
+  Object.keys(_invEditing).forEach(k => { _invEditing[k] = null; });
+  _invEditing[section] = `__new__${section}`;
+  const secKey = (section === 'armor' || section === 'shields') ? 'armorshields' : section;
+  _invCollapsed[secKey] = false;
+  renderInventoryTab();
+  // Scroll to form
+  setTimeout(() => { document.querySelector('.inv-edit-form')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 50);
+}
+
+function editInvItem(section, id) {
+  Object.keys(_invEditing).forEach(k => { _invEditing[k] = null; });
+  _invEditing[section] = id;
+  renderInventoryTab();
+}
+
+function cancelInvEdit(section) {
+  _invEditing[section] = null;
+  renderInventoryTab();
+}
+
+function deleteInvItem(section, id) {
+  const dataKey = section === 'magic' ? 'magicItems' : section;
+  inventoryData[dataKey] = inventoryData[dataKey].filter(x => x.id !== id);
+  _invEditing[section] = null;
+  saveInventory();
+  renderInventoryTab();
+}
+
+// ── Confirm helpers ──
+function _rf(id) { return document.getElementById(id)?.value ?? ''; }
+
+function _confirmArmor(formId) {
+  const isNew = formId === '__new__armor';
+  const item = { name: _rf(`ief-name-${formId}`), subtype: _rf(`ief-sub-${formId}`) || 'DEX mod',
+    formulaValue: _rf(`ief-fv-${formId}`), featReq: _rf(`ief-feat-${formId}`), stealthPenalty: _rf(`ief-ste-${formId}`) };
+  if (isNew) inventoryData.armor.push({ id: _invId(), ...item, equipped: false });
+  else { const e = inventoryData.armor.find(x => x.id === formId); if (e) Object.assign(e, item); }
+  _invEditing.armor = null; saveInventory(); renderInventoryTab();
+}
+
+function _confirmShield(formId) {
+  const isNew = formId === '__new__shields';
+  const item = { name: _rf(`ief-name-${formId}`), description: _rf(`ief-desc-${formId}`) };
+  if (isNew) inventoryData.shields.push({ id: _invId(), ...item, equipped: false });
+  else { const e = inventoryData.shields.find(x => x.id === formId); if (e) Object.assign(e, item); }
+  _invEditing.shields = null; saveInventory(); renderInventoryTab();
+}
+
+function _confirmWeapon(formId) {
+  const isNew = formId === '__new__weapons';
+  const item = { name: _rf(`ief-name-${formId}`), damage: _rf(`ief-dmg-${formId}`),
+    damageType: _rf(`ief-dt-${formId}`) || 'Slashing', range: _rf(`ief-range-${formId}`), feature: _rf(`ief-feat-${formId}`) };
+  if (isNew) inventoryData.weapons.push({ id: _invId(), ...item });
+  else { const e = inventoryData.weapons.find(x => x.id === formId); if (e) Object.assign(e, item); }
+  _invEditing.weapons = null; saveInventory(); renderInventoryTab();
+}
+
+function _confirmConsumable(formId) {
+  const isNew = formId === '__new__consumables';
+  const item = { name: _rf(`ief-name-${formId}`), quantity: parseInt(_rf(`ief-qty-${formId}`)) || 1, description: _rf(`ief-desc-${formId}`) };
+  if (isNew) inventoryData.consumables.push({ id: _invId(), ...item });
+  else { const e = inventoryData.consumables.find(x => x.id === formId); if (e) Object.assign(e, item); }
+  _invEditing.consumables = null; saveInventory(); renderInventoryTab();
+}
+
+function _confirmSimple(section, formId) {
+  const isNew = formId.startsWith('__new__');
+  const dataKey = section === 'magic' ? 'magicItems' : section;
+  const item = { name: _rf(`ief-name-${formId}`), description: _rf(`ief-desc-${formId}`) };
+  if (isNew) inventoryData[dataKey].push({ id: _invId(), ...item });
+  else { const e = inventoryData[dataKey].find(x => x.id === formId); if (e) Object.assign(e, item); }
+  _invEditing[section] = null; saveInventory(); renderInventoryTab();
+}
+
+// ── Equip toggles ──
+function toggleEquipArmor(id) {
+  inventoryData.armor.forEach(a => { a.equipped = a.id === id ? !a.equipped : false; });
+  saveInventory(); renderInventoryTab();
+}
+function toggleEquipShield(id) {
+  inventoryData.shields.forEach(s => { s.equipped = s.id === id ? !s.equipped : false; });
+  saveInventory(); renderInventoryTab();
+}
+
+// ── Quantity ──
+function adjustInvQty(section, id, delta) {
+  const item = inventoryData[section].find(x => x.id === id);
+  if (!item) return;
+  item.quantity = Math.max(0, (item.quantity ?? 1) + delta);
+  saveInventory(); renderInventoryTab();
+}
+
+// ── Currency ──
+function setCurrency(field, val) {
+  inventoryData.currency[field] = Math.max(0, parseInt(val) || 0);
+  saveInventory();
+  const c = inventoryData.currency;
+  const g = c.gold||0, s = c.silver||0, cp = c.copper||0;
+  const totalStr = [g && `${g} gp`, s && `${s} sp`, cp && `${cp} cp`].filter(Boolean).join(', ') || '—';
+  const el = document.getElementById('inv-cur-total');
+  if (el) el.textContent = `Total: ${totalStr}`;
+}
+function adjustCurrency(field, delta) {
+  const input = document.getElementById(`inv-cur-${field}`);
+  const newVal = Math.max(0, (parseInt(input?.value) || 0) + delta);
+  if (input) input.value = newVal;
+  setCurrency(field, newVal);
+}
+
+// ── STRUCTURED FEATURES ──
+let _featureSort = { col: 'level', dir: 1 };
+
+function addFeatureToLevel(lvl) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry) return;
+  if (!entry.features) entry.features = [];
+  entry.features.push({ name: '', source: 'Class', description: '' });
+  saveLevelLog();
+  renderLevelLog();
+  renderFeaturesTab();
+}
+
+function deleteFeatureFromLevel(lvl, idx) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry?.features) return;
+  entry.features.splice(idx, 1);
+  saveLevelLog();
+  renderLevelLog();
+  renderFeaturesTab();
+}
+
+function updateFeatureInLevel(lvl, idx, field, val) {
+  const entry = levelEntries.find(e => e.level === lvl);
+  if (!entry?.features?.[idx]) return;
+  entry.features[idx][field] = val;
+  saveLevelLog();
+  renderFeaturesTab();
+}
+
+function sortFeatures(col) {
+  if (_featureSort.col === col) {
+    _featureSort.dir *= -1;
+  } else {
+    _featureSort.col = col;
+    _featureSort.dir = 1;
+  }
+  renderFeaturesTab();
+  _updateFeatureSortBtns();
+}
+
+function _updateFeatureSortBtns() {
+  ['name', 'source', 'level'].forEach(col => {
+    const btn = document.getElementById(`sort-${col}-btn`);
+    if (!btn) return;
+    const label = col.charAt(0).toUpperCase() + col.slice(1);
+    if (_featureSort.col === col) {
+      btn.classList.add('feat-sort-active');
+      btn.textContent = label + (_featureSort.dir === 1 ? ' ▲' : ' ▼');
+    } else {
+      btn.classList.remove('feat-sort-active');
+      btn.textContent = label;
+    }
+  });
+}
+
+function renderFeaturesTab() {
+  const wrap = document.getElementById('features-table-wrap');
+  if (!wrap) return;
+
+  const allFeatures = [];
+  levelEntries.forEach(entry => {
+    (entry.features || []).forEach(f => {
+      allFeatures.push({ name: f.name || '', source: f.source || 'Other', description: f.description || '', _level: entry.level });
+    });
+  });
+
+  if (allFeatures.length === 0) {
+    wrap.innerHTML = `<div class="features-empty">No features recorded yet. Add features to level entries in the Level Log.</div>`;
+    _updateFeatureSortBtns();
+    return;
+  }
+
+  const { col, dir } = _featureSort;
+  allFeatures.sort((a, b) => {
+    const av = col === 'level' ? a._level : a[col].toLowerCase();
+    const bv = col === 'level' ? b._level : b[col].toLowerCase();
+    if (av < bv) return -dir;
+    if (av > bv) return dir;
+    return 0;
+  });
+
+  const rows = allFeatures.map(f => {
+    const descEsc = escHtml(f.description);
+    const truncated = f.description.length > 60 ? escHtml(f.description.slice(0, 60)) + '…' : descEsc;
+    const srcClass = 'feat-src-' + f.source.toLowerCase().replace(/\s+/g, '');
+    return `<div class="feat-row" onclick="this.classList.toggle('expanded')">
+      <div class="feat-cell feat-name">${escHtml(f.name) || '<em style="color:var(--text-label)">Unnamed</em>'}</div>
+      <div class="feat-cell feat-source"><span class="feat-source-badge ${srcClass}">${escHtml(f.source)}</span></div>
+      <div class="feat-cell feat-level">${f._level}</div>
+      <div class="feat-cell feat-desc">
+        <span class="feat-desc-short">${truncated || '<em style="color:var(--text-label)">—</em>'}</span>
+        <span class="feat-desc-full">${descEsc}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  wrap.innerHTML = `<div class="feat-table">
+    <div class="feat-header">
+      <div class="feat-cell">Name</div>
+      <div class="feat-cell">Source</div>
+      <div class="feat-cell" style="text-align:center;">Lvl</div>
+      <div class="feat-cell">Description</div>
+    </div>
+    ${rows}
+  </div>`;
+
+  _updateFeatureSortBtns();
+}
+
 // ── INIT ──
 renderAbilities();
 renderSkills();
 renderNotes();
 loadLevelSummaryData();
 renderLevelLog();
+renderFeaturesTab();
+loadInventory();
+renderInventoryTab();
 loadActionTables();
 loadAll();
 syncLevelToSheet();
