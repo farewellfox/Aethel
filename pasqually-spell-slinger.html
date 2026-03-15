@@ -2080,6 +2080,7 @@ function resetAll() {
 // ── Saved Spells ────────────────────────────────────────────────
 const LS_KEY = 'aethel_saved_spells';
 let savedSpells = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+let currentExportHandle = null;
 let libraryView = 'cards';
 let tableSortCol = 'date';
 let tableSortDir = 'desc';
@@ -2469,24 +2470,26 @@ async function exportLibrary() {
   const defaultName = 'aethel-spell-library.json';
   if (window.showSaveFilePicker) {
     try {
-      const handle = await window.showSaveFilePicker({
-        suggestedName: defaultName,
-        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
-      });
-      const writable = await handle.createWritable();
+      if (!currentExportHandle) {
+        currentExportHandle = await window.showSaveFilePicker({
+          suggestedName: defaultName,
+          types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+        });
+      }
+      const writable = await currentExportHandle.createWritable();
       await writable.write(json);
       await writable.close();
       showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
     } catch (e) {
-      if (e.name !== 'AbortError') {
-        // Fallback if write fails after picker
-        const blob = new Blob([json], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = defaultName; a.click();
-        URL.revokeObjectURL(url);
-        showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
-      }
+      if (e.name === 'AbortError') return;
+      currentExportHandle = null;
+      // Fallback if write fails after picker
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = defaultName; a.click();
+      URL.revokeObjectURL(url);
+      showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
     }
   } else {
     const blob = new Blob([json], { type: 'application/json' });
@@ -2711,6 +2714,14 @@ function openSpellDetail(id) {
 function closeSpellDetail() {
   document.getElementById('spell-detail-overlay').classList.remove('open');
 }
+
+// Ctrl+S to export/save
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault();
+    exportLibrary();
+  }
+});
 
 // Init
 renderAll();

@@ -2706,6 +2706,7 @@ const NOTE_DEFAULTS = [
 ];
 
 const LS_KEY = 'aethel-sheet-v1';
+let currentFileHandle = null;
 
 function escHtml(str) {
   return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -2975,15 +2976,18 @@ async function saveAll() {
 
   if (window.showSaveFilePicker) {
     try {
-      const handle = await window.showSaveFilePicker({
-        suggestedName: defaultName,
-        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
-      });
-      const writable = await handle.createWritable();
+      if (!currentFileHandle) {
+        currentFileHandle = await window.showSaveFilePicker({
+          suggestedName: defaultName,
+          types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+        });
+      }
+      const writable = await currentFileHandle.createWritable();
       await writable.write(payload);
       await writable.close();
     } catch (e) {
       if (e.name === 'AbortError') return; // user cancelled — don't show "Saved"
+      currentFileHandle = null;
       // Fallback if something went wrong after picker
       const blob = new Blob([payload], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -4525,6 +4529,14 @@ document.getElementById('ability-grid')?.addEventListener('input', updateSavingT
 
 // Wire spell save stat dropdown
 document.getElementById('spell-save-stat')?.addEventListener('change', updateSavingThrows);
+
+// Ctrl+S to save
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault();
+    saveAll();
+  }
+});
 
 // Sync resource label from class input
 document.getElementById('char-class')?.addEventListener('change', function() {
