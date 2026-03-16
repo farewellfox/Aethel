@@ -13,6 +13,7 @@
   --vellum-mid:   #e8d9be;
   --vellum-dark:  #ddc9a8;
   --copper:       #b87333;
+  --copper-dark:  #7a4a18;
   --copper-light: #d4924a;
   --copper-pale:  #f0c87a;
   --teal:         #1e5f5f;
@@ -23,8 +24,8 @@
   --field-bg:     rgba(22,18,14,0.04);
   --field-border: rgba(184,115,51,0.35);
   --text-main:    #1e160e;
-  --text-soft:    rgba(30,22,14,0.55);
-  --text-label:   rgba(30,22,14,0.42);
+  --text-soft:    rgba(30,22,14,0.72);
+  --text-label:   rgba(30,22,14,0.68);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -71,7 +72,7 @@ body {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(240,230,208,0.4);
+  color: rgba(240,230,208,0.75);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -102,7 +103,7 @@ body {
   transition: all 0.15s;
 }
 .save-btn:hover { background: var(--copper); color: var(--ink); border-color: var(--copper); }
-.save-msg { font-size: 0.7rem; color: var(--teal-light); margin-left: 0.75rem; opacity: 0; transition: opacity 0.3s; font-style: italic; }
+.save-msg { font-size: 0.7rem; color: #5ecece; margin-left: 0.75rem; opacity: 0; transition: opacity 0.3s; font-style: italic; }
 .save-msg.show { opacity: 1; }
 
 /* ── PAGES ── */
@@ -116,7 +117,6 @@ body {
   border-radius: 2px;
   box-shadow: 0 4px 24px var(--shadow), inset 0 0 80px rgba(240,230,208,0.2);
   position: relative;
-  overflow: hidden;
   margin-bottom: 1.5rem;
 }
 
@@ -194,7 +194,7 @@ body {
 }
 
 .field-input:focus { border-bottom-color: var(--copper); }
-.field-input::placeholder { color: rgba(30,22,14,0.2); font-style: italic; }
+.field-input::placeholder { color: rgba(30,22,14,0.5); font-style: italic; }
 
 .field-input.large {
   font-size: 1.4rem;
@@ -361,7 +361,7 @@ textarea.field-input:focus { border-color: var(--copper); }
   transition: border-color 0.2s;
 }
 .combat-num:focus { border-bottom-color: var(--copper); }
-.combat-num::placeholder { color: rgba(30,22,14,0.2); font-size: 1rem; }
+.combat-num::placeholder { color: rgba(30,22,14,0.5); font-size: 1rem; }
 
 .combat-divider {
   font-size: 1.1rem;
@@ -584,7 +584,7 @@ textarea.field-input:focus { border-color: var(--copper); }
   font-family: 'Cinzel', serif;
   font-size: 0.7rem;
   letter-spacing: 0.1em;
-  color: var(--copper-light);
+  color: var(--copper-dark);
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(184,115,51,0.3);
@@ -593,7 +593,7 @@ textarea.field-input:focus { border-color: var(--copper); }
   width: 100%;
   text-transform: uppercase;
 }
-.note-title-input::placeholder { color: rgba(184,115,51,0.3); }
+.note-title-input::placeholder { color: rgba(30,22,14,0.5); }
 .note-title-input:focus { border-bottom-color: var(--copper); }
 
 .note-row-table { border: 1px solid var(--field-border); border-radius: 2px; }
@@ -653,7 +653,7 @@ textarea.field-input:focus { border-color: var(--copper); }
 .budget-num { font-size: 1.1rem; font-weight: 700; line-height: 1; color: rgba(240,230,208,0.85); }
 .budget-num.ok { color: #5ecece; }
 .budget-num.warn { color: #e07070; }
-.budget-lbl { font-size: 0.55rem; letter-spacing: 0.1em; color: rgba(240,230,208,0.45); text-transform: uppercase; }
+.budget-lbl { font-size: 0.55rem; letter-spacing: 0.1em; color: rgba(240,230,208,0.75); text-transform: uppercase; }
 
 /* ── LEVEL LOG ── */
 .level-log-grid {
@@ -692,7 +692,7 @@ textarea.field-input:focus { border-color: var(--copper); }
 
 .level-entry-summary {
   font-size: 0.72rem;
-  color: rgba(240,230,208,0.45);
+  color: rgba(240,230,208,0.78);
   font-style: italic;
 }
 
@@ -806,7 +806,7 @@ textarea.field-input:focus { border-color: var(--copper); }
   letter-spacing: 0;
 }
 
-.level-pts-remaining.ok { color: var(--teal-light); }
+.level-pts-remaining.ok { color: var(--teal); }
 .level-pts-remaining.over { color: var(--crimson-soft); }
 
 .level-resource-val {
@@ -842,7 +842,7 @@ select.field-input {
   background: transparent;
   border: 1px dashed rgba(184,115,51,0.35);
   border-radius: 2px;
-  color: var(--copper-light);
+  color: var(--copper-dark);
   font-family: 'Cinzel', serif;
   font-size: 0.72rem;
   letter-spacing: 0.15em;
@@ -862,7 +862,7 @@ select.field-input {
   background: rgba(22,18,14,0.03);
 }
 .level-summary-header {
-  background: linear-gradient(to right, rgba(22,18,14,0.45), rgba(30,22,10,0.35));
+  background: linear-gradient(to right, var(--ink-soft), #1e160a);
   padding: 0.5rem 1rem;
   border-bottom: 1px solid rgba(184,115,51,0.3);
   font-family: 'Cinzel', serif;
@@ -923,7 +923,7 @@ select.field-input {
 }
 .summary-budget-sep {
   font-size: 1.1rem;
-  color: rgba(240,230,208,0.25);
+  color: rgba(240,230,208,0.55);
   padding-bottom: 0.4rem;
   line-height: 1;
 }
@@ -970,7 +970,7 @@ select.field-input {
   text-transform: uppercase;
   background: rgba(30,95,95,0.15);
   border: 1px solid rgba(30,95,95,0.4);
-  color: var(--teal-light);
+  color: var(--teal);
   padding: 0.3rem 0.7rem;
   border-radius: 2px;
   cursor: pointer;
@@ -983,8 +983,8 @@ select.field-input {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   background: transparent;
-  border: 1px solid rgba(120,26,26,0.25);
-  color: rgba(160,48,48,0.7);
+  border: 1px solid rgba(120,26,26,0.5);
+  color: var(--crimson-soft);
   padding: 0.3rem 0.7rem;
   border-radius: 2px;
   cursor: pointer;
@@ -1074,7 +1074,7 @@ select.field-input {
   text-align: center;
 }
 .cs-tag.ok { background: rgba(30,95,95,0.1); color: var(--teal); border-color: rgba(30,95,95,0.2); }
-.cs-tag.warn { background: rgba(184,115,51,0.1); color: var(--copper); border-color: rgba(184,115,51,0.25); }
+.cs-tag.warn { background: rgba(184,115,51,0.1); color: var(--copper-dark); border-color: rgba(184,115,51,0.25); }
 .cs-tag.crit { background: rgba(120,26,26,0.1); color: var(--crimson-soft); border-color: rgba(120,26,26,0.2); }
 .cs-dice {
   font-family: 'Cinzel', serif;
@@ -1150,7 +1150,7 @@ select.field-input {
 }
 
 .action-col-input:focus { background: rgba(184,115,51,0.05); }
-.action-col-input::placeholder { color: rgba(30,22,14,0.2); font-style: italic; }
+.action-col-input::placeholder { color: rgba(30,22,14,0.5); font-style: italic; }
 
 textarea.action-col-input {
   resize: none;
@@ -1168,7 +1168,7 @@ textarea.action-col-input {
 .action-del-btn {
   background: transparent;
   border: none;
-  color: rgba(120,26,26,0.3);
+  color: var(--crimson-soft);
   cursor: pointer;
   font-size: 0.75rem;
   padding: 0.3rem 0.2rem;
@@ -1185,7 +1185,7 @@ textarea.action-col-input {
   background: transparent;
   border: none;
   border-top: 1px solid rgba(184,115,51,0.15);
-  color: var(--copper);
+  color: var(--copper-dark);
   font-family: 'Cinzel', serif;
   font-size: 0.58rem;
   letter-spacing: 0.15em;
@@ -1198,6 +1198,54 @@ textarea.action-col-input {
 }
 
 .action-add-btn:hover { background: rgba(184,115,51,0.06); }
+
+/* ── UNIFIED ACTIONS SECTION ── */
+.action-filter-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.35rem 0 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(184,115,51,0.15);
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+.action-filter-tab {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.25);
+  border-radius: 3px;
+  color: rgba(30,22,14,0.72);
+  font-family: inherit;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  padding: 0.18rem 0.55rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.action-filter-tab:hover { color: var(--ink); border-color: var(--copper); }
+.action-filter-tab.active {
+  background: rgba(184,115,51,0.18);
+  border-color: var(--copper);
+  color: var(--ink);
+}
+.action-cards-scroll {
+  max-height: 900px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184,115,51,0.3) transparent;
+}
+.action-cards-scroll::-webkit-scrollbar { width: 4px; }
+.action-cards-scroll::-webkit-scrollbar-thumb { background: rgba(184,115,51,0.3); border-radius: 2px; }
+.action-badge-type {
+  background: rgba(80,60,120,0.1);
+  color: rgba(30,22,14,0.78);
+  border: 1px solid rgba(80,60,120,0.28);
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
 
 /* ── ACTION CARDS ── */
 .action-cards-wrap { display: flex; flex-direction: column; }
@@ -1231,7 +1279,7 @@ textarea.action-col-input {
   flex-shrink: 0;
   line-height: 1.7;
 }
-.action-badge-usage { background: rgba(30,95,95,0.1); border-color: rgba(45,128,128,0.38); color: var(--teal-light); }
+.action-badge-usage { background: rgba(30,95,95,0.1); border-color: rgba(45,128,128,0.38); color: var(--teal); }
 .action-badge-resource { background: rgba(122,26,26,0.09); border-color: rgba(160,48,48,0.32); color: var(--crimson-soft); }
 .action-card-body {
   margin-top: 0.3rem;
@@ -1264,7 +1312,7 @@ textarea.action-col-input {
 .action-card-btn {
   background: transparent;
   border: 1px solid rgba(184,115,51,0.2);
-  color: var(--copper);
+  color: var(--copper-dark);
   font-family: 'Cinzel', serif;
   font-size: 0.48rem;
   letter-spacing: 0.08em;
@@ -1325,7 +1373,7 @@ textarea.action-col-input {
   font-size: 0.72rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--copper-light);
+  color: var(--copper-dark);
   flex: 1;
 }
 .action-modal-close {
@@ -1397,7 +1445,7 @@ textarea.action-col-input {
   font-size: 0.55rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--copper);
+  color: var(--copper-dark);
   border-bottom: 1px solid rgba(184,115,51,0.18);
   padding-bottom: 0.22rem;
 }
@@ -1429,9 +1477,9 @@ textarea.action-col-input {
   cursor: pointer;
   transition: all 0.15s;
 }
-.am-btn-primary { background: var(--copper); border: 1px solid var(--copper); color: var(--vellum); }
+.am-btn-primary { background: var(--copper); border: 1px solid var(--copper); color: var(--ink); }
 .am-btn-primary:hover { background: var(--copper-light); border-color: var(--copper-light); }
-.am-btn-secondary { background: transparent; border: 1px solid rgba(184,115,51,0.35); color: var(--copper); }
+.am-btn-secondary { background: transparent; border: 1px solid rgba(184,115,51,0.35); color: var(--copper-dark); }
 .am-btn-secondary:hover { background: rgba(184,115,51,0.08); }
 
 /* ── SPELL IMPORT BROWSER ── */
@@ -1483,7 +1531,7 @@ textarea.action-col-input {
   font-size: 0.48rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--copper);
+  color: var(--copper-dark);
   border-bottom: 1px solid rgba(184,115,51,0.2);
   padding-bottom: 0.18rem;
   margin-bottom: 0.28rem;
@@ -1558,7 +1606,7 @@ textarea.action-col-input {
   background: transparent;
   border: 1px solid rgba(30,95,95,0.35);
   border-radius: 2px;
-  color: var(--teal-light);
+  color: var(--teal);
   font-family: 'Cinzel', serif;
   font-size: 0.58rem;
   letter-spacing: 0.08em;
@@ -1607,13 +1655,13 @@ textarea.action-col-input {
   font-family: 'Crimson Text', serif;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--copper-light);
+  color: var(--copper-dark);
   padding: 0.1rem 0.1rem;
   outline: none;
   transition: border-color 0.2s;
 }
 .temp-stat-input:focus { border-bottom-color: var(--copper); }
-.temp-stat-input::placeholder { color: rgba(184,115,51,0.22); font-size: 0.85rem; font-style: italic; }
+.temp-stat-input::placeholder { color: rgba(30,22,14,0.5); font-size: 0.85rem; font-style: italic; }
 
 /* ── REST BAR ── */
 .rest-bar {
@@ -1645,7 +1693,7 @@ textarea.action-col-input {
 .rest-btn.short {
   background: transparent;
   border: 1px solid rgba(30,95,95,0.45);
-  color: var(--teal-light);
+  color: var(--teal);
 }
 .rest-btn.short:hover:not([disabled]) { background: var(--teal); color: var(--vellum); border-color: var(--teal); }
 .rest-btn.short[disabled] {
@@ -1657,7 +1705,7 @@ textarea.action-col-input {
 .rest-btn.long {
   background: transparent;
   border: 1px solid rgba(184,115,51,0.4);
-  color: var(--copper-light);
+  color: var(--copper-dark);
 }
 .rest-btn.long:hover { background: var(--copper); color: var(--ink); border-color: var(--copper); }
 
@@ -1746,7 +1794,7 @@ textarea.action-col-input {
   flex-shrink: 0;
 }
 .cstat-save-val.positive { color: var(--teal); }
-.cstat-save-val.zero     { color: rgba(30,22,14,0.55); }
+.cstat-save-val.zero     { color: rgba(30,22,14,0.72); }
 .cstat-save-val.negative { color: var(--crimson); }
 
 .cstat-stat-hint {
@@ -1773,7 +1821,7 @@ textarea.action-col-input {
   padding: 0.1rem 0.4rem 0.05rem;
 }
 .cstat-input:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.06); }
-.cstat-input::placeholder { color: rgba(30,22,14,0.2); font-size: 1rem; }
+.cstat-input::placeholder { color: rgba(30,22,14,0.5); font-size: 1rem; }
 
 .cstat-divider {
   height: 1px;
@@ -1844,7 +1892,7 @@ textarea.action-col-input {
   padding: 0.1rem 0.4rem 0.05rem;
 }
 .cstat-curmax-cur:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.06); }
-.cstat-curmax-cur::placeholder { color: rgba(30,22,14,0.2); font-size: 1rem; }
+.cstat-curmax-cur::placeholder { color: rgba(30,22,14,0.5); font-size: 1rem; }
 
 .cstat-curmax-sep {
   color: var(--text-label);
@@ -1857,7 +1905,7 @@ textarea.action-col-input {
   font-family: 'Crimson Text', serif;
   font-size: 1.1rem;
   font-weight: 600;
-  color: rgba(30,22,14,0.55);
+  color: rgba(30,22,14,0.72);
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(184,115,51,0.35);
@@ -1868,7 +1916,7 @@ textarea.action-col-input {
   padding: 0.05rem 0.15rem 0;
 }
 .cstat-curmax-max:focus { border-bottom-color: var(--copper); }
-.cstat-curmax-max::placeholder { color: rgba(30,22,14,0.2); font-size: 0.85rem; }
+.cstat-curmax-max::placeholder { color: rgba(30,22,14,0.5); font-size: 0.85rem; }
 
 .cstat-mod-btns {
   display: flex;
@@ -2197,7 +2245,7 @@ textarea.action-col-input {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(240,230,208,0.55);
+  color: rgba(240,230,208,0.82);
   padding: 0.15rem 0.45rem;
   cursor: pointer;
   transition: all 0.15s;
@@ -2261,8 +2309,8 @@ textarea.action-col-input {
   border: 1px solid;
 }
 .feat-src-class        { color: var(--teal);        border-color: rgba(30,95,95,0.4);     background: rgba(30,95,95,0.07); }
-.feat-src-subclass     { color: var(--teal-light);  border-color: rgba(45,128,128,0.4);   background: rgba(45,128,128,0.07); }
-.feat-src-background   { color: var(--copper);      border-color: rgba(184,115,51,0.4);   background: rgba(184,115,51,0.07); }
+.feat-src-subclass     { color: var(--teal);        border-color: rgba(45,128,128,0.4);   background: rgba(45,128,128,0.07); }
+.feat-src-background   { color: var(--copper-dark); border-color: rgba(184,115,51,0.4);   background: rgba(184,115,51,0.07); }
 .feat-src-species      { color: var(--crimson-soft);border-color: rgba(160,48,48,0.4);    background: rgba(160,48,48,0.07); }
 .feat-src-other        { color: var(--text-soft);   border-color: rgba(30,22,14,0.25);    background: rgba(30,22,14,0.04); }
 .feat-desc-full { display: none; }
@@ -2307,7 +2355,7 @@ textarea.action-col-input {
   min-width: 0;
 }
 .feat-name-input:focus { border-bottom-color: var(--copper); }
-.feat-name-input::placeholder { color: rgba(30,22,14,0.3); font-style: italic; font-weight: 400; }
+.feat-name-input::placeholder { color: rgba(30,22,14,0.5); font-style: italic; font-weight: 400; }
 .feat-source-select {
   background: transparent;
   border: 1px solid rgba(184,115,51,0.3);
@@ -2337,7 +2385,7 @@ textarea.action-col-input {
   padding: 0.2rem 0.3rem;
   line-height: 1.4;
 }
-.feat-desc-textarea::placeholder { color: rgba(30,22,14,0.3); font-style: italic; }
+.feat-desc-textarea::placeholder { color: rgba(30,22,14,0.5); font-style: italic; }
 .feat-desc-textarea:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.04); }
 
 /* ── INVENTORY TAB ── */
@@ -2408,9 +2456,9 @@ textarea.action-col-input {
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft);
   padding: 0.14rem 0.4rem; cursor: pointer; transition: all 0.15s; white-space: nowrap;
 }
-.inv-btn:hover       { background: rgba(184,115,51,0.08); border-color: var(--copper);      color: var(--copper); }
+.inv-btn:hover       { background: rgba(184,115,51,0.08); border-color: var(--copper);      color: var(--copper-dark); }
 .inv-btn.del:hover   { background: rgba(120,26,26,0.08);  border-color: var(--crimson-soft); color: var(--crimson-soft); }
-.inv-btn.equip-on    { background: rgba(184,115,51,0.12); border-color: var(--copper);      color: var(--copper); }
+.inv-btn.equip-on    { background: rgba(184,115,51,0.12); border-color: var(--copper);      color: var(--copper-dark); }
 .inv-empty { font-family: 'Crimson Text', serif; font-style: italic; color: var(--text-label); font-size: 0.85rem; padding: 0.55rem 0.4rem; }
 .inv-add-row { padding: 0.3rem 0.4rem; border-top: 1px solid rgba(184,115,51,0.1); }
 .inv-items-wrap { padding: 0.2rem 0.4rem 0; }
@@ -2453,7 +2501,7 @@ textarea.action-col-input {
   width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: all 0.15s; flex-shrink: 0;
 }
-.inv-qty-btn:hover { border-color: var(--copper); color: var(--copper); background: rgba(184,115,51,0.06); }
+.inv-qty-btn:hover { border-color: var(--copper); color: var(--copper-dark); background: rgba(184,115,51,0.06); }
 .inv-qty-val { font-family: 'Crimson Text', serif; font-size: 1rem; font-weight: 700; min-width: 1.4rem; text-align: center; color: var(--text-main); }
 .inv-currency-row { display: flex; gap: 1.5rem; align-items: flex-end; padding: 0.6rem 0.75rem 0.4rem; }
 .inv-currency-field { display: flex; flex-direction: column; align-items: center; gap: 0.28rem; }
@@ -2474,7 +2522,7 @@ textarea.action-col-input {
 .print-hint {
   text-align: center;
   font-size: 0.72rem;
-  color: rgba(240,230,208,0.25);
+  color: rgba(240,230,208,0.72);
   font-style: italic;
   margin-top: 2rem;
   padding-bottom: 2rem;
@@ -2765,31 +2813,26 @@ textarea.action-col-input {
     <!-- RIGHT -->
     <div class="right-col">
 
-      <!-- ACTIONS -->
+      <!-- ACTIONS (unified) -->
       <div class="sheet-section">
         <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
           <div class="section-title">Actions</div>
           <button class="action-card-btn" onclick="openSpellLibraryImport()" style="font-size:0.5rem;padding:0.2rem 0.6rem;opacity:0.75;" title="Import spells from a Spell Slinger export">↑ Import Library</button>
         </div>
-        <div id="tbl-actions"></div>
-      </div>
-
-      <!-- REACTIONS -->
-      <div class="sheet-section">
-        <div class="section-header"><div class="section-title">Reactions</div></div>
-        <div id="tbl-reactions"></div>
-      </div>
-
-      <!-- BONUS ACTIONS + PASSIVES -->
-      <div class="actions-grid">
-        <div class="sheet-section">
-          <div class="section-header"><div class="section-title">Bonus Actions</div></div>
-          <div id="tbl-bonus"></div>
+        <div class="action-filter-tabs" id="action-filter-tabs">
+          <button class="action-filter-tab active" onclick="setActionFilter('All')">All</button>
+          <button class="action-filter-tab" onclick="setActionFilter('Action')">Action</button>
+          <button class="action-filter-tab" onclick="setActionFilter('Bonus Action')">Bonus Action</button>
+          <button class="action-filter-tab" onclick="setActionFilter('Reaction')">Reaction</button>
+          <button class="action-filter-tab" onclick="setActionFilter('Passive')">Passive</button>
         </div>
-        <div class="sheet-section">
-          <div class="section-header"><div class="section-title">Passives</div></div>
-          <div id="tbl-passives"></div>
-        </div>
+        <div class="action-cards-scroll" id="action-cards-scroll"><!-- rendered by JS --></div>
+        <button class="action-add-btn" id="action-add-btn" onclick="openActionModalFiltered()">✦ Add Action</button>
+        <!-- legacy render targets kept hidden for data ops -->
+        <div id="tbl-actions" style="display:none"></div>
+        <div id="tbl-reactions" style="display:none"></div>
+        <div id="tbl-bonus" style="display:none"></div>
+        <div id="tbl-passives" style="display:none"></div>
       </div>
 
       <!-- DAILY ARCHETYPE ABILITY (detail) -->
@@ -4321,84 +4364,120 @@ function saveActionTable(tableId) {
   localStorage.setItem(cfg.key, JSON.stringify(actionTableData[tableId]));
 }
 
-function renderActionTable(tableId) {
-  const cfg = ACTION_TABLE_CONFIGS[tableId];
-  const container = document.getElementById(`tbl-${tableId}`);
-  if (!container) return;
-  const rows = actionTableData[tableId];
+// ── UNIFIED ACTIONS SECTION ──
+let _activeActionFilter = 'All';
 
-  const cards = rows.map((row, idx) => {
-    const usageLabel = USAGE_LABELS[row.usageLimit] || '';
-    const badges = [];
-    if (usageLabel) badges.push(`<span class="action-badge action-badge-usage">${usageLabel}</span>`);
-    if (row.resourceCost?.hasCost) {
-      const t = row.resourceCost.type || 'Resource';
-      badges.push(`<span class="action-badge action-badge-resource">${row.resourceCost.amount || 1} ${t}</span>`);
-    }
+function setActionFilter(type) {
+  _activeActionFilter = type;
+  document.querySelectorAll('.action-filter-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === type);
+  });
+  updateAddActionBtn();
+  renderUnifiedSection();
+}
 
-    const stats = [];
-    // Range (first)
-    if (row.range)
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Range</span><span class="action-card-stat-val">${esc(row.range)}</span></span>`);
-    // To Hit / DC (second, calculated)
-    if (row.resolution?.type === 'attack' && row.resolution.modifier !== 'None') {
-      const mod = getAbilityMod(row.resolution.modifier);
-      const toHitText = modDisplay(mod);
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">To Hit</span><span class="action-card-stat-val">${toHitText}</span></span>`);
-    }
-    if (row.resolution?.type === 'save') {
-      let dcVal;
-      if (row.resolution.dcType === 'spell') {
-        dcVal = parseInt(document.getElementById('spell-save-dc')?.textContent) || '—';
-      } else {
-        dcVal = row.resolution.dcManual || '—';
-      }
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">DC</span><span class="action-card-stat-val">${dcVal} ${esc(row.resolution.saveType)}</span></span>`);
-    }
-    // Damage (third)
-    if (row.effects?.includes('damage') && row.damage?.dice)
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Damage</span><span class="action-card-stat-val">${esc(row.damage.dice)} ${esc(row.damage.damageType)}</span></span>`);
-    // Resource cost (after damage)
-    if (row.resourceCost?.hasCost)
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Cost</span><span class="action-card-stat-val">${row.resourceCost.amount || 1} ${esc(row.resourceCost.type || 'Resource')}</span></span>`);
-    // Remaining effects
-    if (row.effects?.includes('heal') && row.healing?.dice)
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Heal</span><span class="action-card-stat-val">${esc(row.healing.dice)}</span></span>`);
-    if (row.effects?.includes('condition') && row.condition?.name)
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Condition</span><span class="action-card-stat-val">${esc(row.condition.name)}${row.condition.appliedOn !== 'Automatic' ? ' on ' + esc(row.condition.appliedOn) : ''}</span></span>`);
-    if (row.trigger)
-      stats.push(`<span class="action-card-stat" style="flex-basis:100%"><span class="action-card-stat-label">Trigger</span><span class="action-card-stat-val">${esc(row.trigger)}</span></span>`);
-    if (row.duration && row.duration !== 'Instantaneous')
-      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Duration</span><span class="action-card-stat-val">${esc(row.duration)}</span></span>`);
+function updateAddActionBtn() {
+  const btn = document.getElementById('action-add-btn');
+  if (!btn) return;
+  const labels = {
+    'All': '✦ Add Action',
+    'Action': '✦ Add Action',
+    'Bonus Action': '✦ Add Bonus Action',
+    'Reaction': '✦ Add Reaction',
+    'Passive': '✦ Add Passive',
+  };
+  btn.textContent = labels[_activeActionFilter] || '✦ Add Action';
+}
 
-    // Spell Library stat lines (imported spells only)
-    if (row.source === 'spellLibrary') {
-      if (row.spellForm)
-        stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Form</span><span class="action-card-stat-val">${esc(row.spellForm)}</span></span>`);
-      if (row.spellAugments?.length)
-        stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Augments</span><span class="action-card-stat-val">${row.spellAugments.map(esc).join(' · ')}</span></span>`);
-    }
+function openActionModalFiltered() {
+  const filterToTable = {
+    'All': 'actions', 'Action': 'actions',
+    'Bonus Action': 'bonus', 'Reaction': 'reactions', 'Passive': 'passives',
+  };
+  openActionModal(filterToTable[_activeActionFilter] || 'actions', null);
+}
 
-    const notesHtml = row.notes ? `<div class="action-card-notes">${esc(row.notes).replace(/\n/g,'<br>')}</div>` : '';
+function renderActionCardHtml(row, tableId, idx) {
+  const usageLabel = USAGE_LABELS[row.usageLimit] || '';
+  const badges = [];
+  if (usageLabel) badges.push(`<span class="action-badge action-badge-usage">${usageLabel}</span>`);
+  if (row.resourceCost?.hasCost) {
+    const t = row.resourceCost.type || 'Resource';
+    badges.push(`<span class="action-badge action-badge-resource">${row.resourceCost.amount || 1} ${t}</span>`);
+  }
+  badges.push(`<span class="action-badge action-badge-type">${esc(row.actionType || 'Action')}</span>`);
 
-    return `<div class="action-card">
-      <div class="action-card-header">
-        <div class="action-card-name">${esc(row.name || '(Unnamed)')}</div>
-        ${badges.join('')}
-      </div>
-      ${stats.length ? `<div class="action-card-body">${stats.join('')}</div>` : ''}
-      ${notesHtml}
-      <div class="action-card-actions">
-        <button class="action-card-btn" onclick="openActionModal('${tableId}',${idx})">Edit</button>
-        <button class="action-card-btn del" onclick="deleteActionCard('${tableId}',${idx})">Delete</button>
-      </div>
-    </div>`;
-  }).join('');
+  const stats = [];
+  if (row.range)
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Range</span><span class="action-card-stat-val">${esc(row.range)}</span></span>`);
+  if (row.resolution?.type === 'attack' && row.resolution.modifier !== 'None') {
+    const mod = getAbilityMod(row.resolution.modifier);
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">To Hit</span><span class="action-card-stat-val">${modDisplay(mod)}</span></span>`);
+  }
+  if (row.resolution?.type === 'save') {
+    const dcVal = row.resolution.dcType === 'spell'
+      ? (parseInt(document.getElementById('spell-save-dc')?.textContent) || '—')
+      : (row.resolution.dcManual || '—');
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">DC</span><span class="action-card-stat-val">${dcVal} ${esc(row.resolution.saveType)}</span></span>`);
+  }
+  if (row.effects?.includes('damage') && row.damage?.dice)
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Damage</span><span class="action-card-stat-val">${esc(row.damage.dice)} ${esc(row.damage.damageType)}</span></span>`);
+  if (row.resourceCost?.hasCost)
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Cost</span><span class="action-card-stat-val">${row.resourceCost.amount || 1} ${esc(row.resourceCost.type || 'Resource')}</span></span>`);
+  if (row.effects?.includes('heal') && row.healing?.dice)
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Heal</span><span class="action-card-stat-val">${esc(row.healing.dice)}</span></span>`);
+  if (row.effects?.includes('condition') && row.condition?.name)
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Condition</span><span class="action-card-stat-val">${esc(row.condition.name)}${row.condition.appliedOn !== 'Automatic' ? ' on ' + esc(row.condition.appliedOn) : ''}</span></span>`);
+  if (row.trigger)
+    stats.push(`<span class="action-card-stat" style="flex-basis:100%"><span class="action-card-stat-label">Trigger</span><span class="action-card-stat-val">${esc(row.trigger)}</span></span>`);
+  if (row.duration && row.duration !== 'Instantaneous')
+    stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Duration</span><span class="action-card-stat-val">${esc(row.duration)}</span></span>`);
+  if (row.source === 'spellLibrary') {
+    if (row.spellForm)
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Form</span><span class="action-card-stat-val">${esc(row.spellForm)}</span></span>`);
+    if (row.spellAugments?.length)
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Augments</span><span class="action-card-stat-val">${row.spellAugments.map(esc).join(' · ')}</span></span>`);
+  }
 
-  container.innerHTML = `<div class="action-cards-wrap">
-    <div class="action-cards-body">${cards}</div>
-    <button class="action-add-btn" onclick="openActionModal('${tableId}',null)">${cfg.addLabel}</button>
+  const notesHtml = row.notes ? `<div class="action-card-notes">${esc(row.notes).replace(/\n/g,'<br>')}</div>` : '';
+
+  return `<div class="action-card">
+    <div class="action-card-header">
+      <div class="action-card-name">${esc(row.name || '(Unnamed)')}</div>
+      ${badges.join('')}
+    </div>
+    ${stats.length ? `<div class="action-card-body">${stats.join('')}</div>` : ''}
+    ${notesHtml}
+    <div class="action-card-actions">
+      <button class="action-card-btn" onclick="openActionModal('${tableId}',${idx})">Edit</button>
+      <button class="action-card-btn del" onclick="deleteActionCard('${tableId}',${idx})">Delete</button>
+    </div>
   </div>`;
+}
+
+function renderUnifiedSection() {
+  const scroll = document.getElementById('action-cards-scroll');
+  if (!scroll) return;
+
+  const allRows = [];
+  Object.entries(ACTION_TABLE_CONFIGS).forEach(([tableId]) => {
+    (actionTableData[tableId] || []).forEach((row, idx) => {
+      if (_activeActionFilter === 'All' || row.actionType === _activeActionFilter)
+        allRows.push({ row, tableId, idx });
+    });
+  });
+
+  if (allRows.length === 0) {
+    const label = _activeActionFilter === 'All' ? 'entries' : _activeActionFilter.toLowerCase() + 's';
+    scroll.innerHTML = `<div style="text-align:center;color:rgba(240,230,208,0.3);font-size:0.65rem;padding:1.5rem 0;font-style:italic;">No ${label} yet.</div>`;
+  } else {
+    scroll.innerHTML = allRows.map(({ row, tableId, idx }) => renderActionCardHtml(row, tableId, idx)).join('');
+  }
+  updateAddActionBtn();
+}
+
+function renderActionTable(tableId) {
+  renderUnifiedSection();
 }
 
 function esc(s) {
@@ -4701,13 +4780,14 @@ function saveActionModal() {
   }
   saveActionTable(_amTableId);
   renderActionTable(_amTableId);
-  closeActionModalDirect();
 
-  // Advance import queue if active
+  // Advance import queue if active (must check BEFORE closeActionModalDirect clears it)
   if (_importQueue.length > 0) {
+    document.getElementById('action-modal-backdrop').classList.remove('open');
     _importQueueIdx++;
     setTimeout(openNextImport, 80);
   } else {
+    closeActionModalDirect();
     document.getElementById('am-skip-btn').style.display = 'none';
   }
 }
@@ -5786,7 +5866,7 @@ function mapSpellToAction(spell) {
 }
 
 function renderAllActionTables() {
-  Object.keys(ACTION_TABLE_CONFIGS).forEach(id => renderActionTable(id));
+  renderUnifiedSection();
 }
 
 // Wire ability score changes to saving throws + action card recalc
