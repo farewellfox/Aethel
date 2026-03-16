@@ -1199,6 +1199,302 @@ textarea.action-col-input {
 
 .action-add-btn:hover { background: rgba(184,115,51,0.06); }
 
+/* ── ACTION CARDS ── */
+.action-cards-wrap { display: flex; flex-direction: column; }
+.action-cards-body { display: flex; flex-direction: column; }
+.action-card {
+  border-bottom: 1px solid rgba(184,115,51,0.12);
+  padding: 0.55rem 0.75rem;
+  background: transparent;
+  transition: background 0.12s;
+}
+.action-card:last-child { border-bottom: none; }
+.action-card:hover { background: rgba(184,115,51,0.04); }
+.action-card-header { display: flex; align-items: flex-start; gap: 0.4rem; flex-wrap: wrap; }
+.action-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  flex: 1;
+  font-weight: 600;
+  min-width: 0;
+}
+.action-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.7;
+}
+.action-badge-usage { background: rgba(30,95,95,0.1); border-color: rgba(45,128,128,0.38); color: var(--teal-light); }
+.action-badge-resource { background: rgba(122,26,26,0.09); border-color: rgba(160,48,48,0.32); color: var(--crimson-soft); }
+.action-card-body {
+  margin-top: 0.3rem;
+  font-size: 0.83rem;
+  color: var(--text-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.9rem;
+  line-height: 1.5;
+}
+.action-card-stat { display: flex; align-items: baseline; gap: 0.28rem; }
+.action-card-stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.46rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  flex-shrink: 0;
+}
+.action-card-stat-val { color: var(--text-main); }
+.action-card-notes {
+  margin-top: 0.3rem;
+  font-size: 0.79rem;
+  font-style: italic;
+  color: var(--text-soft);
+  border-top: 1px solid rgba(184,115,51,0.1);
+  padding-top: 0.28rem;
+}
+.action-card-actions { display: flex; gap: 0.32rem; margin-top: 0.4rem; justify-content: flex-end; }
+.action-card-btn {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.2);
+  color: var(--copper);
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.16rem 0.48rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.action-card-btn:hover { background: rgba(184,115,51,0.1); }
+.action-card-btn.del:hover { border-color: var(--crimson); color: var(--crimson); background: rgba(122,26,26,0.07); }
+.action-aug-tags { display: flex; flex-wrap: wrap; gap: 0.2rem 0.25rem; margin-top: 0.28rem; }
+.action-aug-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.44rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.08rem 0.32rem;
+  border: 1px solid rgba(184,115,51,0.22);
+  border-radius: 2px;
+  color: var(--text-soft);
+  background: rgba(22,18,14,0.03);
+}
+
+/* ── ACTION MODAL ── */
+.action-modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(14,11,8,0.82);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.action-modal-backdrop.open { display: flex; }
+.action-modal {
+  background: var(--vellum);
+  border: 1px solid rgba(184,115,51,0.45);
+  border-radius: 3px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 48px rgba(14,11,8,0.75);
+}
+.action-modal-header {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.2rem 0.65rem;
+  border-bottom: 1px solid rgba(184,115,51,0.25);
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.action-modal-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--copper-light);
+  flex: 1;
+}
+.action-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-label);
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.15rem;
+  transition: color 0.15s;
+}
+.action-modal-close:hover { color: var(--crimson); }
+.action-modal-body {
+  padding: 0.9rem 1.2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184,115,51,0.3) transparent;
+}
+.action-modal-footer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  padding: 0.65rem 1.2rem;
+  border-top: 1px solid rgba(184,115,51,0.2);
+  flex-shrink: 0;
+}
+.am-group { display: flex; flex-direction: column; gap: 0.28rem; }
+.am-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-label);
+}
+.am-input, .am-select, .am-textarea {
+  background: rgba(22,18,14,0.04);
+  border: none;
+  border-bottom: 1px solid rgba(184,115,51,0.32);
+  font-family: 'Crimson Text', serif;
+  font-size: 0.92rem;
+  color: var(--text-main);
+  padding: 0.3rem 0.38rem;
+  outline: none;
+  width: 100%;
+  border-radius: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+.am-input:focus, .am-select:focus, .am-textarea:focus {
+  border-bottom-color: var(--copper);
+  background: rgba(184,115,51,0.05);
+}
+.am-textarea { resize: vertical; min-height: 2.8rem; line-height: 1.5; }
+.am-row { display: flex; gap: 0.7rem; }
+.am-row .am-group { flex: 1; min-width: 0; }
+.am-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding-left: 0.85rem;
+  border-left: 2px solid rgba(184,115,51,0.2);
+}
+.am-section-divider {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--copper);
+  border-bottom: 1px solid rgba(184,115,51,0.18);
+  padding-bottom: 0.22rem;
+}
+.am-chips { display: flex; flex-wrap: wrap; gap: 0.28rem; }
+.am-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.52rem;
+  border: 1px solid rgba(184,115,51,0.26);
+  border-radius: 2px;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: transparent;
+  user-select: none;
+}
+.am-chip:hover { border-color: var(--copper); color: var(--text-main); }
+.am-chip.selected { background: rgba(184,115,51,0.13); border-color: var(--copper); color: var(--text-main); }
+.am-chip input[type="checkbox"] { display: none; }
+.am-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.95rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.am-btn-primary { background: var(--copper); border: 1px solid var(--copper); color: var(--vellum); }
+.am-btn-primary:hover { background: var(--copper-light); border-color: var(--copper-light); }
+.am-btn-secondary { background: transparent; border: 1px solid rgba(184,115,51,0.35); color: var(--copper); }
+.am-btn-secondary:hover { background: rgba(184,115,51,0.08); }
+
+/* ── SPELL IMPORT BROWSER ── */
+.sib-list { display: flex; flex-direction: column; gap: 0.2rem; }
+.sib-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid rgba(184,115,51,0.18);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.12s;
+  background: transparent;
+}
+.sib-item:hover { background: rgba(184,115,51,0.05); }
+.sib-item:has(.sib-check:checked) { background: rgba(184,115,51,0.09); border-color: rgba(184,115,51,0.42); }
+.sib-check {
+  margin-top: 0.2rem;
+  accent-color: var(--copper);
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.sib-content { flex: 1; min-width: 0; }
+.sib-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.2rem;
+}
+.sib-tags { display: flex; flex-wrap: wrap; gap: 0.18rem 0.28rem; margin-bottom: 0.22rem; }
+.sib-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.44rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.07rem 0.3rem;
+  border: 1px solid rgba(184,115,51,0.26);
+  border-radius: 2px;
+  color: var(--text-soft);
+}
+.sib-desc { font-size: 0.78rem; color: var(--text-soft); font-style: italic; line-height: 1.4; }
+.sib-import-count { font-family: 'Crimson Text', serif; font-size: 0.85rem; color: var(--text-soft); font-style: italic; margin-right: auto; align-self: center; }
+.sib-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--copper);
+  border-bottom: 1px solid rgba(184,115,51,0.2);
+  padding-bottom: 0.18rem;
+  margin-bottom: 0.28rem;
+  margin-top: 0.5rem;
+}
+.sib-section-title:first-of-type { margin-top: 0.35rem; }
+.sib-aug-list { display: flex; flex-direction: column; gap: 0.2rem; }
+.sib-aug-row { font-size: 0.78rem; color: var(--text-soft); line-height: 1.4; }
+.sib-aug-row strong { color: var(--text-main); font-weight: 600; font-style: normal; }
+.sib-form-desc { font-size: 0.78rem; color: var(--text-soft); font-style: italic; line-height: 1.4; }
+
 /* ── COMBAT DELTA CONTROLS ── */
 .combat-mod-btn {
   background: transparent;
@@ -2471,7 +2767,10 @@ textarea.action-col-input {
 
       <!-- ACTIONS -->
       <div class="sheet-section">
-        <div class="section-header"><div class="section-title">Actions</div></div>
+        <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="section-title">Actions</div>
+          <button class="action-card-btn" onclick="openSpellLibraryImport()" style="font-size:0.5rem;padding:0.2rem 0.6rem;opacity:0.75;" title="Import spells from a Spell Slinger export">↑ Import Library</button>
+        </div>
         <div id="tbl-actions"></div>
       </div>
 
@@ -2659,6 +2958,297 @@ textarea.action-col-input {
 </div>
 
 <div class="print-hint">Open in browser to use · Data saves to local storage · Share the .html file with your group</div>
+
+<!-- ══ ACTION MODAL ══ -->
+<div class="action-modal-backdrop" id="action-modal-backdrop">
+  <div class="action-modal" id="action-modal">
+    <div class="action-modal-header">
+      <div class="action-modal-title" id="action-modal-title">Add Action</div>
+      <button class="action-modal-close" onclick="closeActionModalDirect()" title="Close">✕</button>
+    </div>
+    <div class="action-modal-body">
+
+      <!-- Q1 Name -->
+      <div class="am-group">
+        <label class="am-label">Name *</label>
+        <input type="text" class="am-input" id="am-name" placeholder="Action name…">
+      </div>
+
+      <!-- Q1b Range -->
+      <div class="am-group">
+        <label class="am-label">Range (optional)</label>
+        <input type="text" class="am-input" id="am-range" placeholder="5 ft., 30 ft., 60 ft., Self…">
+      </div>
+
+      <!-- Q2 Action Type -->
+      <div class="am-group">
+        <label class="am-label">Action Type</label>
+        <select class="am-select" id="am-action-type" onchange="amHandleActionType()">
+          <option value="Action">Action</option>
+          <option value="Bonus Action">Bonus Action</option>
+          <option value="Reaction">Reaction</option>
+          <option value="Passive">Passive</option>
+        </select>
+      </div>
+
+      <!-- Q3 Usage Limit -->
+      <div class="am-group">
+        <label class="am-label">Usage Limit</label>
+        <select class="am-select" id="am-usage-limit">
+          <option value="no-limit">No limit</option>
+          <option value="per-combat">Once per Combat</option>
+          <option value="per-short">Once per Short Rest</option>
+          <option value="per-long">Once per Long Rest</option>
+          <option value="daily">Daily (Once per Day)</option>
+        </select>
+      </div>
+
+      <!-- Q4 Resource Cost -->
+      <div class="am-group">
+        <label class="am-label">Resource Cost</label>
+        <select class="am-select" id="am-cost-toggle" onchange="amToggleCost()">
+          <option value="no">No cost</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+      <div class="am-sub" id="am-cost-details" style="display:none;">
+        <div class="am-row">
+          <div class="am-group">
+            <label class="am-label">Amount</label>
+            <input type="number" class="am-input" id="am-cost-amount" placeholder="1" min="1">
+          </div>
+          <div class="am-group">
+            <label class="am-label">Resource Type</label>
+            <select class="am-select" id="am-cost-type-select" onchange="amToggleCostOther()">
+              <option value="AP">AP</option>
+              <option value="FP">FP</option>
+              <option value="RP">RP</option>
+              <option value="Other">Other…</option>
+            </select>
+          </div>
+        </div>
+        <div class="am-group" id="am-cost-other-wrap" style="display:none;">
+          <label class="am-label">Resource Name</label>
+          <input type="text" class="am-input" id="am-cost-other" placeholder="Custom resource…">
+        </div>
+      </div>
+
+      <!-- Q5 Effects (multi-select) -->
+      <div class="am-group">
+        <div class="am-section-divider">Effects</div>
+        <label class="am-label" style="margin-top:0.4rem;">What does this action do? (choose all that apply)</label>
+        <div class="am-chips" id="am-effects-chips">
+          <label class="am-chip" data-effect="damage"><input type="checkbox" value="damage"> Deals damage</label>
+          <label class="am-chip" data-effect="heal"><input type="checkbox" value="heal"> Heals</label>
+          <label class="am-chip" data-effect="condition"><input type="checkbox" value="condition"> Imposes a condition</label>
+          <label class="am-chip" data-effect="buff"><input type="checkbox" value="buff"> Grants a buff or effect</label>
+          <label class="am-chip" data-effect="move"><input type="checkbox" value="move"> Moves you or a target</label>
+          <label class="am-chip" data-effect="other"><input type="checkbox" value="other"> Other / utility</label>
+        </div>
+      </div>
+
+      <!-- Q5a-c Damage sub -->
+      <div class="am-sub" id="am-damage-sub" style="display:none;">
+        <div class="am-section-divider" style="font-size:0.5rem;">Damage Details</div>
+        <div class="am-row">
+          <div class="am-group">
+            <label class="am-label">Damage Dice</label>
+            <input type="text" class="am-input" id="am-damage-dice" placeholder="2d6">
+          </div>
+          <div class="am-group">
+            <label class="am-label">Damage Type</label>
+            <select class="am-select" id="am-damage-type">
+              <option value="Physical">Physical</option>
+              <option value="Fire">Fire</option>
+              <option value="Ice">Ice</option>
+              <option value="Lightning">Lightning</option>
+              <option value="Acid">Acid</option>
+              <option value="Thunder">Thunder</option>
+              <option value="Radiant">Radiant</option>
+              <option value="Void">Void</option>
+              <option value="Energy">Energy</option>
+              <option value="Untyped">Untyped</option>
+            </select>
+          </div>
+        </div>
+        <div class="am-group">
+          <label class="am-label">Graze Effect</label>
+          <select class="am-select" id="am-graze-toggle" onchange="amToggleGraze()">
+            <option value="half">No — graze deals half damage as normal</option>
+            <option value="custom">Yes — describe</option>
+          </select>
+        </div>
+        <div class="am-group" id="am-graze-custom-wrap" style="display:none;">
+          <label class="am-label">Graze Description</label>
+          <input type="text" class="am-input" id="am-graze-custom" placeholder="On a graze…">
+        </div>
+      </div>
+
+      <!-- Q5d Healing sub -->
+      <div class="am-sub" id="am-heal-sub" style="display:none;">
+        <div class="am-section-divider" style="font-size:0.5rem;">Healing Details</div>
+        <div class="am-group">
+          <label class="am-label">Healing Dice</label>
+          <input type="text" class="am-input" id="am-heal-dice" placeholder="2d8">
+        </div>
+      </div>
+
+      <!-- Q5e-g Condition sub -->
+      <div class="am-sub" id="am-condition-sub" style="display:none;">
+        <div class="am-section-divider" style="font-size:0.5rem;">Condition Details</div>
+        <div class="am-group">
+          <label class="am-label">Condition Tier</label>
+          <select class="am-select" id="am-cond-tier" onchange="amUpdateConditionNames()">
+            <option value="Basic">Basic</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Expert">Expert</option>
+          </select>
+        </div>
+        <div class="am-group">
+          <label class="am-label">Condition</label>
+          <select class="am-select" id="am-cond-name"></select>
+        </div>
+        <div class="am-group">
+          <label class="am-label">Applied On</label>
+          <select class="am-select" id="am-cond-applied">
+            <option value="Hit">Hit (full hit, roll 13+)</option>
+            <option value="Failed save">Failed saving throw</option>
+            <option value="Automatic">Automatic</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Q6 Resolution -->
+      <div class="am-group">
+        <div class="am-section-divider">Resolution</div>
+        <label class="am-label" style="margin-top:0.4rem;">How is this action resolved?</label>
+        <select class="am-select" id="am-resolution" onchange="amToggleResolution()">
+          <option value="attack">Attack roll</option>
+          <option value="save">Saving throw</option>
+          <option value="auto">Automatic</option>
+          <option value="none">No roll</option>
+        </select>
+      </div>
+
+      <!-- Q6a-b Attack sub -->
+      <div class="am-sub" id="am-attack-sub" style="display:none;">
+        <div class="am-row">
+          <div class="am-group">
+            <label class="am-label">Modifier</label>
+            <select class="am-select" id="am-atk-mod">
+              <option value="STR">STR</option>
+              <option value="DEX">DEX</option>
+              <option value="INT">INT</option>
+              <option value="WIS">WIS</option>
+              <option value="CHA">CHA</option>
+              <option value="None">None</option>
+            </select>
+          </div>
+        </div>
+        <div class="am-group">
+          <label class="am-label">On full hit (13+) — special effect?</label>
+          <select class="am-select" id="am-full-hit-toggle" onchange="amToggleFullHit()">
+            <option value="no">No</option>
+            <option value="yes">Yes — describe</option>
+          </select>
+        </div>
+        <div class="am-group" id="am-full-hit-wrap" style="display:none;">
+          <label class="am-label">Full Hit Effect</label>
+          <input type="text" class="am-input" id="am-full-hit-effect" placeholder="On a full hit…">
+        </div>
+      </div>
+
+      <!-- Q6c-f Save sub -->
+      <div class="am-sub" id="am-save-sub" style="display:none;">
+        <div class="am-row">
+          <div class="am-group">
+            <label class="am-label">Save Type</label>
+            <select class="am-select" id="am-save-type">
+              <option value="Fortitude">Fortitude</option>
+              <option value="Reflex">Reflex</option>
+              <option value="Will">Will</option>
+            </select>
+          </div>
+          <div class="am-group">
+            <label class="am-label">DC</label>
+            <select class="am-select" id="am-dc-type" onchange="amToggleDC()">
+              <option value="spell">Use Spell Save DC</option>
+              <option value="manual">Manual</option>
+            </select>
+          </div>
+        </div>
+        <div class="am-group" id="am-dc-manual-wrap" style="display:none;">
+          <label class="am-label">DC Value</label>
+          <input type="number" class="am-input" id="am-dc-manual" placeholder="14" min="1">
+        </div>
+        <div class="am-group">
+          <label class="am-label">Effect on failed save</label>
+          <input type="text" class="am-input" id="am-save-fail" placeholder="What happens on a failure…">
+        </div>
+        <div class="am-group">
+          <label class="am-label">Effect on successful save (optional)</label>
+          <input type="text" class="am-input" id="am-save-pass" placeholder="What happens on a success…">
+        </div>
+      </div>
+
+      <!-- Q7 Trigger (Reaction only) -->
+      <div class="am-group" id="am-trigger-group" style="display:none;">
+        <div class="am-section-divider">Trigger</div>
+        <label class="am-label" style="margin-top:0.4rem;">Trigger Condition</label>
+        <input type="text" class="am-input" id="am-trigger" placeholder="When an enemy within 60 ft. casts a spell…">
+      </div>
+
+      <!-- Q8 Duration -->
+      <div class="am-group">
+        <div class="am-section-divider">Duration</div>
+        <label class="am-label" style="margin-top:0.4rem;">Duration</label>
+        <select class="am-select" id="am-duration" onchange="amToggleDuration()">
+          <option value="Instantaneous">Instantaneous</option>
+          <option value="Until end of your next turn">Until end of your next turn</option>
+          <option value="Until end of combat">Until end of combat</option>
+          <option value="Concentration">Concentration</option>
+          <option value="Permanent">Permanent</option>
+          <option value="Other">Other…</option>
+        </select>
+      </div>
+      <div class="am-group" id="am-duration-other-wrap" style="display:none;">
+        <label class="am-label">Duration Description</label>
+        <input type="text" class="am-input" id="am-duration-other" placeholder="e.g. 1 minute, 1 hour…">
+      </div>
+
+      <!-- Q9 Notes -->
+      <div class="am-group">
+        <label class="am-label">Notes (optional)</label>
+        <textarea class="am-textarea" id="am-notes" placeholder="Range, additional tags, flavor text…"></textarea>
+      </div>
+
+    </div><!-- /modal-body -->
+    <div class="action-modal-footer">
+      <button class="am-btn am-btn-secondary" id="am-skip-btn" onclick="skipImportSpell()" style="display:none;margin-right:auto;">Skip</button>
+      <button class="am-btn am-btn-secondary" onclick="closeActionModalDirect()">Cancel</button>
+      <button class="am-btn am-btn-primary" onclick="saveActionModal()">Save Action</button>
+    </div>
+  </div><!-- /modal -->
+</div><!-- /backdrop -->
+
+<!-- ══ SPELL IMPORT BROWSER MODAL ══ -->
+<input type="file" id="spell-library-file-input" accept=".json" style="display:none" onchange="handleSpellLibraryFile(this)">
+<div class="action-modal-backdrop" id="spell-import-backdrop">
+  <div class="action-modal" style="max-width:660px;">
+    <div class="action-modal-header">
+      <div class="action-modal-title" id="spell-import-title">Select Spells to Import</div>
+      <button class="action-modal-close" onclick="closeSpellImport()">✕</button>
+    </div>
+    <div class="action-modal-body" id="spell-import-body" style="gap:0.5rem;">
+      <!-- rendered by JS -->
+    </div>
+    <div class="action-modal-footer">
+      <span class="sib-import-count" id="spell-import-count"></span>
+      <button class="am-btn am-btn-secondary" onclick="closeSpellImport()">Cancel</button>
+      <button class="am-btn am-btn-primary" id="spell-import-btn" onclick="startImportReview()" disabled>Review &amp; Import</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const ABILITIES = [
@@ -3042,8 +3632,8 @@ function loadFromFile(input) {
         Object.entries(parsed.actionTables).forEach(([tableId, rows]) => {
           const cfg = ACTION_TABLE_CONFIGS[tableId];
           if (cfg) {
-            actionTableData[tableId] = rows;
-            localStorage.setItem(cfg.key, JSON.stringify(rows));
+            actionTableData[tableId] = rows.map(r => amMigrateRow(r, cfg.type));
+            localStorage.setItem(cfg.key, JSON.stringify(actionTableData[tableId]));
             renderActionTable(tableId);
           }
         });
@@ -3671,51 +4261,57 @@ function updateSummaryPanel() {
   });
 }
 
-// ── ACTION TABLES ──
+// ── ACTION CARDS ──
 const ACTION_TABLE_CONFIGS = {
-  actions: {
-    key: 'aethel-actions',
-    maxHeight: '210px',
-    cols: [
-      { field: 'name',   label: 'Action',         placeholder: 'Attack, spell, ability…', flex: 2 },
-      { field: 'tohit',  label: 'To Hit / DC',     placeholder: '+5 / DC 14',             flex: 1 },
-      { field: 'damage', label: 'Damage / Effect', placeholder: '1d8+3 piercing',         flex: 1.5 },
-      { field: 'notes',  label: 'Notes',           placeholder: 'Range, tags…',           flex: 1.5 },
-    ]
-  },
-  reactions: {
-    key: 'aethel-reactions',
-    maxHeight: '160px',
-    cols: [
-      { field: 'name',    label: 'Reaction', placeholder: 'Name…',         flex: 1.5 },
-      { field: 'trigger', label: 'Trigger',  placeholder: 'When…',         flex: 2 },
-      { field: 'effect',  label: 'Effect',   placeholder: 'What happens…', flex: 2.5 },
-    ]
-  },
-  bonus: {
-    key: 'aethel-bonus',
-    maxHeight: '160px',
-    cols: [
-      { field: 'name',   label: 'Bonus Action', placeholder: 'Name…',         flex: 2 },
-      { field: 'effect', label: 'Effect',       placeholder: 'What it does…', flex: 4 },
-    ]
-  },
-  passives: {
-    key: 'aethel-passives',
-    maxHeight: '160px',
-    cols: [
-      { field: 'name', label: 'Passive / Trait', placeholder: 'Name…',         flex: 2 },
-      { field: 'desc', label: 'Description',     placeholder: 'What it does…', flex: 4 },
-    ]
-  },
+  actions:   { key: 'aethel-actions',   type: 'Action',       addLabel: '✦ Add Action' },
+  reactions: { key: 'aethel-reactions', type: 'Reaction',     addLabel: '✦ Add Reaction' },
+  bonus:     { key: 'aethel-bonus',     type: 'Bonus Action', addLabel: '✦ Add Bonus Action' },
+  passives:  { key: 'aethel-passives',  type: 'Passive',      addLabel: '✦ Add Passive' },
+};
+
+const CONDITION_NAMES = {
+  Basic:    ['Deafened', 'Distracted', 'Prone', 'Staggered', 'Frightened', 'Grappled'],
+  Advanced: ['Blinded', 'Poisoned', 'Restrained'],
+  Expert:   ['Stunned', 'Paralyzed', 'Petrified'],
+};
+
+const USAGE_LABELS = {
+  'per-combat': 'Per Combat',
+  'per-short':  'Per Short Rest',
+  'per-long':   'Per Long Rest',
+  'daily':      'Daily',
 };
 
 let actionTableData = {};
 
+function amMigrateRow(row, defaultType) {
+  if (row.id && row.actionType) return row; // already new format
+  return {
+    id: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : (Date.now() + Math.random()).toString(36),
+    name: row.name || row.action || row.bonus || row.passive || row.reaction || '',
+    actionType: defaultType,
+    usageLimit: 'no-limit',
+    resourceCost: { hasCost: false },
+    effects: [],
+    damage: { dice: '', damageType: 'Physical', grazeCustom: null },
+    healing: { dice: '' },
+    condition: { tier: 'Basic', name: 'Deafened', appliedOn: 'Hit' },
+    resolution: { type: 'none', modifier: 'STR', fullHitEffect: '', saveType: 'Fortitude', dcType: 'spell', dcManual: 14, failEffect: '', passEffect: '' },
+    range: '',
+    source: '',
+    spellForm: '',
+    spellAugments: [],
+    trigger: row.trigger || '',
+    duration: 'Instantaneous',
+    notes: row.notes || row.effect || row.desc || row.damage || row.tohit || '',
+  };
+}
+
 function loadActionTables() {
   Object.entries(ACTION_TABLE_CONFIGS).forEach(([tableId, cfg]) => {
     const raw = localStorage.getItem(cfg.key);
-    actionTableData[tableId] = raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    actionTableData[tableId] = parsed.map(r => amMigrateRow(r, cfg.type));
     renderActionTable(tableId);
   });
 }
@@ -3731,56 +4327,397 @@ function renderActionTable(tableId) {
   if (!container) return;
   const rows = actionTableData[tableId];
 
-  const headCols = cfg.cols.map(col =>
-    `<div class="action-col-label" style="flex:${col.flex}">${col.label}</div>`
-  ).join('') + '<div style="width:20px;flex-shrink:0;"></div>';
+  const cards = rows.map((row, idx) => {
+    const usageLabel = USAGE_LABELS[row.usageLimit] || '';
+    const badges = [];
+    if (usageLabel) badges.push(`<span class="action-badge action-badge-usage">${usageLabel}</span>`);
+    if (row.resourceCost?.hasCost) {
+      const t = row.resourceCost.type || 'Resource';
+      badges.push(`<span class="action-badge action-badge-resource">${row.resourceCost.amount || 1} ${t}</span>`);
+    }
 
-  const bodyRows = rows.map((row, idx) => {
-    const cells = cfg.cols.map(col => {
-      const val = (row[col.field] || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return `<textarea class="action-col-input" style="flex:${col.flex}"
-        placeholder="${col.placeholder}"
-        oninput="updateActionRow('${tableId}',${idx},'${col.field}',this.value)">${val}</textarea>`;
-    }).join('');
-    return `<div class="action-table-row">
-      ${cells}
-      <button class="action-del-btn" onclick="deleteActionRow('${tableId}',${idx})" title="Remove row">✕</button>
+    const stats = [];
+    // Range (first)
+    if (row.range)
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Range</span><span class="action-card-stat-val">${esc(row.range)}</span></span>`);
+    // To Hit / DC (second, calculated)
+    if (row.resolution?.type === 'attack' && row.resolution.modifier !== 'None') {
+      const mod = getAbilityMod(row.resolution.modifier);
+      const toHitText = modDisplay(mod);
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">To Hit</span><span class="action-card-stat-val">${toHitText}</span></span>`);
+    }
+    if (row.resolution?.type === 'save') {
+      let dcVal;
+      if (row.resolution.dcType === 'spell') {
+        dcVal = parseInt(document.getElementById('spell-save-dc')?.textContent) || '—';
+      } else {
+        dcVal = row.resolution.dcManual || '—';
+      }
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">DC</span><span class="action-card-stat-val">${dcVal} ${esc(row.resolution.saveType)}</span></span>`);
+    }
+    // Damage (third)
+    if (row.effects?.includes('damage') && row.damage?.dice)
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Damage</span><span class="action-card-stat-val">${esc(row.damage.dice)} ${esc(row.damage.damageType)}</span></span>`);
+    // Resource cost (after damage)
+    if (row.resourceCost?.hasCost)
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Cost</span><span class="action-card-stat-val">${row.resourceCost.amount || 1} ${esc(row.resourceCost.type || 'Resource')}</span></span>`);
+    // Remaining effects
+    if (row.effects?.includes('heal') && row.healing?.dice)
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Heal</span><span class="action-card-stat-val">${esc(row.healing.dice)}</span></span>`);
+    if (row.effects?.includes('condition') && row.condition?.name)
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Condition</span><span class="action-card-stat-val">${esc(row.condition.name)}${row.condition.appliedOn !== 'Automatic' ? ' on ' + esc(row.condition.appliedOn) : ''}</span></span>`);
+    if (row.trigger)
+      stats.push(`<span class="action-card-stat" style="flex-basis:100%"><span class="action-card-stat-label">Trigger</span><span class="action-card-stat-val">${esc(row.trigger)}</span></span>`);
+    if (row.duration && row.duration !== 'Instantaneous')
+      stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Duration</span><span class="action-card-stat-val">${esc(row.duration)}</span></span>`);
+
+    // Spell Library stat lines (imported spells only)
+    if (row.source === 'spellLibrary') {
+      if (row.spellForm)
+        stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Form</span><span class="action-card-stat-val">${esc(row.spellForm)}</span></span>`);
+      if (row.spellAugments?.length)
+        stats.push(`<span class="action-card-stat"><span class="action-card-stat-label">Augments</span><span class="action-card-stat-val">${row.spellAugments.map(esc).join(' · ')}</span></span>`);
+    }
+
+    const notesHtml = row.notes ? `<div class="action-card-notes">${esc(row.notes).replace(/\n/g,'<br>')}</div>` : '';
+
+    return `<div class="action-card">
+      <div class="action-card-header">
+        <div class="action-card-name">${esc(row.name || '(Unnamed)')}</div>
+        ${badges.join('')}
+      </div>
+      ${stats.length ? `<div class="action-card-body">${stats.join('')}</div>` : ''}
+      ${notesHtml}
+      <div class="action-card-actions">
+        <button class="action-card-btn" onclick="openActionModal('${tableId}',${idx})">Edit</button>
+        <button class="action-card-btn del" onclick="deleteActionCard('${tableId}',${idx})">Delete</button>
+      </div>
     </div>`;
   }).join('');
 
-  container.innerHTML = `
-    <div class="action-table-wrap">
-      <div class="action-table-head">${headCols}</div>
-      <div class="action-table-body" style="max-height:${cfg.maxHeight}">${bodyRows || ''}</div>
-      <button class="action-add-btn" onclick="addActionRow('${tableId}')">✦ Add Row</button>
-    </div>
-  `;
+  container.innerHTML = `<div class="action-cards-wrap">
+    <div class="action-cards-body">${cards}</div>
+    <button class="action-add-btn" onclick="openActionModal('${tableId}',null)">${cfg.addLabel}</button>
+  </div>`;
 }
 
-function addActionRow(tableId) {
-  const cfg = ACTION_TABLE_CONFIGS[tableId];
-  const newRow = {};
-  cfg.cols.forEach(col => { newRow[col.field] = ''; });
-  actionTableData[tableId].push(newRow);
-  saveActionTable(tableId);
-  renderActionTable(tableId);
-  const body = document.querySelector(`#tbl-${tableId} .action-table-body`);
-  if (body) body.scrollTop = body.scrollHeight;
-  const allRows = document.querySelectorAll(`#tbl-${tableId} .action-table-row`);
-  if (allRows.length) allRows[allRows.length - 1].querySelector('textarea')?.focus();
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function deleteActionRow(tableId, idx) {
+function deleteActionCard(tableId, idx) {
+  const name = actionTableData[tableId][idx]?.name || 'this action';
+  if (!confirm(`Delete "${name}"?`)) return;
   actionTableData[tableId].splice(idx, 1);
   saveActionTable(tableId);
   renderActionTable(tableId);
 }
 
-function updateActionRow(tableId, idx, field, value) {
-  if (!actionTableData[tableId]?.[idx]) return;
-  actionTableData[tableId][idx][field] = value;
-  saveActionTable(tableId);
+// ── MODAL STATE ──
+let _amTableId = null;
+let _amEditIdx = null;
+
+function openActionModal(tableId, editIdx) {
+  _amTableId = tableId;
+  _amEditIdx = editIdx;
+  const cfg = ACTION_TABLE_CONFIGS[tableId];
+  const isEdit = editIdx !== null && editIdx !== undefined;
+  document.getElementById('action-modal-title').textContent = isEdit ? 'Edit Action' : cfg.addLabel.replace('✦ ','');
+
+  amResetModal();
+  if (isEdit) {
+    amPopulateModal(actionTableData[tableId][editIdx]);
+  } else {
+    document.getElementById('am-action-type').value = cfg.type;
+    amHandleActionType();
+  }
+  amUpdateConditionNames();
+
+  document.getElementById('action-modal-backdrop').classList.add('open');
+  document.getElementById('am-name').focus();
 }
+
+function closeActionModalDirect() {
+  document.getElementById('action-modal-backdrop').classList.remove('open');
+  // If cancelling mid-import, clear the queue
+  if (_importQueue.length > 0) {
+    _importQueue = [];
+    _importQueueIdx = 0;
+    document.getElementById('am-skip-btn').style.display = 'none';
+  }
+}
+
+function amShow(id, show) {
+  document.getElementById(id).style.display = show ? '' : 'none';
+}
+
+function amResetModal() {
+  document.getElementById('am-name').value = '';
+  document.getElementById('am-range').value = '';
+  document.getElementById('am-action-type').value = 'Action';
+  document.getElementById('am-usage-limit').value = 'no-limit';
+  document.getElementById('am-cost-toggle').value = 'no';
+  amShow('am-cost-details', false);
+  document.getElementById('am-cost-amount').value = '';
+  document.getElementById('am-cost-type-select').value = 'AP';
+  amShow('am-cost-other-wrap', false);
+  document.getElementById('am-cost-other').value = '';
+
+  document.querySelectorAll('#am-effects-chips .am-chip').forEach(chip => {
+    chip.classList.remove('selected');
+    chip.querySelector('input').checked = false;
+  });
+  amShow('am-damage-sub', false);
+  amShow('am-heal-sub', false);
+  amShow('am-condition-sub', false);
+  document.getElementById('am-damage-dice').value = '';
+  document.getElementById('am-damage-type').value = 'Physical';
+  document.getElementById('am-graze-toggle').value = 'half';
+  amShow('am-graze-custom-wrap', false);
+  document.getElementById('am-graze-custom').value = '';
+  document.getElementById('am-heal-dice').value = '';
+  document.getElementById('am-cond-tier').value = 'Basic';
+  document.getElementById('am-cond-applied').value = 'Hit';
+
+  document.getElementById('am-resolution').value = 'attack';
+  amToggleResolution();
+  document.getElementById('am-atk-mod').value = 'STR';
+  document.getElementById('am-full-hit-toggle').value = 'no';
+  amShow('am-full-hit-wrap', false);
+  document.getElementById('am-full-hit-effect').value = '';
+  document.getElementById('am-save-type').value = 'Fortitude';
+  document.getElementById('am-dc-type').value = 'spell';
+  amShow('am-dc-manual-wrap', false);
+  document.getElementById('am-dc-manual').value = '';
+  document.getElementById('am-save-fail').value = '';
+  document.getElementById('am-save-pass').value = '';
+
+  amShow('am-trigger-group', false);
+  document.getElementById('am-trigger').value = '';
+  document.getElementById('am-duration').value = 'Instantaneous';
+  amShow('am-duration-other-wrap', false);
+  document.getElementById('am-duration-other').value = '';
+  document.getElementById('am-notes').value = '';
+}
+
+function amPopulateModal(row) {
+  document.getElementById('am-name').value = row.name || '';
+  document.getElementById('am-range').value = row.range || '';
+  document.getElementById('am-action-type').value = row.actionType || 'Action';
+  document.getElementById('am-usage-limit').value = row.usageLimit || 'no-limit';
+
+  const hasCost = row.resourceCost?.hasCost;
+  document.getElementById('am-cost-toggle').value = hasCost ? 'yes' : 'no';
+  amShow('am-cost-details', hasCost);
+  if (hasCost) {
+    document.getElementById('am-cost-amount').value = row.resourceCost.amount || '';
+    const t = row.resourceCost.type || 'AP';
+    if (['AP','FP','RP'].includes(t)) {
+      document.getElementById('am-cost-type-select').value = t;
+    } else {
+      document.getElementById('am-cost-type-select').value = 'Other';
+      amShow('am-cost-other-wrap', true);
+      document.getElementById('am-cost-other').value = t;
+    }
+  }
+
+  const effects = row.effects || [];
+  document.querySelectorAll('#am-effects-chips .am-chip').forEach(chip => {
+    if (effects.includes(chip.dataset.effect)) {
+      chip.classList.add('selected');
+      chip.querySelector('input').checked = true;
+    }
+  });
+  amShow('am-damage-sub', effects.includes('damage'));
+  if (effects.includes('damage')) {
+    document.getElementById('am-damage-dice').value = row.damage?.dice || '';
+    document.getElementById('am-damage-type').value = row.damage?.damageType || 'Physical';
+    if (row.damage?.grazeCustom) {
+      document.getElementById('am-graze-toggle').value = 'custom';
+      amShow('am-graze-custom-wrap', true);
+      document.getElementById('am-graze-custom').value = row.damage.grazeCustom;
+    }
+  }
+  amShow('am-heal-sub', effects.includes('heal'));
+  if (effects.includes('heal')) document.getElementById('am-heal-dice').value = row.healing?.dice || '';
+  amShow('am-condition-sub', effects.includes('condition'));
+  if (effects.includes('condition')) {
+    document.getElementById('am-cond-tier').value = row.condition?.tier || 'Basic';
+    amUpdateConditionNames(row.condition?.name);
+    document.getElementById('am-cond-applied').value = row.condition?.appliedOn || 'Hit';
+  }
+
+  document.getElementById('am-resolution').value = row.resolution?.type || 'none';
+  amToggleResolution();
+  if (row.resolution?.type === 'attack') {
+    document.getElementById('am-atk-mod').value = row.resolution.modifier || 'STR';
+    if (row.resolution.fullHitEffect) {
+      document.getElementById('am-full-hit-toggle').value = 'yes';
+      amShow('am-full-hit-wrap', true);
+      document.getElementById('am-full-hit-effect').value = row.resolution.fullHitEffect;
+    }
+  }
+  if (row.resolution?.type === 'save') {
+    document.getElementById('am-save-type').value = row.resolution.saveType || 'Fortitude';
+    document.getElementById('am-dc-type').value = row.resolution.dcType || 'spell';
+    if (row.resolution.dcType === 'manual') {
+      amShow('am-dc-manual-wrap', true);
+      document.getElementById('am-dc-manual').value = row.resolution.dcManual || '';
+    }
+    document.getElementById('am-save-fail').value = row.resolution.failEffect || '';
+    document.getElementById('am-save-pass').value = row.resolution.passEffect || '';
+  }
+
+  document.getElementById('am-trigger').value = row.trigger || '';
+  amHandleActionType();
+
+  const stdDurations = ['Instantaneous','Until end of your next turn','Until end of combat','Concentration','Permanent'];
+  const dur = row.duration || 'Instantaneous';
+  if (stdDurations.includes(dur)) {
+    document.getElementById('am-duration').value = dur;
+  } else {
+    document.getElementById('am-duration').value = 'Other';
+    amShow('am-duration-other-wrap', true);
+    document.getElementById('am-duration-other').value = dur;
+  }
+
+  document.getElementById('am-notes').value = row.notes || '';
+}
+
+// Toggle helpers
+function amToggleCost() {
+  amShow('am-cost-details', document.getElementById('am-cost-toggle').value === 'yes');
+}
+function amToggleCostOther() {
+  amShow('am-cost-other-wrap', document.getElementById('am-cost-type-select').value === 'Other');
+}
+function amToggleGraze() {
+  amShow('am-graze-custom-wrap', document.getElementById('am-graze-toggle').value === 'custom');
+}
+function amToggleResolution() {
+  const v = document.getElementById('am-resolution').value;
+  amShow('am-attack-sub', v === 'attack');
+  amShow('am-save-sub', v === 'save');
+}
+function amToggleDC() {
+  amShow('am-dc-manual-wrap', document.getElementById('am-dc-type').value === 'manual');
+}
+function amToggleFullHit() {
+  amShow('am-full-hit-wrap', document.getElementById('am-full-hit-toggle').value === 'yes');
+}
+function amToggleDuration() {
+  amShow('am-duration-other-wrap', document.getElementById('am-duration').value === 'Other');
+}
+function amHandleActionType() {
+  amShow('am-trigger-group', document.getElementById('am-action-type').value === 'Reaction');
+}
+function amUpdateConditionNames(selectedName) {
+  const tier = document.getElementById('am-cond-tier').value;
+  const sel = document.getElementById('am-cond-name');
+  sel.innerHTML = (CONDITION_NAMES[tier] || []).map(n =>
+    `<option value="${n}"${n === selectedName ? ' selected' : ''}>${n}</option>`
+  ).join('');
+}
+
+// Chip toggle (event delegation)
+document.addEventListener('click', function(e) {
+  const chip = e.target.closest('#am-effects-chips .am-chip');
+  if (!chip) return;
+  e.preventDefault();
+  chip.classList.toggle('selected');
+  chip.querySelector('input').checked = chip.classList.contains('selected');
+  amShow('am-damage-sub',   !!document.querySelector('#am-effects-chips [data-effect="damage"].selected'));
+  amShow('am-heal-sub',     !!document.querySelector('#am-effects-chips [data-effect="heal"].selected'));
+  amShow('am-condition-sub',!!document.querySelector('#am-effects-chips [data-effect="condition"].selected'));
+});
+
+function saveActionModal() {
+  const name = document.getElementById('am-name').value.trim();
+  if (!name) { document.getElementById('am-name').focus(); return; }
+
+  const effects = [];
+  document.querySelectorAll('#am-effects-chips .am-chip.selected').forEach(c => effects.push(c.dataset.effect));
+
+  const costToggle = document.getElementById('am-cost-toggle').value;
+  const costTypeVal = document.getElementById('am-cost-type-select').value;
+  const resourceCost = costToggle === 'yes' ? {
+    hasCost: true,
+    amount: parseInt(document.getElementById('am-cost-amount').value) || 1,
+    type: costTypeVal === 'Other' ? (document.getElementById('am-cost-other').value.trim() || 'Other') : costTypeVal,
+  } : { hasCost: false };
+
+  const resType = document.getElementById('am-resolution').value;
+  const resolution = { type: resType };
+  if (resType === 'attack') {
+    resolution.modifier = document.getElementById('am-atk-mod').value;
+    resolution.fullHitEffect = document.getElementById('am-full-hit-toggle').value === 'yes'
+      ? document.getElementById('am-full-hit-effect').value.trim() : '';
+  }
+  if (resType === 'save') {
+    resolution.saveType = document.getElementById('am-save-type').value;
+    resolution.dcType = document.getElementById('am-dc-type').value;
+    resolution.dcManual = parseInt(document.getElementById('am-dc-manual').value) || 14;
+    resolution.failEffect = document.getElementById('am-save-fail').value.trim();
+    resolution.passEffect = document.getElementById('am-save-pass').value.trim();
+  }
+
+  const durSel = document.getElementById('am-duration').value;
+  const duration = durSel === 'Other' ? (document.getElementById('am-duration-other').value.trim() || 'Other') : durSel;
+
+  const row = {
+    id: (_amEditIdx !== null && actionTableData[_amTableId][_amEditIdx]?.id)
+      || ((typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : (Date.now() + Math.random()).toString(36)),
+    source: (_amEditIdx !== null ? actionTableData[_amTableId][_amEditIdx]?.source : _importQueue[_importQueueIdx]?.source) || '',
+    spellForm: (_amEditIdx !== null ? actionTableData[_amTableId][_amEditIdx]?.spellForm : _importQueue[_importQueueIdx]?.spellForm) || '',
+    spellAugments: (_amEditIdx !== null ? actionTableData[_amTableId][_amEditIdx]?.spellAugments : _importQueue[_importQueueIdx]?.spellAugments) || [],
+    name,
+    range: document.getElementById('am-range').value.trim(),
+    actionType: document.getElementById('am-action-type').value,
+    usageLimit: document.getElementById('am-usage-limit').value,
+    resourceCost,
+    effects,
+    damage: {
+      dice: document.getElementById('am-damage-dice').value.trim(),
+      damageType: document.getElementById('am-damage-type').value,
+      grazeCustom: document.getElementById('am-graze-toggle').value === 'custom'
+        ? document.getElementById('am-graze-custom').value.trim() : null,
+    },
+    healing: { dice: document.getElementById('am-heal-dice').value.trim() },
+    condition: {
+      tier: document.getElementById('am-cond-tier').value,
+      name: document.getElementById('am-cond-name').value,
+      appliedOn: document.getElementById('am-cond-applied').value,
+    },
+    resolution,
+    trigger: document.getElementById('am-trigger').value.trim(),
+    duration,
+    notes: document.getElementById('am-notes').value.trim(),
+  };
+
+  if (_amEditIdx !== null) {
+    actionTableData[_amTableId][_amEditIdx] = row;
+  } else {
+    actionTableData[_amTableId].push(row);
+  }
+  saveActionTable(_amTableId);
+  renderActionTable(_amTableId);
+  closeActionModalDirect();
+
+  // Advance import queue if active
+  if (_importQueue.length > 0) {
+    _importQueueIdx++;
+    setTimeout(openNextImport, 80);
+  } else {
+    document.getElementById('am-skip-btn').style.display = 'none';
+  }
+}
+
+// Escape key closes modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('action-modal-backdrop').classList.contains('open')) {
+    closeActionModalDirect();
+  }
+});
 
 // ── COMBAT DELTA ──
 const _deltaMode = { hp: null, rp: null };
@@ -4517,18 +5454,352 @@ renderLevelLog();
 renderFeaturesTab();
 loadInventory();
 renderInventoryTab();
-loadActionTables();
 loadAll();
 syncLevelToSheet();
 updateSkillTotals();
 updateSavingThrows();
+loadActionTables();
 updateRestBar();
 
-// Wire ability score changes to saving throws
-document.getElementById('ability-grid')?.addEventListener('input', updateSavingThrows);
+// ── SPELL LIBRARY IMPORT ──
+const _SPELL_FORM_MAP = {
+  cantrip:       { name: 'Channel Cantrip',   action: 'Action',       tag: 'attack', range: '60 ft.',                      desc: 'Attack a single target within 60 ft. Deals 1d6 damage. Recover 2–6 AP on hit.' },
+  simple:        { name: 'Simple Projection', action: 'Action',       tag: 'attack', range: '60 ft.',                      desc: 'Single target within 60 ft.' },
+  close_burst:   { name: 'Close Burst',       action: 'Action',       tag: 'save',   range: 'Self (15 ft. burst)',          desc: '15 ft. radius burst originating from you.' },
+  ranged_burst:  { name: 'Ranged Burst',      action: 'Action',       tag: 'save',   range: '60 ft. (15 ft. burst)',        desc: '15 ft. radius burst at a point within 60 ft.' },
+  broad_wave:    { name: 'Broad Wave',        action: 'Action',       tag: 'save',   range: '30 ft. cone / 60 ft. line',   desc: 'Cone (30 ft.) or Line (60 ft.).' },
+  self_channel:  { name: 'Self Channel',      action: 'Action',       tag: 'none',   range: 'Self',                        desc: 'Targets only you. Self-affecting effects.' },
+  arcane_wall:   { name: 'Arcane Wall',       action: 'Action',       tag: 'none',   range: '30 ft. wall',                 desc: '30 ft. long, 15 ft. high barrier.' },
+  binding_ring:  { name: 'Binding Ring',      action: 'Action',       tag: 'save',   range: '60 ft. (10 ft. ring)',         desc: '10 ft. radius ring around a point within 60 ft.' },
+  sense_strands: { name: 'Sense Strands',     action: 'Bonus Action', tag: 'none',   range: 'Self or ally',                desc: 'Targets you or one ally. Usually no roll.' },
+};
+
+const _STRAND_AUGS = {
+  destructive:   { name: 'Destructive',                desc: 'Deals 2d6 damage to each affected enemy.' },
+  restorative:   { name: 'Restorative',                desc: 'Restores 2d8 HP to each affected ally.' },
+  elemental:     { name: 'Elemental Shift',            desc: 'Deals 1d6 additional damage and shifts all damage to the chosen element.' },
+  greater_reach: { name: 'Greater Reach',              desc: 'Doubles the Spell Form\'s range.' },
+  minor_cond:    { name: 'Impose Minor Condition',     desc: 'Imposes a Basic condition on a failed save.' },
+  major_cond:    { name: 'Impose Major Condition',     desc: 'Imposes an Advanced condition on a failed save.' },
+  severe_cond:   { name: 'Impose Severe Condition',    desc: 'Imposes an Expert condition on a failed save.' },
+};
+
+const _CLASS_AUGS = {
+  kinetic_chain:      { name: 'Kinetic Chain',      desc: 'Chains damage to a second enemy within 10 ft.' },
+  flawless_strike:    { name: 'Flawless Strike',    desc: 'Converts Glancing Blows to Full Damage.' },
+  flicker_warp:       { name: 'Flicker Warp',       desc: 'Teleport up to 30 ft. after casting.' },
+  haste_field:        { name: 'Haste Field',        desc: 'Doubles an affected ally\'s movement speed until their next turn.' },
+  temporal_hitch:     { name: 'Temporal Hitch',     desc: 'Delay a resisted effect until end of next turn, reapplied with Disadvantage.' },
+  displacement:       { name: 'Displacement',       desc: 'Push or pull the target up to 15 ft.' },
+  astral_link:        { name: 'Astral Link',         desc: 'Half damage dealt to one linked enemy is also dealt to another within 30 ft.' },
+  prowlers_strike:    { name: "Prowler's Strike",   desc: 'Anima attack deals +1d8 damage.' },
+  ancestral_ward:     { name: 'Ancestral Ward',     desc: 'Anima gains Physical Resistance for one round.' },
+  aggressive_tether:  { name: 'Aggressive Tether',  desc: 'Anima may reposition a hit enemy up to 10 ft.' },
+  symbiotic_healing:  { name: 'Symbiotic Healing',  desc: 'Animist recovers half the HP restored to the Anima.' },
+  blinding_radiance:  { name: 'Blinding Radiance',  desc: 'Blinds enemies within 15 ft. on a failed Reflex Save.' },
+  guardian_link:      { name: 'Guardian Link',      desc: 'Anima intercepts an attack on an adjacent ally as a Reaction.' },
+  ward_of_faith:      { name: 'Ward of Faith',      desc: 'Grants an ally +2 Defense Score until your next turn.' },
+  purify_condition:   { name: 'Purify Condition',   desc: 'Removes one Advanced condition from an ally.' },
+  restore_vitality:   { name: 'Restore Vitality',   desc: 'Restores +2d6 HP and grants Physical Resistance until your next turn.' },
+  smite:              { name: 'Smite',               desc: 'Deals +1d12 Radiant Damage.' },
+  hallowed_ground:    { name: 'Hallowed Ground',    desc: 'Frightens enemies and bolsters ally Defense Scores in the area.' },
+  judgment:           { name: 'Judgment',            desc: 'Marks an enemy for Advantage and +1d6 bonus damage.' },
+  empower_healing:    { name: 'Empower Healing',    desc: 'Restores +1d8 HP and splashes 1d4 to an adjacent ally.' },
+  mass_renewal:       { name: 'Mass Renewal',        desc: 'Extends healing to two additional allies or removes a condition.' },
+  sanctuary:          { name: 'Sanctuary',           desc: 'Grants Immunity to Advanced/Basic conditions for one turn.' },
+  aura_of_protection: { name: 'Aura of Protection', desc: 'Grants +2 Defense Score to nearby allies.' },
+  aura_of_courage:    { name: 'Aura of Courage',    desc: 'Grants Advantage on Saving Throws to nearby allies.' },
+  aura_of_retribution:{ name: 'Aura of Retribution',desc: 'Grants Advantage on next Attack Roll with +2d6 Radiant to nearby allies.' },
+  chained_punishment: { name: 'Chained Punishment', desc: 'Deals half damage to a second target within 10 ft.' },
+  agony:              { name: 'Agony',               desc: 'Inflicts Distracted and +1d6 ongoing damage.' },
+  oblivion:           { name: 'Oblivion',            desc: 'Inflicts Disadvantage on all Saves and −2 Defense Score.' },
+};
+
+let _importQueue = [];
+let _importQueueIdx = 0;
+let _browserSpells = [];
+
+function openSpellLibraryImport() {
+  document.getElementById('spell-library-file-input').click();
+}
+
+function handleSpellLibraryFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      const spells = Array.isArray(data) ? data : [];
+      if (spells.length === 0) { alert('No spells found in this file.'); return; }
+      showSpellBrowserModal(spells);
+    } catch(err) {
+      alert('Could not read the file. Make sure it is a valid Spell Slinger JSON export.');
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function showSpellBrowserModal(spells) {
+  _browserSpells = spells;
+  document.getElementById('spell-import-title').textContent =
+    `Spell Library — ${spells.length} spell${spells.length !== 1 ? 's' : ''}`;
+  document.getElementById('spell-import-btn').disabled = true;
+  document.getElementById('spell-import-btn').textContent = 'Review & Import';
+  document.getElementById('spell-import-count').textContent = '';
+
+  const body = document.getElementById('spell-import-body');
+  body.innerHTML = '<div class="sib-list">' + spells.map((spell, idx) => {
+    const fd = _SPELL_FORM_MAP[spell.formId] || {};
+    const augs = new Set(spell.augs || []);
+    const mindAugs = new Set(spell.mindAugs || []);
+    const locked = new Set(spell.lockedAugs || []);
+    const conds = spell.conditions || {};
+
+    // Header tags
+    const tags = [];
+    if (fd.action) tags.push(fd.action);
+    if (spell.cost) tags.push(`${spell.cost} AP`);
+    if (fd.tag === 'attack') tags.push('Attack Roll');
+    else if (fd.tag === 'save') tags.push('Saving Throw');
+
+    // Spell Form section
+    const formHtml = fd.name ? `
+      <div class="sib-section-title">Spell Form</div>
+      <div class="sib-form-desc"><strong style="font-style:normal;color:var(--text-main);">${esc(fd.name)}</strong> — ${esc(fd.desc || '')}${fd.range ? ` <span style="color:var(--text-label);">(${esc(fd.range)})</span>` : ''}</div>
+      ${spell.importNotes ? `<div class="sib-form-desc" style="margin-top:0.2rem;color:var(--copper);">${esc(spell.importNotes)}</div>` : spell.importDescription ? `<div class="sib-form-desc" style="margin-top:0.2rem;color:var(--copper);">${esc(spell.importDescription)}</div>` : ''}
+    ` : '';
+
+    // Strand Augments section
+    const strandRows = [];
+    for (const [id, aug] of Object.entries(_STRAND_AUGS)) {
+      if (!augs.has(id) || locked.has(id)) continue;
+      let detail = aug.desc;
+      if (id === 'elemental' && conds['elemental']) detail = `Shifts all damage to ${esc(conds['elemental'])} and deals 1d6 additional damage.`;
+      if (id === 'minor_cond'  && conds['minor_cond'])  detail = `Imposes <strong>${esc(conds['minor_cond'])}</strong> (Basic) on a failed save.`;
+      if (id === 'major_cond'  && conds['major_cond'])  detail = `Imposes <strong>${esc(conds['major_cond'])}</strong> (Advanced) on a failed save.`;
+      if (id === 'severe_cond' && conds['severe_cond']) detail = `Imposes <strong>${esc(conds['severe_cond'])}</strong> (Expert) on a failed save.`;
+      strandRows.push(`<div class="sib-aug-row"><strong>${esc(aug.name)}</strong> — ${detail}</div>`);
+    }
+    const strandHtml = strandRows.length ? `
+      <div class="sib-section-title">Strand Augments</div>
+      <div class="sib-aug-list">${strandRows.join('')}</div>
+    ` : '';
+
+    // Class Augments section
+    const classRows = [];
+    for (const [id, aug] of Object.entries(_CLASS_AUGS)) {
+      if (!mindAugs.has(id)) continue;
+      classRows.push(`<div class="sib-aug-row"><strong>${esc(aug.name)}</strong> — ${esc(aug.desc)}</div>`);
+    }
+    const classHtml = classRows.length ? `
+      <div class="sib-section-title">Class Augments</div>
+      <div class="sib-aug-list">${classRows.join('')}</div>
+    ` : '';
+
+    return `<label class="sib-item">
+      <input type="checkbox" class="sib-check" data-idx="${idx}" onchange="sibUpdateCount()">
+      <div class="sib-content">
+        <div class="sib-name">${esc(spell.name)}</div>
+        <div class="sib-tags">${tags.map(t => `<span class="sib-tag">${esc(t)}</span>`).join('')}</div>
+        ${formHtml}${strandHtml}${classHtml}
+      </div>
+    </label>`;
+  }).join('') + '</div>';
+
+  document.getElementById('spell-import-backdrop').classList.add('open');
+}
+
+function sibSpellDesc(spell) {
+  const fd = _SPELL_FORM_MAP[spell.formId] || {};
+  const augs = new Set(spell.augs || []);
+  const mindAugs = new Set(spell.mindAugs || []);
+  const locked = new Set(spell.lockedAugs || []);
+  const conds = spell.conditions || {};
+  const sentences = [];
+
+  // Form description
+  if (fd.name && fd.desc) sentences.push(`${fd.name}: ${fd.desc}`);
+  if (spell.importNotes) sentences.push(spell.importNotes);
+  else if (spell.importDescription) sentences.push(spell.importDescription);
+
+  // Strand augments
+  if (augs.has('destructive') && !locked.has('destructive')) {
+    const elem = augs.has('elemental') ? ` + 1d6 ${conds['elemental'] || 'elemental'}` : '';
+    sentences.push(`Deals 2d6${elem} damage to each affected target.`);
+  } else if (augs.has('elemental') && !locked.has('elemental')) {
+    sentences.push(`Deals 1d6 ${conds['elemental'] || 'elemental'} damage.`);
+  }
+  if (augs.has('restorative') && !locked.has('restorative')) sentences.push('Restores 2d8 HP to each affected ally.');
+  if (augs.has('greater_reach')) sentences.push('Range doubled.');
+  if (augs.has('minor_cond'))  sentences.push(`Imposes ${conds['minor_cond']  || 'a minor condition'} (Basic) on a failed save.`);
+  if (augs.has('major_cond'))  sentences.push(`Imposes ${conds['major_cond']  || 'a major condition'} (Advanced) on a failed save.`);
+  if (augs.has('severe_cond')) sentences.push(`Imposes ${conds['severe_cond'] || 'a severe condition'} (Expert) on a failed save.`);
+
+  // Class augments — use full descriptions from the lookup
+  for (const [id, aug] of Object.entries(_CLASS_AUGS)) {
+    if (mindAugs.has(id)) sentences.push(`${aug.name}: ${aug.desc}`);
+  }
+
+  return sentences.join(' ') || 'No description available.';
+}
+
+function sibBuildSpellFields(spell) {
+  const fd = _SPELL_FORM_MAP[spell.formId] || {};
+  const augs = new Set(spell.augs || []);
+  const mindAugs = new Set(spell.mindAugs || []);
+  const locked = new Set(spell.lockedAugs || []);
+  const conds = spell.conditions || {};
+  const augNames = [];
+  for (const [id, aug] of Object.entries(_STRAND_AUGS)) {
+    if (!augs.has(id) || locked.has(id)) continue;
+    let label = aug.name;
+    if (id === 'elemental' && conds['elemental']) label += ` (${conds['elemental']})`;
+    if (id === 'minor_cond'  && conds['minor_cond'])  label = conds['minor_cond'];
+    if (id === 'major_cond'  && conds['major_cond'])  label = conds['major_cond'];
+    if (id === 'severe_cond' && conds['severe_cond']) label = conds['severe_cond'];
+    augNames.push(label);
+  }
+  for (const [id, aug] of Object.entries(_CLASS_AUGS)) {
+    if (mindAugs.has(id)) augNames.push(aug.name);
+  }
+  return { spellForm: fd.name || '', spellAugments: augNames };
+}
+
+function sibUpdateCount() {
+  const n = document.querySelectorAll('.sib-check:checked').length;
+  const btn = document.getElementById('spell-import-btn');
+  const countEl = document.getElementById('spell-import-count');
+  btn.disabled = n === 0;
+  btn.textContent = n > 0 ? `Review & Import (${n})` : 'Review & Import';
+  countEl.textContent = n === 1 ? '1 selected' : n > 1 ? `${n} selected` : '';
+}
+
+function closeSpellImport() {
+  document.getElementById('spell-import-backdrop').classList.remove('open');
+}
+
+function startImportReview() {
+  const selected = Array.from(document.querySelectorAll('.sib-check:checked'))
+    .map(cb => _browserSpells[parseInt(cb.dataset.idx)]);
+  if (!selected.length) return;
+  closeSpellImport();
+  _importQueue = selected.map(mapSpellToAction);
+  _importQueueIdx = 0;
+  setTimeout(openNextImport, 80);
+}
+
+function openNextImport() {
+  if (_importQueueIdx >= _importQueue.length) {
+    _importQueue = [];
+    _importQueueIdx = 0;
+    document.getElementById('am-skip-btn').style.display = 'none';
+    return;
+  }
+  const row = _importQueue[_importQueueIdx];
+  _amTableId = 'actions';
+  _amEditIdx = null;
+  const total = _importQueue.length;
+  const n = _importQueueIdx + 1;
+  document.getElementById('action-modal-title').textContent =
+    `Import ${n} of ${total} — ${row.name}`;
+  amResetModal();
+  amPopulateModal(row);
+  document.getElementById('am-skip-btn').style.display = '';
+  document.getElementById('action-modal-backdrop').classList.add('open');
+  document.getElementById('am-name').focus();
+}
+
+function skipImportSpell() {
+  document.getElementById('action-modal-backdrop').classList.remove('open');
+  _importQueueIdx++;
+  setTimeout(openNextImport, 80);
+}
+
+function mapSpellToAction(spell) {
+  const fd = _SPELL_FORM_MAP[spell.formId] || {};
+  const augs = new Set(spell.augs || []);
+  const mindAugs = new Set(spell.mindAugs || []);
+  const locked = new Set(spell.lockedAugs || []);
+  const conds = spell.conditions || {};
+
+  const effects = [];
+  if (augs.has('destructive') && !locked.has('destructive')) effects.push('damage');
+  if (augs.has('restorative') && !locked.has('restorative')) effects.push('heal');
+  const condAug = augs.has('severe_cond') ? 'severe_cond'
+                : augs.has('major_cond')  ? 'major_cond'
+                : augs.has('minor_cond')  ? 'minor_cond' : null;
+  if (condAug) effects.push('condition');
+  if (!effects.length || mindAugs.size > 0) effects.push('other');
+
+  // Damage
+  let damageDice = '';
+  let damageType = 'Energy';
+  if (effects.includes('damage')) {
+    damageDice = augs.has('elemental') ? '2d6 + 1d6' : '2d6';
+    if (augs.has('elemental') && conds['elemental']) {
+      const t = conds['elemental'];
+      const map = { fire:'Fire', ice:'Ice', lightning:'Lightning', acid:'Acid', thunder:'Thunder' };
+      damageType = map[t.toLowerCase()] || t;
+    }
+  }
+
+  // Condition
+  let condTier = 'Basic', condName = 'Prone', condApplied = 'Failed save';
+  if (condAug === 'severe_cond') { condTier = 'Expert';   condName = conds['severe_cond'] || 'Stunned'; }
+  else if (condAug === 'major_cond')  { condTier = 'Advanced'; condName = conds['major_cond']  || 'Blinded'; }
+  else if (condAug === 'minor_cond')  { condTier = 'Basic';    condName = conds['minor_cond']  || 'Prone'; }
+
+  // Resolution
+  let resType = 'none', resMod = 'INT', resSave = 'Reflex', resDcType = 'spell';
+  if (fd.tag === 'attack') { resType = 'attack'; resMod = 'INT'; }
+  else if (fd.tag === 'save') { resType = 'save'; resSave = 'Reflex'; resDcType = 'spell'; }
+
+  // Resource cost
+  const resourceCost = spell.cost > 0
+    ? { hasCost: true, amount: spell.cost, type: 'AP' }
+    : { hasCost: false };
+
+  const notes = sibSpellDesc(spell);
+  const { spellForm, spellAugments } = sibBuildSpellFields(spell);
+
+  return {
+    id: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : (Date.now() + Math.random()).toString(36),
+    name: spell.name || 'Unnamed Spell',
+    range: fd.range || '',
+    source: 'spellLibrary',
+    spellForm,
+    spellAugments,
+    actionType: fd.action || 'Action',
+    usageLimit: 'no-limit',
+    resourceCost,
+    effects,
+    damage: { dice: damageDice, damageType, grazeCustom: null },
+    healing: { dice: effects.includes('heal') ? '2d8' : '' },
+    condition: { tier: condTier, name: condName, appliedOn: condApplied },
+    resolution: { type: resType, modifier: resMod, fullHitEffect: '', saveType: resSave, dcType: resDcType, dcManual: 14, failEffect: '', passEffect: '' },
+    trigger: '',
+    duration: 'Instantaneous',
+    notes,
+  };
+}
+
+function renderAllActionTables() {
+  Object.keys(ACTION_TABLE_CONFIGS).forEach(id => renderActionTable(id));
+}
+
+// Wire ability score changes to saving throws + action card recalc
+document.getElementById('ability-grid')?.addEventListener('input', function() {
+  updateSavingThrows();
+  renderAllActionTables();
+});
 
 // Wire spell save stat dropdown
-document.getElementById('spell-save-stat')?.addEventListener('change', updateSavingThrows);
+document.getElementById('spell-save-stat')?.addEventListener('change', function() {
+  updateSavingThrows();
+  renderAllActionTables();
+});
 
 // Ctrl+S to save
 document.addEventListener('keydown', function(e) {
