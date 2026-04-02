@@ -3791,17 +3791,16 @@ async function saveAll() {
     shortRestUsed: localStorage.getItem('aethel-short-rest-used') || '0',
     actionTables: actionTableData,
     noteBoxRows: Array.from({length: 9}, (_, i) => getNoteRows(i)),
-    inventory: inventoryData
+    inventory: inventoryData,
+    proficiencies: profLoad()
   }, null, 2);
 
   if (window.showSaveFilePicker) {
     try {
-      if (!currentFileHandle) {
-        currentFileHandle = await window.showSaveFilePicker({
-          suggestedName: defaultName,
-          types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
-        });
-      }
+      currentFileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultName,
+        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+      });
       const writable = await currentFileHandle.createWritable();
       await writable.write(payload);
       await writable.close();
@@ -3872,6 +3871,10 @@ function loadFromFile(input) {
         parsed.noteBoxRows.forEach((rows, i) => {
           saveNoteRows(i, rows);
         });
+      }
+      if (parsed.proficiencies) {
+        profSave(parsed.proficiencies);
+        profRender();
       }
       if (parsed.inventory) {
         ['armor','shields','weapons','consumables','gear','magicItems'].forEach(k => {
