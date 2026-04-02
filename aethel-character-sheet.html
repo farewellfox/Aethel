@@ -2518,6 +2518,125 @@ textarea.action-col-input {
 .inv-currency-total { font-family: 'Crimson Text', serif; font-size: 0.88rem; font-style: italic; color: var(--text-soft); padding: 0 0.75rem 0.3rem; }
 .inv-currency-note  { font-family: 'Crimson Text', serif; font-size: 0.7rem; font-style: italic; color: var(--text-label); padding: 0 0.75rem 0.6rem; }
 
+/* ── PROFICIENCIES & TRAINING ── */
+.prof-layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem 1.5rem;
+}
+@media (max-width: 700px) {
+  .prof-layout { grid-template-columns: 1fr; }
+}
+.prof-col { display: flex; flex-direction: column; gap: 0.5rem; }
+.prof-col-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--copper-light);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.prof-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-height: 1.6rem;
+  align-items: flex-start;
+}
+.prof-empty {
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-label);
+  line-height: 1.6rem;
+}
+.prof-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  line-height: 1.4;
+}
+.prof-chip-armor  { background: rgba(122,74,24,0.18); border: 1px solid rgba(122,74,24,0.45); color: var(--copper-dark); }
+.prof-chip-weapons{ background: rgba(160,48,48,0.14); border: 1px solid rgba(160,48,48,0.4);  color: var(--crimson-soft); }
+.prof-chip-tools  { background: rgba(30,22,14,0.10);  border: 1px solid rgba(30,22,14,0.28);  color: var(--text-soft); }
+.prof-chip-languages { background: rgba(45,128,128,0.13); border: 1px solid rgba(45,128,128,0.4); color: var(--teal-light); }
+.prof-chip-del {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  line-height: 1;
+  opacity: 0.55;
+  padding: 0 0 0 0.1rem;
+  color: inherit;
+  transition: opacity 0.15s;
+}
+.prof-chip-del:hover { opacity: 1; }
+.prof-tier-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+  margin-left: 0.15rem;
+}
+.prof-add-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.1rem;
+}
+.prof-add-input {
+  flex: 1;
+  background: var(--field-bg);
+  border: none;
+  border-bottom: 1px solid var(--field-border);
+  color: var(--text-main);
+  font-family: 'Crimson Text', serif;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.25rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.prof-add-input:focus { border-bottom-color: var(--copper); }
+.prof-add-input::placeholder { color: rgba(30,22,14,0.38); font-style: italic; }
+.prof-tier-select {
+  background: var(--field-bg);
+  border: none;
+  border-bottom: 1px solid var(--field-border);
+  color: var(--text-main);
+  font-family: 'Crimson Text', serif;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.2rem;
+  outline: none;
+  cursor: pointer;
+  max-width: 110px;
+}
+.prof-tier-select:focus { border-bottom-color: var(--copper); }
+.prof-add-btn {
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(184,115,51,0.15);
+  color: var(--copper-light);
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.prof-add-btn:hover { background: rgba(184,115,51,0.06); }
+
 /* ── PRINT HINT ── */
 .print-hint {
   text-align: center;
@@ -2878,14 +2997,84 @@ textarea.action-col-input {
 
 <!-- ═══════════════════════════════════════════════ PAGE 4: NOTES & LORE -->
 <div class="page" id="page-notes">
+
+  <!-- PROFICIENCIES & TRAINING -->
   <div class="sheet-section">
-    <div class="section-header"><div class="section-title">Notes &amp; Lore</div></div>
+    <div class="section-header">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>Proficiencies &amp; Training</span>
+        <span style="font-size:0.6rem;color:var(--text-label);font-style:italic;font-weight:400;">Armor, weapons, tools, and languages known</span>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="prof-layout">
+
+        <!-- Armor -->
+        <div class="prof-col">
+          <div class="prof-col-label">🛡 Armor</div>
+          <div class="prof-chips" id="prof-chips-armor"></div>
+          <div class="prof-add-row">
+            <input class="prof-add-input" id="prof-input-armor" placeholder="Add armor type…"
+              onkeydown="if(event.key==='Enter'){profAdd('armor')}">
+            <button class="prof-add-btn" onclick="profAdd('armor')">✦ Add</button>
+          </div>
+        </div>
+
+        <!-- Weapons -->
+        <div class="prof-col">
+          <div class="prof-col-label">⚔ Weapons</div>
+          <div class="prof-chips" id="prof-chips-weapons"></div>
+          <div class="prof-add-row">
+            <input class="prof-add-input" id="prof-input-weapons" placeholder="Add weapon type…"
+              onkeydown="if(event.key==='Enter'){profAdd('weapons')}">
+            <button class="prof-add-btn" onclick="profAdd('weapons')">✦ Add</button>
+          </div>
+        </div>
+
+        <!-- Tools -->
+        <div class="prof-col">
+          <div class="prof-col-label">🪛 Tools</div>
+          <div class="prof-chips" id="prof-chips-tools"></div>
+          <div class="prof-add-row">
+            <input class="prof-add-input" id="prof-input-tools" placeholder="Add tool…"
+              onkeydown="if(event.key==='Enter'){profAdd('tools')}">
+            <button class="prof-add-btn" onclick="profAdd('tools')">✦ Add</button>
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="prof-col">
+          <div class="prof-col-label">📜 Languages</div>
+          <div class="prof-chips" id="prof-chips-languages"></div>
+          <div class="prof-add-row">
+            <input class="prof-add-input" id="prof-input-languages" placeholder="Add language…"
+              onkeydown="if(event.key==='Enter'){profAdd('languages')}">
+            <select class="prof-tier-select" id="prof-tier-languages">
+              <option value="">— Fluency —</option>
+              <option value="Native">Native</option>
+              <option value="Fluent">Fluent</option>
+              <option value="Conversational">Conversational</option>
+              <option value="Basic">Basic</option>
+              <option value="Script Only">Script Only</option>
+            </select>
+            <button class="prof-add-btn" onclick="profAdd('languages')">✦ Add</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LORE & NOTES -->
+  <div class="sheet-section">
+    <div class="section-header"><div class="section-title">Lore &amp; Notes</div></div>
     <div class="section-body">
       <div class="notes-grid" id="notes-grid">
         <!-- rendered by JS -->
       </div>
     </div>
   </div>
+
 </div>
 
 <!-- ═══════════════════════════════════════════════ PAGE 3: LEVEL LOG -->
@@ -2999,8 +3188,6 @@ textarea.action-col-input {
     </div>
   </div>
 </div>
-
-<div class="print-hint">Open in browser to use · Data saves to local storage · Share the .html file with your group</div>
 
 <!-- ══ ACTION MODAL ══ -->
 <div class="action-modal-backdrop" id="action-modal-backdrop">
@@ -3883,6 +4070,7 @@ function deleteLevelEntry(lvl) {
   levelEntries.forEach((e, i) => { e.level = i + 1; });
   saveLevelLog();
   renderLevelLog();
+  renderFeaturesTab();
 }
 
 function updateLevelEntry(lvl, field, val) {
@@ -5525,10 +5713,90 @@ function renderFeaturesTab() {
   _updateFeatureSortBtns();
 }
 
+// ── PROFICIENCIES & TRAINING ──
+const PROF_LS_KEY = 'aethel-proficiencies-v1';
+
+function profLoad() {
+  try {
+    const raw = localStorage.getItem(PROF_LS_KEY);
+    const data = raw ? JSON.parse(raw) : {};
+    return {
+      armor:     Array.isArray(data.armor)     ? data.armor     : [],
+      weapons:   Array.isArray(data.weapons)   ? data.weapons   : [],
+      tools:     Array.isArray(data.tools)     ? data.tools     : [],
+      languages: Array.isArray(data.languages) ? data.languages : [],
+    };
+  } catch { return { armor: [], weapons: [], tools: [], languages: [] }; }
+}
+
+function profSave(data) {
+  localStorage.setItem(PROF_LS_KEY, JSON.stringify(data));
+}
+
+function profRender() {
+  const data = profLoad();
+
+  ['armor', 'weapons', 'tools'].forEach(cat => {
+    const wrap = document.getElementById('prof-chips-' + cat);
+    if (!wrap) return;
+    if (data[cat].length === 0) {
+      wrap.innerHTML = '<span class="prof-empty">None recorded</span>';
+      return;
+    }
+    wrap.innerHTML = data[cat].map((name, idx) =>
+      `<span class="prof-chip prof-chip-${cat}">${_escHtml(name)}<button class="prof-chip-del" onclick="profRemove('${cat}',${idx})" title="Remove">✕</button></span>`
+    ).join('');
+  });
+
+  const langWrap = document.getElementById('prof-chips-languages');
+  if (langWrap) {
+    if (data.languages.length === 0) {
+      langWrap.innerHTML = '<span class="prof-empty">None recorded</span>';
+    } else {
+      langWrap.innerHTML = data.languages.map((entry, idx) => {
+        const tierBadge = entry.tier ? `<span class="prof-tier-badge">${_escHtml(entry.tier)}</span>` : '';
+        return `<span class="prof-chip prof-chip-languages">${_escHtml(entry.name)}${tierBadge}<button class="prof-chip-del" onclick="profRemove('languages',${idx})" title="Remove">✕</button></span>`;
+      }).join('');
+    }
+  }
+}
+
+function _escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function profAdd(cat) {
+  const input = document.getElementById('prof-input-' + cat);
+  if (!input) return;
+  const name = input.value.trim();
+  if (!name) return;
+  const data = profLoad();
+  if (cat === 'languages') {
+    const tierSel = document.getElementById('prof-tier-languages');
+    const tier = tierSel ? tierSel.value : '';
+    data.languages.push({ name, tier });
+    if (tierSel) tierSel.value = '';
+  } else {
+    data[cat].push(name);
+  }
+  profSave(data);
+  input.value = '';
+  profRender();
+}
+
+function profRemove(cat, idx) {
+  const data = profLoad();
+  if (!data[cat]) return;
+  data[cat].splice(idx, 1);
+  profSave(data);
+  profRender();
+}
+
 // ── INIT ──
 renderAbilities();
 renderSkills();
 renderNotes();
+profRender();
 loadLevelSummaryData();
 renderLevelLog();
 renderFeaturesTab();
