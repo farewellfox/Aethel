@@ -2646,6 +2646,55 @@ textarea.action-col-input {
   margin-top: 2rem;
   padding-bottom: 2rem;
 }
+
+/* ── MIGRATION BANNER ── */
+.migration-banner {
+  display: none;
+  position: sticky;
+  top: 45px;
+  z-index: 98;
+  background: linear-gradient(to right, #2e1c00, #1e1400);
+  border-bottom: 2px solid var(--copper);
+  padding: 0.55rem 2rem;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.migration-banner.show { display: flex; }
+.migration-banner-icon {
+  font-size: 0.85rem;
+  color: var(--copper-pale);
+  flex-shrink: 0;
+}
+.migration-banner-text {
+  flex: 1;
+  font-size: 0.78rem;
+  color: rgba(240,214,160,0.92);
+  font-style: italic;
+  min-width: 0;
+}
+.migration-banner-text strong {
+  font-style: normal;
+  color: var(--copper-pale);
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+.migration-banner-dismiss {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.4);
+  border-radius: 2px;
+  color: var(--copper-light);
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.migration-banner-dismiss:hover { background: var(--copper); color: var(--ink); border-color: var(--copper); }
 </style>
 </head>
 <body>
@@ -2663,6 +2712,13 @@ textarea.action-col-input {
   <label class="save-btn" style="cursor:pointer;">Load<input type="file" accept=".json" style="display:none;" onchange="loadFromFile(this)"></label>
   <span class="save-msg" id="save-msg">Saved.</span>
 </nav>
+
+<!-- MIGRATION BANNER -->
+<div class="migration-banner" id="migration-banner" role="alert">
+  <span class="migration-banner-icon">✦</span>
+  <span class="migration-banner-text" id="migration-banner-text"></span>
+  <button class="migration-banner-dismiss" onclick="dismissMigrationBanner()">Dismiss</button>
+</div>
 
 <!-- ═══════════════════════════════════════════════ PAGE 1: SHEET -->
 <div class="page active" id="page-sheet">
@@ -2686,7 +2742,7 @@ textarea.action-col-input {
           <div class="identity-row">
             <div class="field-group">
               <label class="field-label">Ancestry</label>
-              <input type="text" class="field-input" id="char-species" placeholder="Human, Elf, Gargan…" data-save="char-species">
+              <input type="text" class="field-input" id="char-ancestry" placeholder="Human, Elf, Gargan…" data-save="char-ancestry">
             </div>
             <div class="field-group">
               <label class="field-label">Alignment</label>
@@ -3845,6 +3901,9 @@ async function saveAll() {
     URL.revokeObjectURL(url);
   }
 
+  localStorage.setItem('aethel-save-version', '0.8.1');
+  dismissMigrationBanner();
+
   const msg = document.getElementById('save-msg');
   msg.classList.add('show');
   setTimeout(() => msg.classList.remove('show'), 2000);
@@ -3857,11 +3916,11 @@ function loadFromFile(input) {
   reader.onload = function(e) {
     try {
       const parsed = JSON.parse(e.target.result);
-      // Version detection: absence of version or "0.7.2" indicates a pre-v0.8.1 save
-      const saveVersion = parsed.version || '0.7.2';
-      const isLegacySave = !parsed.version || parsed.version === '0.7.2';
-      if (isLegacySave) {
-        console.warn(`[Aethel] Loading legacy save (v${saveVersion}). Ability scores and skills use the old v0.7.2 format — manual review recommended.`);
+      // Set version key before loadAll() so migration runs (or skips) correctly
+      if (parsed.version === '0.8.1') {
+        localStorage.setItem('aethel-save-version', '0.8.1');
+      } else {
+        localStorage.removeItem('aethel-save-version'); // force migration to run
       }
       // Support both wrapped format and bare fields object
       const fields = parsed.fields || parsed;
@@ -3933,7 +3992,145 @@ function loadFromFile(input) {
   reader.readAsText(file);
 }
 
+// ── MIGRATION BANNER ──
+function dismissMigrationBanner() {
+  document.getElementById('migration-banner')?.classList.remove('show');
+}
+
+function showMigrationBanner(changes) {
+  const banner = document.getElementById('migration-banner');
+  const text   = document.getElementById('migration-banner-text');
+  if (!banner || !text || changes.length === 0) return;
+  text.innerHTML = `<strong>Save data updated to v0.8.1:</strong> ${changes.join(' · ')}. Review your sheet and save to confirm.`;
+  banner.classList.add('show');
+}
+
+// ── LOCALSTORAGE MIGRATION ──
+function migrateLocalStorage() {
+  const savedVersion = localStorage.getItem('aethel-save-version');
+  if (savedVersion === '0.8.1') return;
+
+  const changes = [];
+
+  // 1. Migrate main fields (ability scores, char-species → char-ancestry)
+  const rawFields = localStorage.getItem(LS_KEY);
+  if (rawFields) {
+    try {
+      const data = JSON.parse(rawFields);
+      let fieldsChanged = false;
+
+      // Ability scores
+      if ('ability-str' in data || 'ability-dex' in data || 'ability-wis' in data || 'ability-cha' in data) {
+        if ('ability-str' in data) { data['ability-fort'] = data['ability-str']; delete data['ability-str']; }
+        if ('ability-dex' in data) { data['ability-ref']  = data['ability-dex']; delete data['ability-dex']; }
+        const wisScore = parseInt(data['ability-wis']) || 0;
+        const chaScore = parseInt(data['ability-cha']) || 0;
+        if (wisScore > 0 || chaScore > 0) data['ability-pres'] = String(Math.max(wisScore, chaScore));
+        delete data['ability-wis'];
+        delete data['ability-cha'];
+        delete data['ability-con'];
+        fieldsChanged = true;
+        changes.push('ability scores remapped');
+      }
+
+      // char-species → char-ancestry
+      if ('char-species' in data) {
+        data['char-ancestry'] = data['char-species'];
+        delete data['char-species'];
+        fieldsChanged = true;
+        changes.push('ancestry field renamed');
+      }
+
+      if (fieldsChanged) localStorage.setItem(LS_KEY, JSON.stringify(data));
+    } catch {}
+  }
+
+  // 2. Migrate skill investments
+  const rawSkillInv = localStorage.getItem('aethel-skill-investments');
+  if (rawSkillInv) {
+    try {
+      const inv = JSON.parse(rawSkillInv);
+      const hasOldSkills = ['Acrobatics','Athletics','Stealth','Thievery','Arcana',
+        'Tactics','Intimidation','Deception','Perception','Insight'].some(k => k in inv);
+
+      if (hasOldSkills) {
+        const pick = (...names) => Math.max(...names.map(n => parseInt(inv[n]) || 0));
+        const newInv = {};
+        const consolidations = [
+          ['Mobility',      pick('Acrobatics', 'Athletics')],
+          ['Subterfuge',    pick('Stealth', 'Thievery', 'Deception')],
+          ['Awareness',     pick('Awareness', 'Perception', 'Insight')],
+          ['Persuasion',    pick('Persuasion', 'Intimidation')],
+          ['Lore',          pick('Lore', 'Arcana', 'History', 'Religion', 'Nature', 'Tactics')],
+          ['Investigation', pick('Investigation')],
+          ['Crafting',      pick('Crafting')],
+          ['Alchemy',       pick('Alchemy')],
+          ['Survival',      pick('Survival')],
+          ['Treat Injury',  pick('Treat Injury')],
+          ['Faith',         pick('Faith')],
+        ];
+        let totalOld = 0, totalNew = 0;
+        consolidations.forEach(([name, pts]) => {
+          if (pts > 0) { newInv[name] = pts; totalNew += pts; }
+        });
+        totalOld = Object.values(inv).reduce((s, v) => s + (parseInt(v) || 0), 0);
+        localStorage.setItem('aethel-skill-investments', JSON.stringify(newInv));
+        skillInvestments = newInv;
+        changes.push(`skills consolidated (${totalOld} pts → ${totalNew} pts across 11 skills)`);
+      }
+    } catch {}
+  }
+
+  // 3. Migrate action tables: RP → SP, modifier/save fields
+  const modMap = { STR: 'FORT', DEX: 'REF', WIS: 'PRES', CHA: 'PRES' };
+  const actionStorageKeys = ['aethel-actions', 'aethel-reactions', 'aethel-bonus', 'aethel-passives'];
+  let rpCount = 0;
+  actionStorageKeys.forEach(key => {
+    const raw = localStorage.getItem(key);
+    if (!raw) return;
+    try {
+      const rows = JSON.parse(raw);
+      let changed = false;
+      rows.forEach(row => {
+        if (row.resourceCost?.type === 'RP') { row.resourceCost.type = 'SP'; changed = true; rpCount++; }
+        if (row.resolution?.modifier && modMap[row.resolution.modifier]) {
+          row.resolution.modifier = modMap[row.resolution.modifier]; changed = true;
+        }
+        if (row.resolution?.modifier === 'None') { /* keep as-is */ }
+      });
+      if (changed) localStorage.setItem(key, JSON.stringify(rows));
+    } catch {}
+  });
+  if (rpCount > 0) changes.push(`RP → SP (${rpCount} action${rpCount !== 1 ? 's' : ''})`);
+
+  // 4. Migrate inventory armor subtypes: DEX mod → REF mod
+  const rawInvData = localStorage.getItem('aethel-inventory');
+  if (rawInvData) {
+    try {
+      const invData = JSON.parse(rawInvData);
+      let armorCount = 0;
+      if (Array.isArray(invData.armor)) {
+        invData.armor.forEach(item => {
+          if (item.subtype === 'DEX mod')   { item.subtype = 'REF mod';  armorCount++; }
+          else if (item.subtype === 'DEX mod +') { item.subtype = 'REF mod +'; armorCount++; }
+        });
+      }
+      if (armorCount > 0) {
+        localStorage.setItem('aethel-inventory', JSON.stringify(invData));
+        changes.push(`armor subtypes updated (${armorCount})`);
+      }
+    } catch {}
+  }
+
+  // Mark migration complete
+  localStorage.setItem('aethel-save-version', '0.8.1');
+
+  if (changes.length > 0) showMigrationBanner(changes);
+}
+
 function loadAll() {
+  migrateLocalStorage();
+
   const raw = localStorage.getItem(LS_KEY);
   if (!raw) return;
   try {
