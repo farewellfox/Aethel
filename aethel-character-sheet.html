@@ -2311,7 +2311,7 @@ textarea.action-col-input {
 .feat-src-class        { color: var(--teal);        border-color: rgba(30,95,95,0.4);     background: rgba(30,95,95,0.07); }
 .feat-src-subclass     { color: var(--teal);        border-color: rgba(45,128,128,0.4);   background: rgba(45,128,128,0.07); }
 .feat-src-background   { color: var(--copper-dark); border-color: rgba(184,115,51,0.4);   background: rgba(184,115,51,0.07); }
-.feat-src-species      { color: var(--crimson-soft);border-color: rgba(160,48,48,0.4);    background: rgba(160,48,48,0.07); }
+.feat-src-ancestry     { color: var(--crimson-soft);border-color: rgba(160,48,48,0.4);    background: rgba(160,48,48,0.07); }
 .feat-src-other        { color: var(--text-soft);   border-color: rgba(30,22,14,0.25);    background: rgba(30,22,14,0.04); }
 .feat-desc-full { display: none; }
 .feat-row.expanded .feat-desc-short { display: none; }
@@ -2685,8 +2685,8 @@ textarea.action-col-input {
           </div>
           <div class="identity-row">
             <div class="field-group">
-              <label class="field-label">Species</label>
-              <input type="text" class="field-input" id="char-species" placeholder="Human, Elf…" data-save="char-species">
+              <label class="field-label">Ancestry</label>
+              <input type="text" class="field-input" id="char-species" placeholder="Human, Elf, Gargan…" data-save="char-species">
             </div>
             <div class="field-group">
               <label class="field-label">Alignment</label>
@@ -2698,7 +2698,7 @@ textarea.action-col-input {
                 <option value="">— Choose Class —</option>
                 <option value="The Mind">The Mind (d6 · AP)</option>
                 <option value="The Body">The Body (d10 · FP)</option>
-                <option value="The Spirit">The Spirit (d8 · RP)</option>
+                <option value="The Spirit">The Spirit (d8 · SP)</option>
               </select>
             </div>
             <div class="field-group">
@@ -2752,7 +2752,10 @@ textarea.action-col-input {
         <div class="cstat-body">
           <div class="cstat-row">
             <span class="cstat-label">Initiative</span>
-            <input type="text" class="cstat-input" id="stat-initiative" placeholder="—" data-save="stat-initiative">
+            <div style="display:flex;align-items:baseline;gap:0.3rem;">
+              <input type="text" class="cstat-input" id="stat-initiative" placeholder="—" data-save="stat-initiative">
+              <span class="cstat-stat-hint">REF mod</span>
+            </div>
           </div>
           <div class="cstat-row">
             <span class="cstat-label">Speed</span>
@@ -2771,8 +2774,7 @@ textarea.action-col-input {
               <div class="cstat-save-val positive" id="spell-save-dc">—</div>
               <select id="spell-save-stat" onchange="updateSavingThrows()" class="cstat-dc-stat-select">
                 <option value="INT">INT mod</option>
-                <option value="WIS">WIS mod</option>
-                <option value="CHA">CHA mod</option>
+                <option value="PRES">PRES mod</option>
               </select>
             </div>
           </div>
@@ -2792,21 +2794,28 @@ textarea.action-col-input {
             <span class="cstat-label">Fortitude</span>
             <div class="cstat-save-right">
               <span class="cstat-save-val" id="save-fort">—</span>
-              <span class="cstat-stat-hint">STR mod</span>
+              <span class="cstat-stat-hint">FORT mod</span>
             </div>
           </div>
           <div class="cstat-row" style="align-items:baseline;">
             <span class="cstat-label">Reflex</span>
             <div class="cstat-save-right">
               <span class="cstat-save-val" id="save-reflex">—</span>
-              <span class="cstat-stat-hint" id="save-reflex-stat">DEX mod</span>
+              <span class="cstat-stat-hint">REF mod</span>
             </div>
           </div>
           <div class="cstat-row" style="align-items:baseline;">
             <span class="cstat-label">Will</span>
             <div class="cstat-save-right">
               <span class="cstat-save-val" id="save-will">—</span>
-              <span class="cstat-stat-hint" id="save-will-stat">WIS mod</span>
+              <span class="cstat-stat-hint">PRES mod</span>
+            </div>
+          </div>
+          <div class="cstat-row" style="align-items:baseline;">
+            <span class="cstat-label">Intellect</span>
+            <div class="cstat-save-right">
+              <span class="cstat-save-val" id="save-intellect">—</span>
+              <span class="cstat-stat-hint">INT mod</span>
             </div>
           </div>
         </div>
@@ -2912,7 +2921,7 @@ textarea.action-col-input {
             </div>
           </div>
           <div style="font-size:0.6rem;color:rgba(240,230,208,0.45);font-style:italic;padding-top:0.25rem;">
-            Cap per skill: 2 × level (<span id="skill-cap-display">—</span> pts max)
+            Cap per skill: level + 1 (<span id="skill-cap-display">—</span> pts max)
           </div>
         </div>
         <div class="section-body">
@@ -2998,7 +3007,7 @@ textarea.action-col-input {
             <option value="Class">Class</option>
             <option value="Subclass">Subclass</option>
             <option value="Background">Background</option>
-            <option value="Species">Species</option>
+            <option value="Ancestry">Ancestry</option>
             <option value="Other">Other</option>
           </select>
         </div>
@@ -3161,10 +3170,10 @@ textarea.action-col-input {
       <div class="cs-block">
         <div class="cs-title">Defense Score</div>
         <div class="cs-body">
-          Reduces incoming damage based on armor, DEX, and special abilities.
+          Reduces incoming damage based on armor, REF, and special abilities.
           <div class="cs-table" style="margin-top:0.5rem;">
-            <div class="cs-row"><div class="cs-tag ok">Light / Medium</div><div>DEX modifier + Armor Value</div></div>
-            <div class="cs-row"><div class="cs-tag">Heavy</div><div>Armor Value only (no DEX)</div></div>
+            <div class="cs-row"><div class="cs-tag ok">Light / Medium</div><div>REF modifier + Armor Value</div></div>
+            <div class="cs-row"><div class="cs-tag">Heavy</div><div>Armor Value only (no REF)</div></div>
           </div>
         </div>
       </div>
@@ -3270,7 +3279,7 @@ textarea.action-col-input {
             <select class="am-select" id="am-cost-type-select" onchange="amToggleCostOther()">
               <option value="AP">AP</option>
               <option value="FP">FP</option>
-              <option value="RP">RP</option>
+              <option value="SP">SP</option>
               <option value="Other">Other…</option>
             </select>
           </div>
@@ -3384,11 +3393,10 @@ textarea.action-col-input {
           <div class="am-group">
             <label class="am-label">Modifier</label>
             <select class="am-select" id="am-atk-mod">
-              <option value="STR">STR</option>
-              <option value="DEX">DEX</option>
+              <option value="FORT">FORT</option>
+              <option value="REF">REF</option>
               <option value="INT">INT</option>
-              <option value="WIS">WIS</option>
-              <option value="CHA">CHA</option>
+              <option value="PRES">PRES</option>
               <option value="None">None</option>
             </select>
           </div>
@@ -3415,6 +3423,7 @@ textarea.action-col-input {
               <option value="Fortitude">Fortitude</option>
               <option value="Reflex">Reflex</option>
               <option value="Will">Will</option>
+              <option value="Intellect">Intellect</option>
             </select>
           </div>
           <div class="am-group">
@@ -3500,11 +3509,10 @@ textarea.action-col-input {
 
 <script>
 const ABILITIES = [
-  { abbr: 'STR', name: 'Strength' },
-  { abbr: 'DEX', name: 'Dexterity' },
-  { abbr: 'INT', name: 'Intelligence' },
-  { abbr: 'WIS', name: 'Wisdom' },
-  { abbr: 'CHA', name: 'Charisma' },
+  { abbr: 'FORT', name: 'Fortitude' },
+  { abbr: 'REF',  name: 'Reflex' },
+  { abbr: 'INT',  name: 'Intelligence' },
+  { abbr: 'PRES', name: 'Presence' },
 ];
 
 // Original order preserved here for migrating old numeric-keyed save data
@@ -3515,22 +3523,17 @@ const OLD_SKILL_ORDER = [
 ];
 
 const SKILLS = [
-  { name: 'Acrobatics',   assoc: 'DEX' },
-  { name: 'Alchemy',      assoc: 'INT' },
-  { name: 'Arcana',       assoc: 'INT' },
-  { name: 'Athletics',    assoc: 'STR' },
-  { name: 'Awareness',    assoc: 'WIS' },
-  { name: 'Crafting',     assoc: 'INT / DEX' },
-  { name: 'Faith',        assoc: 'WIS / CHA' },
-  { name: 'Intimidation', assoc: 'STR / CHA' },
-  { name: 'Investigation',assoc: 'INT' },
-  { name: 'Lore',         assoc: 'INT' },
-  { name: 'Persuasion',   assoc: 'CHA' },
-  { name: 'Stealth',      assoc: 'DEX' },
-  { name: 'Survival',     assoc: 'WIS' },
-  { name: 'Tactics',      assoc: 'INT' },
-  { name: 'Thievery',     assoc: 'DEX' },
-  { name: 'Treat Injury', assoc: 'WIS' },
+  { name: 'Mobility',      assoc: 'REF' },
+  { name: 'Subterfuge',    assoc: 'REF' },
+  { name: 'Lore',          assoc: 'INT' },
+  { name: 'Investigation', assoc: 'INT' },
+  { name: 'Crafting',      assoc: 'INT' },
+  { name: 'Alchemy',       assoc: 'INT' },
+  { name: 'Awareness',     assoc: 'PRES' },
+  { name: 'Survival',      assoc: 'FORT' },
+  { name: 'Treat Injury',  assoc: 'FORT' },
+  { name: 'Faith',         assoc: 'PRES' },
+  { name: 'Persuasion',    assoc: 'PRES' },
 ];
 
 const NOTE_DEFAULTS = [
@@ -3649,7 +3652,7 @@ function getAbilityMod(abbr) {
 
 function updateSkillTotals() {
   const level = getCharLevel();
-  const cap = level * 2;
+  const cap = level + 1;
   const available = totalSkillPointsAvailable();
   let spent = 0;
 
@@ -3801,6 +3804,7 @@ async function saveAll() {
   const charName = document.getElementById('char-name')?.value || 'character';
   const defaultName = `${charName.replace(/\s+/g, '-').toLowerCase() || 'aethel-sheet'}.json`;
   const payload = JSON.stringify({
+    version: '0.8.1',
     fields: data,
     levelLog: levelEntries,
     skillInvestments: skillInvestments,
@@ -3853,6 +3857,12 @@ function loadFromFile(input) {
   reader.onload = function(e) {
     try {
       const parsed = JSON.parse(e.target.result);
+      // Version detection: absence of version or "0.7.2" indicates a pre-v0.8.1 save
+      const saveVersion = parsed.version || '0.7.2';
+      const isLegacySave = !parsed.version || parsed.version === '0.7.2';
+      if (isLegacySave) {
+        console.warn(`[Aethel] Loading legacy save (v${saveVersion}). Ability scores and skills use the old v0.7.2 format — manual review recommended.`);
+      }
       // Support both wrapped format and bare fields object
       const fields = parsed.fields || parsed;
       localStorage.setItem(LS_KEY, JSON.stringify(fields));
@@ -3940,15 +3950,10 @@ function loadAll() {
 
 // ── SAVING THROWS & SPELL SAVE DC ──
 function updateSavingThrows() {
-  const strMod = getAbilityMod('STR');
-  const dexMod = getAbilityMod('DEX');
-  const intMod = getAbilityMod('INT');
-  const wisMod = getAbilityMod('WIS');
-  const chaMod = getAbilityMod('CHA');
-
-  const fortMod  = strMod;
-  const reflexMod = Math.max(dexMod, intMod);
-  const willMod   = Math.max(wisMod, chaMod);
+  const fortMod    = getAbilityMod('FORT');
+  const reflexMod  = getAbilityMod('REF');
+  const willMod    = getAbilityMod('PRES');
+  const intMod     = getAbilityMod('INT');
 
   function applyMod(id, mod) {
     const el = document.getElementById(id);
@@ -3960,12 +3965,7 @@ function updateSavingThrows() {
   applyMod('save-fort', fortMod);
   applyMod('save-reflex', reflexMod);
   applyMod('save-will', willMod);
-
-  // Label which stat won for reflex/will
-  const refEl = document.getElementById('save-reflex-stat');
-  if (refEl) refEl.textContent = dexMod >= intMod ? 'DEX mod' : 'INT mod';
-  const wilEl = document.getElementById('save-will-stat');
-  if (wilEl) wilEl.textContent = wisMod >= chaMod ? 'WIS mod' : 'CHA mod';
+  applyMod('save-intellect', intMod);
 
   // Spell Save DC: 8 + ceil(level/2) + governing mod
   const level = getCharLevel();
@@ -3991,13 +3991,13 @@ function getClassResourceInfo() {
     return { score: getAbilityScore('INT'), mod: getAbilityMod('INT'), label: 'AP', stat: 'INT' };
   }
   if (cls.includes('body')) {
-    return { score: getAbilityScore('STR'), mod: getAbilityMod('STR'), label: 'FP', stat: 'STR' };
+    const fortScore = getAbilityScore('FORT'), refScore = getAbilityScore('REF');
+    const fort = getAbilityMod('FORT'), ref = getAbilityMod('REF');
+    const useFort = fortScore >= refScore;
+    return { score: useFort ? fortScore : refScore, mod: useFort ? fort : ref, label: 'FP', stat: useFort ? 'FORT' : 'REF' };
   }
   if (cls.includes('spirit')) {
-    const wisScore = getAbilityScore('WIS'), chaScore = getAbilityScore('CHA');
-    const wis = getAbilityMod('WIS'), cha = getAbilityMod('CHA');
-    const useWis = wisScore >= chaScore;
-    return { score: useWis ? wisScore : chaScore, mod: useWis ? wis : cha, label: 'RP', stat: useWis ? 'WIS' : 'CHA' };
+    return { score: getAbilityScore('PRES'), mod: getAbilityMod('PRES'), label: 'SP', stat: 'PRES' };
   }
   return null;
 }
@@ -4072,7 +4072,7 @@ function getClassHitDie() {
 
 function levelPtsForEntry(lvl) {
   const intMod = getIntMod();
-  if (lvl === 1) return Math.max(2, 4 + intMod);
+  if (lvl === 1) return Math.max(2, 2 + intMod);
   return Math.max(1, intMod);
 }
 
@@ -4172,8 +4172,8 @@ function renderLevelLog() {
     const resTitle = res ? (isLvl1 ? `${res.stat} score` : `${res.stat} modifier`) : '';
     const resSummary = res ? ` · ${resDisplay} ${res.stat}` : '';
     const hpPlaceholder = isLvl1
-      ? (die ? `STR + ${die} (max)` : 'STR + hit die max')
-      : (die ? `STR mod + d${die}` : 'STR mod + hit die');
+      ? (die ? `FORT + ${die} (max)` : 'FORT + hit die max')
+      : (die ? `FORT mod + d${die}` : 'FORT mod + hit die');
 
     const el = document.createElement('div');
     el.className = 'level-entry';
@@ -4191,7 +4191,7 @@ function renderLevelLog() {
 
     if (!entry.features) entry.features = [];
     const structFeatHtml = entry.features.map((f, idx) => {
-      const srcOpts = ['Class','Subclass','Background','Species','Other']
+      const srcOpts = ['Class','Subclass','Background','Ancestry','Other']
         .map(s => `<option value="${s}"${f.source===s?' selected':''}>${s}</option>`).join('');
       return `<div class="feat-entry-row">
         <div class="feat-entry-fields">
@@ -4209,7 +4209,7 @@ function renderLevelLog() {
       <div class="level-entry-header" onclick="toggleLevelCollapse(${lvl})">
         <div style="display:flex;flex-direction:column;gap:0.1rem;">
           <div class="level-entry-title">Level ${lvl}</div>
-          <div class="level-entry-summary">${pts} skill pt${pts !== 1 ? 's' : ''} · ${isLvl1 ? 'STR + ' + dieLabel + ' max HP' : dieLabel + ' HP'}${resSummary}</div>
+          <div class="level-entry-summary">${pts} skill pt${pts !== 1 ? 's' : ''} · ${isLvl1 ? 'FORT + ' + dieLabel + ' max HP' : dieLabel + ' HP'}${resSummary}</div>
         </div>
         <div style="display:flex;align-items:center;gap:0.75rem;">
           <button onclick="event.stopPropagation();deleteLevelEntry(${lvl})"
@@ -4234,7 +4234,7 @@ function renderLevelLog() {
           </div>
           <div class="level-stat-row">
             <span class="level-stat-label">SP Gained</span>
-            <span class="level-resource-val" title="${isLvl1 ? '4 + INT mod (min 2)' : 'INT mod (min 1)'}">${pts}</span>
+            <span class="level-resource-val" title="${isLvl1 ? '2 + INT mod (min 2)' : 'INT mod (min 1)'}">${pts}</span>
           </div>
           <div>
             <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Features</span>
@@ -4354,7 +4354,7 @@ function renderLevelSummary() {
   const granted = totalSkillPointsGranted();
   const available = earned + granted;
   const level = getCharLevel();
-  const cap = level * 2;
+  const cap = level + 1;
   const spent = SKILLS.reduce((sum, sk) => sum + (parseInt(skillInvestments[sk.name]) || 0), 0);
   const remaining = available - spent;
 
@@ -4459,7 +4459,7 @@ function renderLevelSummary() {
         <div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.25rem;">
             <div class="summary-section-title" style="margin-bottom:0;">Skill Investment</div>
-            <div id="summary-cap-label" style="font-size:0.62rem;color:var(--text-label);font-style:italic;">Cap per skill: ${cap} (2 × level ${level || '?'})</div>
+            <div id="summary-cap-label" style="font-size:0.62rem;color:var(--text-label);font-style:italic;">Cap per skill: ${cap} (level ${level || '?'} + 1)</div>
           </div>
           <div class="summary-skills-grid">${skillGridHtml}</div>
         </div>
@@ -4476,7 +4476,7 @@ function updateSummaryPanel() {
   const granted = totalSkillPointsGranted();
   const available = earned + granted;
   const level = getCharLevel();
-  const cap = level * 2;
+  const cap = level + 1;
   const spent = SKILLS.reduce((sum, sk) => sum + (parseInt(skillInvestments[sk.name]) || 0), 0);
   const remaining = available - spent;
 
@@ -4496,7 +4496,7 @@ function updateSummaryPanel() {
   set('summary-remaining', remaining >= 0 ? remaining : `−${Math.abs(remaining)}`, `budget-num ${remaining < 0 ? 'warn' : 'ok'}`);
 
   const capLabel = document.getElementById('summary-cap-label');
-  if (capLabel) capLabel.textContent = `Cap per skill: ${cap} (2 × level ${level || '?'})`;
+  if (capLabel) capLabel.textContent = `Cap per skill: ${cap} (level ${level || '?'} + 1)`;
 
   SKILLS.forEach(sk => {
     const safeId = sk.name.replace(/[^a-z0-9]/gi, '-');
@@ -4548,7 +4548,7 @@ function amMigrateRow(row, defaultType) {
     damage: { dice: '', damageType: 'Physical', grazeCustom: null },
     healing: { dice: '' },
     condition: { tier: 'Basic', name: 'Deafened', appliedOn: 'Hit' },
-    resolution: { type: 'none', modifier: 'STR', fullHitEffect: '', saveType: 'Fortitude', dcType: 'spell', dcManual: 14, failEffect: '', passEffect: '' },
+    resolution: { type: 'none', modifier: 'FORT', fullHitEffect: '', saveType: 'Fortitude', dcType: 'spell', dcManual: 14, failEffect: '', passEffect: '' },
     range: '',
     source: '',
     spellForm: '',
@@ -4769,7 +4769,7 @@ function amResetModal() {
 
   document.getElementById('am-resolution').value = 'attack';
   amToggleResolution();
-  document.getElementById('am-atk-mod').value = 'STR';
+  document.getElementById('am-atk-mod').value = 'FORT';
   document.getElementById('am-full-hit-toggle').value = 'no';
   amShow('am-full-hit-wrap', false);
   document.getElementById('am-full-hit-effect').value = '';
@@ -4800,7 +4800,7 @@ function amPopulateModal(row) {
   if (hasCost) {
     document.getElementById('am-cost-amount').value = row.resourceCost.amount || '';
     const t = row.resourceCost.type || 'AP';
-    if (['AP','FP','RP'].includes(t)) {
+    if (['AP','FP','SP'].includes(t)) {
       document.getElementById('am-cost-type-select').value = t;
     } else {
       document.getElementById('am-cost-type-select').value = 'Other';
@@ -4838,7 +4838,7 @@ function amPopulateModal(row) {
   document.getElementById('am-resolution').value = row.resolution?.type || 'none';
   amToggleResolution();
   if (row.resolution?.type === 'attack') {
-    document.getElementById('am-atk-mod').value = row.resolution.modifier || 'STR';
+    document.getElementById('am-atk-mod').value = row.resolution.modifier || 'FORT';
     if (row.resolution.fullHitEffect) {
       document.getElementById('am-full-hit-toggle').value = 'yes';
       amShow('am-full-hit-wrap', true);
@@ -5110,7 +5110,7 @@ function quickApply(stat, dir) {
 
 function doShortRest() {
   if (shortRestUsed) return;
-  if (!confirm('Take a short rest?\nYou will recover ½ max HP and ½ max RP.')) return;
+  if (!confirm('Take a short rest?\nYou will recover ½ max HP and ½ max Resource.')) return;
   const hpCur = document.getElementById('stat-hp-cur');
   const hpMax = document.getElementById('stat-hp-max');
   const rpCur = document.getElementById('stat-rp-cur');
@@ -5131,7 +5131,7 @@ function doShortRest() {
 }
 
 function doLongRest() {
-  if (!confirm('Take a long rest?\nThis will restore all HP and RP, and reset your short rest.')) return;
+  if (!confirm('Take a long rest?\nThis will restore all HP and Resources, and reset your short rest.')) return;
   const hpCur = document.getElementById('stat-hp-cur');
   const hpMax = document.getElementById('stat-hp-max');
   const rpCur = document.getElementById('stat-rp-cur');
@@ -5189,17 +5189,17 @@ function toggleInvSection(sec) {
 
 // ── Suggested Defense ──
 function getSuggestedDefense() {
-  const dex = getAbilityMod('DEX');
+  const ref = getAbilityMod('REF');
   const arm = inventoryData.armor.find(a => a.equipped);
   const shd = inventoryData.shields.find(s => s.equipped);
   let val = 0, parts = [];
-  if (!arm || arm.subtype === 'DEX mod') {
-    val = dex;
-    parts.push(`DEX mod (${dex})`);
-  } else if (arm.subtype === 'DEX mod +') {
+  if (!arm || arm.subtype === 'REF mod') {
+    val = ref;
+    parts.push(`REF mod (${ref})`);
+  } else if (arm.subtype === 'REF mod +') {
     const fv = parseInt(arm.formulaValue) || 0;
-    val = dex + fv;
-    parts.push(`DEX mod (${dex}) + ${escHtml(arm.name || 'Armor')} (+${fv})`);
+    val = ref + fv;
+    parts.push(`REF mod (${ref}) + ${escHtml(arm.name || 'Armor')} (+${fv})`);
   } else {
     const fv = parseInt(arm.formulaValue) || 0;
     val = fv;
@@ -5263,8 +5263,10 @@ function _invArmorSubHtml() {
 }
 
 function _invArmorRow(item) {
-  const sub = item.subtype === 'DEX mod' ? 'DEX mod'
-    : item.subtype === 'DEX mod +' ? `DEX mod + ${item.formulaValue || 0}`
+  const sub = item.subtype === 'REF mod' ? 'REF mod'
+    : item.subtype === 'REF mod +' ? `REF mod + ${item.formulaValue || 0}`
+    : item.subtype === 'DEX mod' ? 'REF mod'
+    : item.subtype === 'DEX mod +' ? `REF mod + ${item.formulaValue || 0}`
     : `Flat ${item.formulaValue || 0}`;
   const meta = [sub, item.featReq && `Feat: ${item.featReq}`, item.stealthPenalty && `Stealth: ${item.stealthPenalty}`].filter(Boolean).join(' · ');
   return `<div class="inv-item-row${item.equipped ? ' equipped' : ''}">
@@ -5282,9 +5284,10 @@ function _invArmorRow(item) {
 
 function _invArmorForm(item) {
   const id = item?.id || '__new__armor';
-  const sub = item?.subtype || 'DEX mod';
-  const subtypeOpts = ['DEX mod','DEX mod +','Flat'].map(s => `<option value="${s}"${sub===s?' selected':''}>${s}</option>`).join('');
-  const fvHide = sub === 'DEX mod' ? ' style="display:none;"' : '';
+  const rawSub = item?.subtype || 'REF mod';
+  const sub = rawSub === 'DEX mod' ? 'REF mod' : rawSub === 'DEX mod +' ? 'REF mod +' : rawSub;
+  const subtypeOpts = ['REF mod','REF mod +','Flat'].map(s => `<option value="${s}"${sub===s?' selected':''}>${s}</option>`).join('');
+  const fvHide = sub === 'REF mod' ? ' style="display:none;"' : '';
   return `<div class="inv-edit-form">
     <div class="inv-edit-grid cols3">
       <div class="inv-edit-group"><div class="inv-edit-label">Name</div><input class="inv-edit-input" id="ief-name-${id}" value="${escHtml(item?.name||'')}"></div>
@@ -5305,7 +5308,7 @@ function _invArmorForm(item) {
 function _invArmorSubChange(id) {
   const sub = document.getElementById(`ief-sub-${id}`)?.value;
   const g = document.getElementById(`ief-fvg-${id}`);
-  if (g) g.style.display = sub === 'DEX mod' ? 'none' : '';
+  if (g) g.style.display = sub === 'REF mod' ? 'none' : '';
 }
 
 function _invShieldsSubHtml() {
@@ -5548,7 +5551,7 @@ function _rf(id) { return document.getElementById(id)?.value ?? ''; }
 
 function _confirmArmor(formId) {
   const isNew = formId === '__new__armor';
-  const item = { name: _rf(`ief-name-${formId}`), subtype: _rf(`ief-sub-${formId}`) || 'DEX mod',
+  const item = { name: _rf(`ief-name-${formId}`), subtype: _rf(`ief-sub-${formId}`) || 'REF mod',
     formulaValue: _rf(`ief-fv-${formId}`), featReq: _rf(`ief-feat-${formId}`), stealthPenalty: _rf(`ief-ste-${formId}`) };
   if (isNew) inventoryData.armor.push({ id: _invId(), ...item, equipped: false });
   else { const e = inventoryData.armor.find(x => x.id === formId); if (e) Object.assign(e, item); }
@@ -6200,7 +6203,7 @@ document.getElementById('char-class')?.addEventListener('change', function() {
   if (label) {
     if (val.includes('mind')) label.textContent = 'AP — Arcane Points';
     else if (val.includes('body')) label.textContent = 'FP — Feat Points';
-    else if (val.includes('spirit')) label.textContent = 'RP — Resolve Points';
+    else if (val.includes('spirit')) label.textContent = 'SP — Spirit Points';
     else label.textContent = 'Resource Points';
   }
   renderLevelLog();
