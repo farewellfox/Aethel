@@ -1258,7 +1258,18 @@ textarea.action-col-input {
 }
 .action-card:last-child { border-bottom: none; }
 .action-card:hover { background: rgba(184,115,51,0.04); }
-.action-card-header { display: flex; align-items: flex-start; gap: 0.4rem; flex-wrap: wrap; }
+.action-card-header { display: flex; align-items: center; gap: 0.4rem; flex-wrap: nowrap; cursor: pointer; user-select: none; }
+.action-card-chevron {
+  font-size: 0.5rem;
+  color: var(--text-label);
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+  line-height: 1;
+}
+.action-card.expanded .action-card-chevron { transform: rotate(90deg); }
+.action-card-collapse { display: none; }
+.action-card.expanded .action-card-collapse { display: block; }
 .action-card-name {
   font-family: 'Cinzel', serif;
   font-size: 0.82rem;
@@ -2807,18 +2818,12 @@ textarea.action-col-input {
         <div class="cstat-panel-header">Offense</div>
         <div class="cstat-body">
           <div class="cstat-row">
-            <span class="cstat-label">Initiative</span>
-            <div style="display:flex;align-items:baseline;gap:0.3rem;">
-              <input type="text" class="cstat-input" id="stat-initiative" placeholder="—" data-save="stat-initiative">
-              <span class="cstat-stat-hint">REF mod</span>
-            </div>
+            <span class="cstat-label">Initiative <span class="cstat-stat-hint">(REF)</span></span>
+            <input type="text" class="cstat-input" id="stat-initiative" placeholder="—" data-save="stat-initiative">
           </div>
           <div class="cstat-row">
-            <span class="cstat-label">Speed</span>
-            <div style="display:flex;align-items:baseline;gap:0.2rem;">
-              <input type="text" class="cstat-input" id="stat-speed" placeholder="30" data-save="stat-speed">
-              <span class="cstat-unit">ft</span>
-            </div>
+            <span class="cstat-label">Speed <span class="cstat-stat-hint">(ft)</span></span>
+            <input type="text" class="cstat-input" id="stat-speed" placeholder="30" data-save="stat-speed">
           </div>
           <div class="cstat-divider"></div>
           <div class="cstat-row" style="align-items:flex-start;">
@@ -2847,32 +2852,20 @@ textarea.action-col-input {
           </div>
           <div class="cstat-saves-label">Saving Throws</div>
           <div class="cstat-row" style="align-items:baseline;">
-            <span class="cstat-label">Fortitude</span>
-            <div class="cstat-save-right">
-              <span class="cstat-save-val" id="save-fort">—</span>
-              <span class="cstat-stat-hint">FORT mod</span>
-            </div>
+            <span class="cstat-label">Fortitude <span class="cstat-stat-hint">(FORT)</span></span>
+            <span class="cstat-save-val" id="save-fort">—</span>
           </div>
           <div class="cstat-row" style="align-items:baseline;">
-            <span class="cstat-label">Reflex</span>
-            <div class="cstat-save-right">
-              <span class="cstat-save-val" id="save-reflex">—</span>
-              <span class="cstat-stat-hint">REF mod</span>
-            </div>
+            <span class="cstat-label">Reflex <span class="cstat-stat-hint">(REF)</span></span>
+            <span class="cstat-save-val" id="save-reflex">—</span>
           </div>
           <div class="cstat-row" style="align-items:baseline;">
-            <span class="cstat-label">Will</span>
-            <div class="cstat-save-right">
-              <span class="cstat-save-val" id="save-will">—</span>
-              <span class="cstat-stat-hint">PRES mod</span>
-            </div>
+            <span class="cstat-label">Will <span class="cstat-stat-hint">(PRES)</span></span>
+            <span class="cstat-save-val" id="save-will">—</span>
           </div>
           <div class="cstat-row" style="align-items:baseline;">
-            <span class="cstat-label">Intellect</span>
-            <div class="cstat-save-right">
-              <span class="cstat-save-val" id="save-intellect">—</span>
-              <span class="cstat-stat-hint">INT mod</span>
-            </div>
+            <span class="cstat-label">Intellect <span class="cstat-stat-hint">(INT)</span></span>
+            <span class="cstat-save-val" id="save-intellect">—</span>
           </div>
         </div>
       </div>
@@ -3579,15 +3572,15 @@ const OLD_SKILL_ORDER = [
 ];
 
 const SKILLS = [
-  { name: 'Mobility',      assoc: 'REF' },
+  { name: 'Mobility',      assoc: 'FORT / REF' },
   { name: 'Subterfuge',    assoc: 'REF' },
   { name: 'Lore',          assoc: 'INT' },
   { name: 'Investigation', assoc: 'INT' },
-  { name: 'Crafting',      assoc: 'INT' },
-  { name: 'Alchemy',       assoc: 'INT' },
+  { name: 'Crafting',      assoc: 'INT / REF' },
+  { name: 'Alchemy',       assoc: 'INT / PRES' },
   { name: 'Awareness',     assoc: 'PRES' },
-  { name: 'Survival',      assoc: 'FORT' },
-  { name: 'Treat Injury',  assoc: 'FORT' },
+  { name: 'Survival',      assoc: 'INT / PRES' },
+  { name: 'Treat Injury',  assoc: 'INT / PRES' },
   { name: 'Faith',         assoc: 'PRES' },
   { name: 'Persuasion',    assoc: 'PRES' },
 ];
@@ -3688,7 +3681,7 @@ function renderSkills() {
     row.innerHTML = `
       <div class="skill-name-wrap">
         <span class="skill-name">${sk.name}</span>
-        <span class="skill-assoc">${sk.assoc}</span>
+        <span class="skill-assoc">${sk.assoc.split(' / ').map((a,j) => `<span id="skill-assoc-${i}-${j}">${a}</span>`).join(' / ')}</span>
       </div>
       <div class="skill-pts-computed" id="skill-pts-${i}">—</div>
       <div class="skill-total" id="skill-total-${i}">—</div>
@@ -3725,7 +3718,12 @@ function updateSkillTotals() {
     }
     spent += pts;
     const abbrs = sk.assoc.split(' / ').map(s => s.trim());
-    const mod = Math.max(...abbrs.map(a => getAbilityMod(a)));
+    const mods = abbrs.map(a => getAbilityMod(a));
+    const mod = Math.max(...mods);
+    abbrs.forEach((_, j) => {
+      const span = document.getElementById(`skill-assoc-${i}-${j}`);
+      if (span) span.style.fontWeight = (abbrs.length > 1 && mods[j] === mod) ? 'bold' : '';
+    });
     const total = pts + mod;
     totalEl.textContent = pts === 0 && mod === 0 ? '—' : (total >= 0 ? `+${total}` : `${total}`);
     if (warnEl) warnEl.classList.toggle('visible', pts > cap);
@@ -4772,6 +4770,19 @@ function saveActionTable(tableId) {
 
 // ── UNIFIED ACTIONS SECTION ──
 let _activeActionFilter = 'All';
+const _expandedCards = new Set();
+
+function toggleActionCard(cardId) {
+  const el = document.getElementById(cardId);
+  if (!el) return;
+  if (_expandedCards.has(cardId)) {
+    _expandedCards.delete(cardId);
+    el.classList.remove('expanded');
+  } else {
+    _expandedCards.add(cardId);
+    el.classList.add('expanded');
+  }
+}
 
 function setActionFilter(type) {
   _activeActionFilter = type;
@@ -4846,17 +4857,22 @@ function renderActionCardHtml(row, tableId, idx) {
   }
 
   const notesHtml = row.notes ? `<div class="action-card-notes">${esc(row.notes).replace(/\n/g,'<br>')}</div>` : '';
+  const cardId = `action-card-${tableId}-${idx}`;
+  const isExpanded = _expandedCards.has(cardId);
 
-  return `<div class="action-card">
-    <div class="action-card-header">
+  return `<div class="action-card${isExpanded ? ' expanded' : ''}" id="${cardId}">
+    <div class="action-card-header" onclick="toggleActionCard('${cardId}')">
       <div class="action-card-name">${esc(row.name || '(Unnamed)')}</div>
       ${badges.join('')}
+      <span class="action-card-chevron">▶</span>
     </div>
-    ${stats.length ? `<div class="action-card-body">${stats.join('')}</div>` : ''}
-    ${notesHtml}
-    <div class="action-card-actions">
-      <button class="action-card-btn" onclick="openActionModal('${tableId}',${idx})">Edit</button>
-      <button class="action-card-btn del" onclick="deleteActionCard('${tableId}',${idx})">Delete</button>
+    <div class="action-card-collapse">
+      ${stats.length ? `<div class="action-card-body">${stats.join('')}</div>` : ''}
+      ${notesHtml}
+      <div class="action-card-actions">
+        <button class="action-card-btn" onclick="openActionModal('${tableId}',${idx})">Edit</button>
+        <button class="action-card-btn del" onclick="deleteActionCard('${tableId}',${idx})">Delete</button>
+      </div>
     </div>
   </div>`;
 }
