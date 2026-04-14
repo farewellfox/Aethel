@@ -715,6 +715,23 @@ textarea.field-input:focus { border-color: var(--copper); }
   .level-entry-body { grid-template-columns: 1fr; }
 }
 
+.feat-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0.3rem;
+}
+.feat-section-header:hover .level-stat-label { color: var(--copper-light); }
+.feat-section-chevron {
+  color: var(--copper);
+  font-size: 0.6rem;
+  transition: transform 0.2s;
+}
+.feat-section.collapsed .feat-section-chevron { transform: rotate(-90deg); }
+.feat-section.collapsed .feat-section-body { display: none; }
+
 .level-stat-row {
   display: flex;
   align-items: center;
@@ -4316,6 +4333,7 @@ let levelEntries = JSON.parse(localStorage.getItem('aethel-level-log') || '[]');
 let skillInvestments = {};
 let skillGrants = [];
 let _grantFormVisible = false;
+const collapsedFeatureLevels = new Set();
 
 function loadLevelSummaryData() {
   try {
@@ -4432,6 +4450,15 @@ function toggleLevelCollapse(lvl) {
   el?.classList.toggle('collapsed');
 }
 
+function toggleFeaturesCollapse(lvl) {
+  if (collapsedFeatureLevels.has(lvl)) {
+    collapsedFeatureLevels.delete(lvl);
+  } else {
+    collapsedFeatureLevels.add(lvl);
+  }
+  document.getElementById(`feat-section-${lvl}`)?.classList.toggle('collapsed');
+}
+
 function renderLevelLog() {
   const grid = document.getElementById('level-log-grid');
   if (!grid) return;
@@ -4530,11 +4557,16 @@ function renderLevelLog() {
             <span class="level-stat-label">SP Gained</span>
             <span class="level-resource-val" title="${isLvl1 ? '2 + INT mod (min 2)' : 'INT mod (min 1)'}">${pts}</span>
           </div>
-          <div>
-            <span class="level-stat-label" style="display:block;margin-bottom:0.3rem;">Features</span>
-            <div class="action-table-wrap">
-              <div id="feat-entries-${lvl}">${structFeatHtml}</div>
-              <button class="action-add-btn" onclick="addFeatureToLevel(${lvl})">✦ Add Feature</button>
+          <div class="feat-section${collapsedFeatureLevels.has(lvl) ? ' collapsed' : ''}" id="feat-section-${lvl}">
+            <div class="feat-section-header" onclick="toggleFeaturesCollapse(${lvl})">
+              <span class="level-stat-label">Features</span>
+              <span class="feat-section-chevron">▼</span>
+            </div>
+            <div class="feat-section-body">
+              <div class="action-table-wrap">
+                <div id="feat-entries-${lvl}">${structFeatHtml}</div>
+                <button class="action-add-btn" onclick="addFeatureToLevel(${lvl})">✦ Add Feature</button>
+              </div>
             </div>
           </div>
           <div>
@@ -5997,6 +6029,7 @@ function addFeatureToLevel(lvl) {
   if (!entry) return;
   if (!entry.features) entry.features = [];
   entry.features.push({ name: '', source: 'Class', description: '' });
+  collapsedFeatureLevels.delete(lvl); // ensure features are visible after adding
   saveLevelLog();
   renderLevelLog();
   renderFeaturesTab();
