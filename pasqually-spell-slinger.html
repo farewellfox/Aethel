@@ -680,6 +680,50 @@
     transition: opacity 0.3s;
   }
 
+  .sustain-wrap {
+    margin: 0.75rem 1.25rem 0.25rem;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid rgba(184,134,11,0.25);
+    border-radius: 6px;
+    background: rgba(242,232,213,0.35);
+  }
+  .sustain-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+  .sustain-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+  .sustain-radio-label {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.88rem;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .sustain-cost-hint {
+    font-size: 0.75rem;
+    color: var(--gold);
+    font-style: italic;
+  }
+  .sustain-note {
+    font-size: 0.76rem;
+    font-style: italic;
+    color: rgba(26,20,16,0.55);
+    margin-top: 0.4rem;
+    line-height: 1.4;
+    min-height: 0;
+  }
+
   /* Library view */
   .library-view {
     display: none;
@@ -902,8 +946,10 @@
     transition: all 0.12s;
   }
   .btn-io:hover { color: var(--gold-light); border-color: rgba(184,134,11,0.7); }
-  .btn-io.import { border-color: rgba(26,92,92,0.5); color: rgba(242,232,213,0.45); }
-  .btn-io.import:hover { border-color: var(--teal); color: #5dc5c5; }
+  .btn-io.load { border-color: rgba(26,92,92,0.5); color: rgba(242,232,213,0.45); }
+  .btn-io.load:hover { border-color: var(--teal); color: #5dc5c5; }
+  .btn-io.save { border-color: rgba(184,134,11,0.5); color: rgba(242,232,213,0.45); }
+  .btn-io.save:hover { border-color: var(--gold); color: var(--gold-light); }
   .io-msg {
     font-family: 'Crimson Text', serif;
     font-size: 0.82rem;
@@ -1069,6 +1115,38 @@
     border: 1px solid rgba(139,26,26,0.35);
     margin-top: 0.15rem;
   }
+  @keyframes formless-pulse {
+    0%, 100% { opacity: 0.75; }
+    50% { opacity: 1; }
+  }
+  .formless-prompt {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: center;
+    color: var(--crimson-light);
+    border: 1px solid rgba(192,57,43,0.4);
+    border-radius: 5px;
+    padding: 0.55rem 1rem;
+    margin-top: 0.5rem;
+    background: rgba(139,26,26,0.07);
+    animation: formless-pulse 2s ease-in-out infinite;
+  }
+  .sc-formless-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 3px;
+    background: rgba(139,26,26,0.18);
+    color: var(--crimson-light);
+    border: 1px solid rgba(192,57,43,0.55);
+    margin-top: 0.15rem;
+  }
 
   /* ── Import Modal ── */
   .import-modal-overlay {
@@ -1111,6 +1189,17 @@
     font-size: 0.95rem;
     letter-spacing: 0.08em;
     color: var(--gold-light);
+  }
+  .import-guidance {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--parchment);
+    opacity: 0.75;
+    line-height: 1.5;
+    border-left: 3px solid rgba(184,134,11,0.4);
+    padding-left: 0.75rem;
+    margin: 0.25rem 0 0;
   }
   .import-close-btn {
     background: transparent;
@@ -1241,6 +1330,9 @@
       </div>
       <div class="panel-body">
         <div class="forms-grid" id="forms-grid"></div>
+        <div id="formless-prompt" class="formless-prompt" style="display:none;">
+          ✦ Select a Spell Form to finalize this import.
+        </div>
       </div>
     </div>
 
@@ -1308,6 +1400,15 @@
         <div class="breakdown-title">Cost Breakdown</div>
         <div id="breakdown-list"></div>
       </div>
+      <div class="sustain-wrap">
+        <div class="sustain-label">Sustained Magic</div>
+        <div class="sustain-radio-group">
+          <label class="sustain-radio-label"><input type="radio" name="sustain-type" value="none" checked onchange="onSustainChange()"> None</label>
+          <label class="sustain-radio-label"><input type="radio" name="sustain-type" value="unfocused" onchange="onSustainChange()"> Unfocused <span class="sustain-cost-hint">(+4 RP)</span></label>
+          <label class="sustain-radio-label"><input type="radio" name="sustain-type" value="focused" onchange="onSustainChange()"> Focused <span class="sustain-cost-hint">(+2 RP)</span></label>
+        </div>
+        <div class="sustain-note" id="sustain-note"></div>
+      </div>
       <div class="spell-summary">
         <div class="summary-title">Spell Description</div>
         <div class="summary-text" id="summary-text"><em>Select a Spell Form to begin weaving your spell.</em></div>
@@ -1359,9 +1460,9 @@
     <span class="library-count" id="library-count"></span>
     <div class="io-group">
       <span class="io-msg" id="io-msg"></span>
-      <button class="btn-io import" onclick="importLibrary()">↑ Import</button>
-      <button class="btn-io" onclick="exportLibrary()">↓ Export</button>
-      <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="handleImportFile(this)">
+      <button class="btn-io load" onclick="loadLibrary()">📁 Load</button>
+      <button class="btn-io save" onclick="saveLibrary()">💾 Save</button>
+      <input type="file" id="load-file-input" accept=".json" style="display:none" onchange="handleLoadFile(this)">
     </div>
   </div>
   <div id="library-content"></div>
@@ -1375,20 +1476,24 @@
       <button class="import-close-btn" onclick="closeImportModal()" title="Close">✕</button>
     </div>
 
+    <div class="import-guidance">
+      <em>Imported spells arrive as <strong>Formless</strong> — they carry the power tier and effect from their original system, but no Aethel Spell Form. After importing, load the spell into the builder and apply a Spell Form to finalize it.</em>
+    </div>
+
     <!-- Step 1 -->
     <div class="import-step">
       <div class="import-step-num">Step 1</div>
       <div class="import-step-title">Spell Level</div>
       <select class="import-select" id="import-level">
-        <option value="1">1st Level (Simple) — 3 AP/RP minimum</option>
-        <option value="2">2nd Level (Advanced) — 4 AP/RP minimum</option>
-        <option value="3">3rd Level (Major) — 6 AP/RP minimum</option>
-        <option value="4">4th Level (Epic) — 7 AP/RP minimum</option>
-        <option value="5">5th Level (Legendary) — 9 AP/RP minimum</option>
-        <option value="6">6th Level (Mythic) — 10 AP/RP minimum</option>
-        <option value="7">7th Level (Mythic) — 12 AP/RP minimum</option>
-        <option value="8">8th Level (Cosmic) — 13 AP/RP minimum</option>
-        <option value="9">9th Level (Cosmic) — 15 AP/RP minimum</option>
+        <option value="1">1st Level (Simple) — 3 RP minimum</option>
+        <option value="2">2nd Level (Advanced) — 4 RP minimum</option>
+        <option value="3">3rd Level (Major) — 6 RP minimum</option>
+        <option value="4">4th Level (Epic) — 7 RP minimum</option>
+        <option value="5">5th Level (Legendary) — 10 RP minimum</option>
+        <option value="6">6th Level (Mythic) — 11 RP minimum</option>
+        <option value="7">7th Level (Mythic) — 15 RP minimum</option>
+        <option value="8">8th Level (Cosmic) — 16 RP minimum</option>
+        <option value="9">9th Level (Cosmic) — 20 RP minimum</option>
       </select>
     </div>
 
@@ -1542,11 +1647,11 @@ const AUG_SECTIONS = [
     title: 'Condition Augments',
     augments: [
       { id: 'minor_cond',  name: 'Impose Minor Condition',  cost: 2, desc: 'Imposes a Basic condition on failed save (e.g. Prone, Grappled, Frightened).', gate: null,
-        conditions: ['Deafened','Distracted','Prone','Staggered','Frightened','Grappled'] },
-      { id: 'major_cond',  name: 'Impose Major Condition',  cost: 4, desc: 'Imposes an Advanced condition on failed save (e.g. Blinded, Restrained, Poisoned).', gate: 'Level 3+',
-        conditions: ['Blinded','Poisoned','Restrained'] },
-      { id: 'severe_cond', name: 'Impose Severe Condition', cost: 6, desc: 'Imposes an Expert condition on failed save (e.g. Stunned, Paralyzed, Petrified).', gate: 'Level 5+',
-        conditions: ['Stunned','Paralyzed','Petrified'] },
+        conditions: ['Dazed','Deafened','Prone','Staggered','Frightened','Grappled'] },
+      { id: 'major_cond',  name: 'Impose Major Condition',  cost: 4, desc: 'Imposes an Advanced condition on failed save (e.g. Blinded, Distracted, Poisoned).', gate: 'Level 3+',
+        conditions: ['Blinded','Distracted','Poisoned','Restrained','Silenced','Weakened'] },
+      { id: 'severe_cond', name: 'Impose Severe Condition', cost: 6, desc: 'Imposes an Expert condition on failed save (e.g. Stunned, Paralyzed, Unconscious).', gate: 'Level 5+',
+        conditions: ['Stunned','Paralyzed','Unconscious'] },
     ]
   }
 ];
@@ -1582,11 +1687,38 @@ const ANIMIST_AUG_SECTIONS = [
     note: 'Animist Exclusive — Taken in place of standard Advanced Augments.',
     augments: [
       { id: 'prowlers_strike',    name: "Prowler's Strike",  cost: 3, desc: "When the Animist commands the Anima to attack, that attack deals an additional 1d8 damage." },
-      { id: 'ancestral_ward',     name: 'Ancestral Ward',    cost: 3, desc: 'The Anima gains Resistance to all Physical Damage (Slashing, Piercing, Bludgeoning) until the start of the Animist\'s next turn.' },
-      { id: 'aggressive_tether',  name: 'Aggressive Tether', cost: 4, desc: 'If the Anima hits an enemy with an attack this turn, the Anima may immediately move the enemy up to 10 ft. into any open space.' },
+      { id: 'ancestral_ward',     name: 'Ancestral Ward',    cost: 5, gate: 'Mind Level 3+', desc: 'The Anima gains Resistance to all Physical Damage (Slashing, Piercing, Bludgeoning) until the start of the Animist\'s next turn.' },
+      { id: 'aggressive_tether',  name: 'Aggressive Tether', cost: 2, desc: 'If the Anima hits an enemy with an attack this turn, the Anima may immediately move the enemy up to 10 ft. into any open space.' },
       { id: 'symbiotic_healing',  name: 'Symbiotic Healing', cost: 3, desc: 'When the Animist uses a Restorative spell on the Anima, the Animist also recovers half of the HP healed.' },
-      { id: 'blinding_radiance',  name: 'Blinding Radiance', cost: 4, gate: 'Mind Level 5+', desc: 'The Anima lets out a flash of raw energy. All enemies within a 15 ft. radius must make a Reflex Save or be Blinded until the end of their next turn.' },
+      { id: 'blinding_radiance',  name: 'Blinding Radiance', cost: 5, gate: 'Mind Level 5+', desc: 'The Anima lets out a flash of raw energy. All enemies within a 15 ft. radius must make a Reflex Save or be Blinded until the end of their next turn.' },
       { id: 'guardian_link',      name: 'Guardian Link',     cost: 4, gate: 'Mind Level 5+', desc: 'If an adjacent ally (other than the Animist) is targeted by an attack, the Animist may command the Anima to intercept as a Reaction. The Anima is instantly moved to the target and takes the hit instead.' },
+      { id: 'anima_projection',   name: 'Anima Projection',  cost: 3, desc: 'The Anima roots itself in place (speed becomes 0) and projects a 10 ft. radius spiritual aura. Until the start of your next turn, all allies within this aura gain +2 DEF and cannot be forcibly pushed or moved.' },
+      { id: 'spirit_swap',        name: 'Spirit Swap',       cost: 3, gate: 'Mind Level 3+', desc: 'As a reaction to being attacked (or at will), the Anima instantly teleports, swapping physical locations with the Animist. The Anima takes the attack instead, applying its own DEF score to the incoming damage.' },
+      { id: 'primal_roar',        name: 'Primal Roar',       cost: 5, gate: 'Mind Level 5+', desc: 'The Anima unleashes a terrifying shockwave. Enemies within 15 ft. are physically pushed 10 ft. away and lose their Bonus Action on their next turn. Allies in the radius are instantly cleared of the Dazed or Distracted conditions.' },
+    ]
+  }
+];
+
+const WARDEN_AUG_SECTIONS = [
+  {
+    title: 'Wild Augments',
+    note: 'Warden Exclusive — Channel raw natural energy.',
+    augments: [
+      { id: 'thorn_whip',          name: 'Thorn Whip',          cost: 1, desc: 'If the Spell Form hits a target, a lashing tendril of thorns pulls the target up to 10 ft. toward you.' },
+      { id: 'rooting_tendrils',    name: 'Rooting Tendrils',    cost: 2, desc: 'Impose the Grappled condition on a failed Reflex Save. The target cannot move until the start of your next turn.' },
+      { id: 'shifting_ground',     name: 'Shifting Ground',     cost: 2, desc: 'Choose a 10 ft. square within the Spell Form\'s area. It becomes difficult terrain until the end of your next turn.' },
+      { id: 'territorial_presence',name: 'Territorial Presence',cost: 3, desc: 'All allies within 15 ft. of you gain Advantage on opportunity attack rolls until the start of your next turn.' },
+      { id: 'savage_rend',         name: 'Savage Rend',         cost: 3, desc: 'Your Anima\'s next attack deals an additional 2d6 damage and ignores Physical Resistance.' },
+      { id: 'bark_skin',           name: 'Bark Skin',           cost: 3, desc: 'Target ally (including yourself) gains +3 Defense Score until the start of your next turn. Ends early if the target moves more than 10 ft.' },
+      { id: 'regenerative_hide',   name: 'Regenerative Hide',   cost: 2, desc: 'As a part of casting, one ally within range recovers 1d6 HP at the start of each of their turns for 2 turns.' },
+      { id: 'spiritual_frenzy',    name: 'Spiritual Frenzy',    cost: 3, desc: 'If the Spell Form deals damage, all affected enemies suffer Disadvantage on Saving Throws until the end of their next turn.' },
+      { id: 'life_bloom',          name: 'Life Bloom',          cost: 3, desc: 'If the Spell Form includes a Restorative Augment, the target also removes one Basic condition and gains 1d4 temporary HP.' },
+    ]
+  },
+  {
+    title: 'Advanced Wild Augments',
+    augments: [
+      { id: 'elemental_symbiosis', name: 'Elemental Symbiosis',  cost: 4, gate: 'Mind Level 3+', desc: 'When you deal elemental damage, the Anima\'s next attack deals the same damage type and gains +1d8 damage of that type until the start of your next turn.' },
     ]
   }
 ];
@@ -1614,20 +1746,20 @@ const TIERS = [
   { label: '2nd — Advanced',  min: 4,  max: 4,  scale: 'Moderate complexity' },
   { label: '3rd — Major',     min: 6,  max: 6,  scale: 'Impactful AoE or single-target' },
   { label: '4th — Epic',      min: 7,  max: 7,  scale: 'Major conditions, battlefield control' },
-  { label: '5th — Legendary', min: 9,  max: 9,  scale: 'Capstone-level power' },
-  { label: '6th — Mythic',    min: 10, max: 10, scale: 'Shapes the encounter' },
-  { label: '7th — Mythic',    min: 12, max: 12, scale: 'Can resolve an encounter' },
-  { label: '8th — Cosmic',    min: 13, max: 13, scale: 'Near-ultimate power' },
-  { label: '9th — Cosmic',    min: 15, max: 99, scale: 'Campaign-defining devastation' },
+  { label: '5th — Legendary', min: 10, max: 10, scale: 'Capstone-level power' },
+  { label: '6th — Mythic',    min: 11, max: 11, scale: 'Shapes the encounter' },
+  { label: '7th — Mythic',    min: 15, max: 15, scale: 'Can resolve an encounter' },
+  { label: '8th — Cosmic',    min: 16, max: 16, scale: 'Near-ultimate power' },
+  { label: '9th — Cosmic',    min: 20, max: 99, scale: 'Campaign-defining devastation' },
 ];
 
 const TIER_COLORS = [
   { min:0,  max:3,  color:'#2d6a2d', bg:'rgba(45,106,45,0.12)' },
   { min:4,  max:5,  color:'#1a5c5c', bg:'rgba(26,92,92,0.12)' },
   { min:6,  max:7,  color:'#1a3a8b', bg:'rgba(26,58,139,0.12)' },
-  { min:8,  max:10, color:'#6a2d8b', bg:'rgba(106,45,139,0.12)' },
-  { min:11, max:13, color:'#b86a00', bg:'rgba(184,106,0,0.12)' },
-  { min:14, max:99, color:'#8b1a1a', bg:'rgba(139,26,26,0.12)' },
+  { min:8,  max:11, color:'#6a2d8b', bg:'rgba(106,45,139,0.12)' },
+  { min:12, max:16, color:'#b86a00', bg:'rgba(184,106,0,0.12)' },
+  { min:17, max:99, color:'#8b1a1a', bg:'rgba(139,26,26,0.12)' },
 ];
 
 let selectedForm = null;
@@ -1643,6 +1775,8 @@ let importTierLabel = '';
 let importTierMinCost = 0;
 let selectedClass = 'mind';
 let selectedSubclass = 'arcanist';
+let sustainType = 'none';
+let loadedSpellId = null;
 
 function isGated(gate) {
   if (!gate) return false;
@@ -1657,7 +1791,9 @@ function isGated(gate) {
 
 function getCurrentClassAugSections() {
   if (selectedClass === 'mind') {
-    return selectedSubclass === 'animist' ? ANIMIST_AUG_SECTIONS : MIND_AUG_SECTIONS;
+    if (selectedSubclass === 'animist') return ANIMIST_AUG_SECTIONS;
+    if (selectedSubclass === 'warden') return WARDEN_AUG_SECTIONS;
+    return MIND_AUG_SECTIONS;
   }
   // Spirit — filter SPIRIT_AUGMENTS by selected subclass
   const filtered = SPIRIT_AUGMENTS.filter(a => a.archetypes.includes(selectedSubclass));
@@ -1670,6 +1806,10 @@ function findClassAugById(id) {
     if (a) return a;
   }
   for (const sec of ANIMIST_AUG_SECTIONS) {
+    const a = sec.augments.find(x => x.id === id);
+    if (a) return a;
+  }
+  for (const sec of WARDEN_AUG_SECTIONS) {
     const a = sec.augments.find(x => x.id === id);
     if (a) return a;
   }
@@ -1700,7 +1840,7 @@ function selectSubclass(sub) {
 function renderSubclassSelector() {
   const el = document.getElementById('subclass-selector');
   const subs = selectedClass === 'mind'
-    ? [['arcanist','Arcanist'],['animist','Animist']]
+    ? [['arcanist','Arcanist'],['animist','Animist'],['warden','Warden']]
     : [['oracle','Oracle'],['templar','Templar'],['zealot','Zealot']];
   el.innerHTML = subs.map(([id, label]) =>
     `<button class="subclass-btn${selectedSubclass === id ? ' active' : ''}" onclick="selectSubclass('${id}')">${label}</button>`
@@ -1713,7 +1853,7 @@ function enforceGating() {
       if (aug.gate && isGated(aug.gate)) selectedAugs.delete(aug.id);
     }
   }
-  const allClassSecs = [...MIND_AUG_SECTIONS, ...ANIMIST_AUG_SECTIONS];
+  const allClassSecs = [...MIND_AUG_SECTIONS, ...ANIMIST_AUG_SECTIONS, ...WARDEN_AUG_SECTIONS];
   for (const sec of allClassSecs) {
     for (const aug of sec.augments) {
       if (aug.gate && isGated(aug.gate)) selectedMindAugs.delete(aug.id);
@@ -1771,7 +1911,12 @@ function renderForms() {
       ${blocked ? '<div class="gate-label" style="margin-top:0.4rem;">⚠ Not available for imported spells</div>' : ''}
     `;
     if (!blocked) {
-      div.onclick = () => { selectedForm = (selectedForm === f.id ? null : f.id); renderAll(); };
+      div.onclick = () => {
+        selectedForm = (selectedForm === f.id ? null : f.id);
+        const promptEl = document.getElementById('formless-prompt');
+        if (promptEl) promptEl.style.display = 'none';
+        renderAll();
+      };
     }
     grid.appendChild(div);
   });
@@ -1909,7 +2054,8 @@ function computeCost() {
     const a = findClassAugById(id);
     if (a) augCost += a.cost;
   });
-  return { base, augCost, total: base + augCost + importTierMinCost };
+  const sustainCost = sustainType === 'unfocused' ? 4 : sustainType === 'focused' ? 2 : 0;
+  return { base, augCost, sustainCost, total: base + augCost + importTierMinCost + sustainCost };
 }
 
 function buildSpellDescriptionHTML(spell) {
@@ -1949,6 +2095,19 @@ function buildSpellDescriptionHTML(spell) {
   if (mindAugs.has('symbiotic_healing')) effects.push('heals the Animist for half the HP restored to the Anima');
   if (mindAugs.has('blinding_radiance')) effects.push('blinds enemies within 15 ft. on a failed Reflex Save');
   if (mindAugs.has('guardian_link')) effects.push('lets the Anima intercept an attack as a Reaction');
+  if (mindAugs.has('anima_projection')) effects.push('roots the Anima to project a 10 ft. aura granting +2 DEF and push immunity to allies');
+  if (mindAugs.has('spirit_swap')) effects.push('swaps the Anima and Animist positions so the Anima takes the attack');
+  if (mindAugs.has('primal_roar')) effects.push('pushes enemies 10 ft. back and strips their Bonus Action; clears Dazed/Distracted from allies');
+  if (mindAugs.has('thorn_whip')) effects.push('pulls the target up to 10 ft. toward you on a hit');
+  if (mindAugs.has('rooting_tendrils')) effects.push('imposes Grappled on a failed Reflex Save, preventing movement');
+  if (mindAugs.has('shifting_ground')) effects.push('creates a 10 ft. square of difficult terrain');
+  if (mindAugs.has('territorial_presence')) effects.push('grants allies within 15 ft. Advantage on opportunity attacks');
+  if (mindAugs.has('savage_rend')) effects.push("boosts the Anima's next attack by 2d6 and ignores Physical Resistance");
+  if (mindAugs.has('bark_skin')) effects.push('grants +3 Defense Score to a target until your next turn');
+  if (mindAugs.has('regenerative_hide')) effects.push('grants an ally 1d6 HP regeneration for 2 turns');
+  if (mindAugs.has('spiritual_frenzy')) effects.push('inflicts Disadvantage on Saving Throws on damaged enemies');
+  if (mindAugs.has('life_bloom')) effects.push('removes a Basic condition and grants 1d4 temporary HP alongside healing');
+  if (mindAugs.has('elemental_symbiosis')) effects.push("bonds elemental damage to the Anima's next attack for +1d8 matching damage");
   if (mindAugs.has('smite')) effects.push('deals +1d12 Radiant Damage');
   if (mindAugs.has('ward_of_faith')) effects.push('grants an ally +2 Defense Score');
   if (mindAugs.has('purify_condition')) effects.push('removes one Advanced condition from an ally');
@@ -1966,11 +2125,31 @@ function buildSpellDescriptionHTML(spell) {
   if (mindAugs.has('oblivion')) effects.push('inflicts Disadvantage on all Saves and -2 Defense Score');
   if (effects.length > 0) parts.push('The spell ' + effects.join(', and ') + '.');
 
+  const st = spell.sustainType || 'none';
+  if (st === 'unfocused') {
+    parts.push('<em style="color:var(--teal);font-size:0.92em;">Unfocused Sustain (+4 RP): Self-sufficient matrix. Ends only on unconsciousness, death, voluntary dismissal, or anti-magic.</em>');
+  } else if (st === 'focused') {
+    parts.push('<em style="color:var(--teal);font-size:0.92em;">Focused Sustain (+2 RP): Upkeep 1 RP/turn. Breaks on Crit, Distracted/Dazed/Staggered/Silenced/Unconscious, or failed Fort Save (DC 10 or half dmg).</em>');
+  }
+
   return parts.join(' ') || '<em style="opacity:0.45;">No description available.</em>';
 }
 
+function onSustainChange() {
+  sustainType = document.querySelector('input[name="sustain-type"]:checked')?.value || 'none';
+  const noteEl = document.getElementById('sustain-note');
+  if (sustainType === 'unfocused') {
+    noteEl.textContent = 'Unfocused: Self-sufficient matrix. Ends only on unconsciousness, death, voluntary dismissal, or anti-magic.';
+  } else if (sustainType === 'focused') {
+    noteEl.textContent = 'Focused: Upkeep 1 RP/turn. Breaks on Crit, Distracted/Dazed/Staggered/Silenced/Unconscious, or failed Fort Save (DC 10 or half dmg).';
+  } else {
+    noteEl.textContent = '';
+  }
+  renderAll();
+}
+
 function updateSummary() {
-  const { base, augCost, total } = computeCost();
+  const { base, augCost, sustainCost, total } = computeCost();
 
   // Cost number
   const el = document.getElementById('total-cost');
@@ -1993,7 +2172,7 @@ function updateSummary() {
   // Breakdown
   const bsec = document.getElementById('breakdown-section');
   const blist = document.getElementById('breakdown-list');
-  if (selectedForm || selectedAugs.size > 0 || selectedMindAugs.size > 0 || importTierLabel) {
+  if (selectedForm || selectedAugs.size > 0 || selectedMindAugs.size > 0 || importTierLabel || sustainCost > 0) {
     bsec.style.display = 'block';
     let rows = '';
     if (importTierLabel) {
@@ -2016,7 +2195,11 @@ function updateSummary() {
       const a = findClassAugById(id);
       if (a) rows += `<div class="breakdown-row"><span>${a.name}</span><span class="bval">+${a.cost} RP</span></div>`;
     });
-    if (selectedAugs.size > 0 || selectedMindAugs.size > 0) {
+    if (sustainCost > 0) {
+      const sustainLabel = sustainType === 'unfocused' ? 'Unfocused Sustain' : 'Focused Sustain';
+      rows += `<div class="breakdown-row"><span>${sustainLabel}</span><span class="bval">+${sustainCost} RP</span></div>`;
+    }
+    if (selectedAugs.size > 0 || selectedMindAugs.size > 0 || sustainCost > 0) {
       rows += `<div class="breakdown-row total-row"><span>Total</span><span class="bval">${total} RP</span></div>`;
     }
     blist.innerHTML = rows;
@@ -2038,6 +2221,7 @@ function updateSummary() {
     conditions: conditionChoices,
     importNotes,
     importDescription,
+    sustainType,
   });
 }
 
@@ -2073,14 +2257,19 @@ function resetAll() {
   importNotes = '';
   importTierLabel = '';
   importTierMinCost = 0;
+  sustainType = 'none';
+  loadedSpellId = null;
   document.getElementById('spell-name').value = '';
+  document.querySelectorAll('input[name="sustain-type"]').forEach(r => { r.checked = r.value === 'none'; });
+  document.getElementById('sustain-note').textContent = '';
+  const promptEl = document.getElementById('formless-prompt');
+  if (promptEl) promptEl.style.display = 'none';
   renderAll();
 }
 
 // ── Saved Spells ────────────────────────────────────────────────
 const LS_KEY = 'aethel_saved_spells';
 let savedSpells = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
-let currentExportHandle = null;
 let libraryView = 'cards';
 let tableSortCol = 'date';
 let tableSortDir = 'desc';
@@ -2089,21 +2278,10 @@ function persistSpells() {
   localStorage.setItem(LS_KEY, JSON.stringify(savedSpells));
 }
 
-function saveSpell() {
-  const name = document.getElementById('spell-name').value.trim();
-  const msgEl = document.getElementById('save-msg');
-  const showMsg = (text, ok) => {
-    msgEl.style.color = ok ? '#2d6a2d' : '';
-    msgEl.textContent = text;
-    setTimeout(() => { msgEl.textContent = ''; msgEl.style.color = ''; }, 2800);
-  };
-  if (!name) { showMsg('A name is required to save your spell.', false); return; }
-  if (!selectedForm) { showMsg('Select a Spell Form before saving.', false); return; }
-
+function buildSpellData(name) {
   const { total } = computeCost();
   const tier = getTier(total);
-  savedSpells.unshift({
-    id: Date.now(),
+  return {
     name,
     formId: selectedForm,
     augs: [...selectedAugs],
@@ -2121,8 +2299,40 @@ function saveSpell() {
     importRoll: '',
     importTierLabel,
     importTierMinCost,
+    sustainType,
     savedAt: Date.now(),
-  });
+  };
+}
+
+function saveSpell() {
+  const name = document.getElementById('spell-name').value.trim();
+  const msgEl = document.getElementById('save-msg');
+  const showMsg = (text, ok) => {
+    msgEl.style.color = ok ? '#2d6a2d' : '';
+    msgEl.textContent = text;
+    setTimeout(() => { msgEl.textContent = ''; msgEl.style.color = ''; }, 2800);
+  };
+  if (!name) { showMsg('A name is required to save your spell.', false); return; }
+  if (!selectedForm) { showMsg('Select a Spell Form before saving.', false); return; }
+
+  // If this spell was loaded from the library, offer update-in-place
+  if (loadedSpellId !== null) {
+    const existing = savedSpells.find(s => s.id === loadedSpellId);
+    if (existing) {
+      const choice = confirm(`Update "${existing.name}" in the library, or save as a new spell?\n\nOK = Update "${existing.name}"\nCancel = Save as New Spell`);
+      if (choice) {
+        const idx = savedSpells.findIndex(s => s.id === loadedSpellId);
+        savedSpells[idx] = { ...buildSpellData(name), id: loadedSpellId, savedAt: existing.savedAt };
+        persistSpells();
+        updateLibraryTabCount();
+        showMsg(`"${name}" updated.`, true);
+        return;
+      }
+    }
+  }
+
+  savedSpells.unshift({ id: Date.now(), ...buildSpellData(name) });
+  loadedSpellId = null;
   persistSpells();
   updateLibraryTabCount();
   showMsg(`"${name}" saved to library.`, true);
@@ -2138,6 +2348,7 @@ function deleteSpell(id) {
 function loadSpell(id) {
   const spell = savedSpells.find(s => s.id === id);
   if (!spell) return;
+  loadedSpellId = id;
   selectedForm = spell.formId;
   selectedAugs = new Set(spell.augs);
   selectedMindAugs = new Set(spell.mindAugs);
@@ -2151,15 +2362,27 @@ function loadSpell(id) {
   mindLevel = spell.mindLevel;
   selectedClass = spell.spellClass || 'mind';
   selectedSubclass = spell.spellSubclass || 'arcanist';
+  sustainType = spell.sustainType || 'none';
   document.getElementById('player-level-val').value = playerLevel;
   document.getElementById('mind-level-val').value = mindLevel;
   document.getElementById('spell-name').value = spell.name;
+  document.querySelectorAll('input[name="sustain-type"]').forEach(r => { r.checked = r.value === sustainType; });
+  const sustainNoteEl = document.getElementById('sustain-note');
+  if (sustainType === 'unfocused') {
+    sustainNoteEl.textContent = 'Unfocused: Self-sufficient matrix. Ends only on unconsciousness, death, voluntary dismissal, or anti-magic.';
+  } else if (sustainType === 'focused') {
+    sustainNoteEl.textContent = 'Focused: Upkeep 1 RP/turn. Breaks on Crit, Distracted/Dazed/Staggered/Silenced/Unconscious, or failed Fort Save (DC 10 or half dmg).';
+  } else {
+    sustainNoteEl.textContent = '';
+  }
   document.getElementById('class-btn-mind').classList.toggle('active', selectedClass === 'mind');
   document.getElementById('class-btn-spirit').classList.toggle('active', selectedClass === 'spirit');
   const lbl = document.getElementById('class-level-label');
   lbl.innerHTML = selectedClass === 'mind' ? 'Mind Class<br>Level' : 'Spirit Class<br>Level';
   switchTab('builder');
   renderAll();
+  const promptEl = document.getElementById('formless-prompt');
+  if (promptEl) promptEl.style.display = (!selectedForm && importTierMinCost > 0) ? 'block' : 'none';
 }
 
 function updateLibraryTabCount() {
@@ -2250,7 +2473,7 @@ function renderLibraryCards(sorted) {
       <div class="sc-header">
         <div>
           <div class="sc-name">${spell.name}</div>
-          <div class="sc-form">${form ? form.name : '<span class="sc-formless">Formless</span>'}</div>
+          <div class="sc-form">${form ? form.name : '<span class="sc-formless-badge">⚠ Formless — Needs Spell Form</span>'}</div>
         </div>
         <div class="sc-cost-col">
           <div class="sc-cost-num">${spell.cost}</div>
@@ -2346,7 +2569,7 @@ function deriveSpellTableRow(spell) {
     _dmgDice: dmgDice,
     tc,
     name: spell.name,
-    formName: form.name || '—',
+    formName: form.name || '<span class="sc-formless-badge" style="font-size:0.58rem;padding:0.15rem 0.45rem;">⚠ Formless</span>',
     action: form.action || '—',
     range,
     damage,
@@ -2456,7 +2679,7 @@ function switchTab(tab) {
   if (!isBuilder) renderLibrary();
 }
 
-// ── Import / Export ──────────────────────────────────────────────
+// ── Save / Load ──────────────────────────────────────────────────
 function showIoMsg(text, ok) {
   const el = document.getElementById('io-msg');
   el.textContent = text;
@@ -2464,32 +2687,27 @@ function showIoMsg(text, ok) {
   setTimeout(() => { el.textContent = ''; el.className = 'io-msg'; }, 3000);
 }
 
-async function exportLibrary() {
-  if (savedSpells.length === 0) { showIoMsg('No spells to export.', false); return; }
+async function saveLibrary() {
   const json = JSON.stringify(savedSpells, null, 2);
   const defaultName = 'aethel-spell-library.json';
   if (window.showSaveFilePicker) {
     try {
-      if (!currentExportHandle) {
-        currentExportHandle = await window.showSaveFilePicker({
-          suggestedName: defaultName,
-          types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
-        });
-      }
-      const writable = await currentExportHandle.createWritable();
+      const handle = await window.showSaveFilePicker({
+        suggestedName: defaultName,
+        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
       await writable.write(json);
       await writable.close();
-      showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+      showIoMsg(`Saved ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
     } catch (e) {
       if (e.name === 'AbortError') return;
-      currentExportHandle = null;
-      // Fallback if write fails after picker
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; a.download = defaultName; a.click();
       URL.revokeObjectURL(url);
-      showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+      showIoMsg(`Saved ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
     }
   } else {
     const blob = new Blob([json], { type: 'application/json' });
@@ -2497,32 +2715,52 @@ async function exportLibrary() {
     const a = document.createElement('a');
     a.href = url; a.download = defaultName; a.click();
     URL.revokeObjectURL(url);
-    showIoMsg(`Exported ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
+    showIoMsg(`Saved ${savedSpells.length} spell${savedSpells.length !== 1 ? 's' : ''}.`, true);
   }
 }
 
-function importLibrary() {
-  document.getElementById('import-file-input').value = '';
-  document.getElementById('import-file-input').click();
+function mergeLoadedSpells(text) {
+  const data = JSON.parse(text);
+  if (!Array.isArray(data)) throw new Error('Expected an array of spells.');
+  const existingIds = new Set(savedSpells.map(s => s.id));
+  const newSpells = data.filter(s => s && s.id && !existingIds.has(s.id));
+  if (newSpells.length === 0) { showIoMsg('No new spells found.', false); return; }
+  savedSpells = [...newSpells, ...savedSpells];
+  persistSpells();
+  updateLibraryTabCount();
+  renderLibrary();
+  showIoMsg(`Added ${newSpells.length} spell${newSpells.length !== 1 ? 's' : ''}.`, true);
 }
 
-function handleImportFile(input) {
+async function loadLibrary() {
+  if (window.showOpenFilePicker) {
+    try {
+      const [fileHandle] = await window.showOpenFilePicker({
+        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
+        multiple: false,
+      });
+      const file = await fileHandle.getFile();
+      const text = await file.text();
+      mergeLoadedSpells(text);
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      // Fall back to hidden input on unexpected error
+      document.getElementById('load-file-input').value = '';
+      document.getElementById('load-file-input').click();
+    }
+  } else {
+    document.getElementById('load-file-input').value = '';
+    document.getElementById('load-file-input').click();
+  }
+}
+
+function handleLoadFile(input) {
   const file = input.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      const data = JSON.parse(e.target.result);
-      if (!Array.isArray(data)) throw new Error('Expected an array of spells.');
-      // Merge: add spells whose id doesn't already exist
-      const existingIds = new Set(savedSpells.map(s => s.id));
-      const newSpells = data.filter(s => s && s.id && s.formId && !existingIds.has(s.id));
-      if (newSpells.length === 0) { showIoMsg('No new spells found to import.', false); return; }
-      savedSpells = [...newSpells, ...savedSpells];
-      persistSpells();
-      updateLibraryTabCount();
-      renderLibrary();
-      showIoMsg(`Imported ${newSpells.length} spell${newSpells.length !== 1 ? 's' : ''}.`, true);
+      mergeLoadedSpells(e.target.result);
     } catch (err) {
       showIoMsg('Invalid file: ' + err.message, false);
     }
@@ -2531,7 +2769,7 @@ function handleImportFile(input) {
 }
 
 // ── Import Modal ────────────────────────────────────────────────
-const IMPORT_LEVEL_COSTS  = [3, 4, 6, 7, 9, 10, 12, 13, 15];
+const IMPORT_LEVEL_COSTS  = [3, 4, 6, 7, 10, 11, 15, 16, 20];
 const IMPORT_LEVEL_LABELS = [
   '1st — Simple', '2nd — Advanced', '3rd — Major', '4th — Epic', '5th — Legendary',
   '6th — Mythic',  '7th — Mythic',   '8th — Cosmic', '9th — Cosmic',
@@ -2675,7 +2913,8 @@ function openSpellDetail(id) {
   const formLabel = form ? form.name : 'Formless';
   const tierPart = spell.tierLabel ? ` · ${spell.tierLabel}` : '';
   const rollPart = spell.importRoll ? ` · ${spell.importRoll}` : (form ? ` · ${form.tag}` : '');
-  document.getElementById('sd-meta').textContent = `${formLabel}${rollPart}${tierPart} · ${spell.cost} RP`;
+  const sustainPart = (spell.sustainType && spell.sustainType !== 'none') ? ` · ${spell.sustainType === 'unfocused' ? 'Unfocused Sustain' : 'Focused Sustain'}` : '';
+  document.getElementById('sd-meta').textContent = `${formLabel}${rollPart}${tierPart}${sustainPart} · ${spell.cost} RP`;
 
   // Description
   document.getElementById('sd-description').innerHTML = buildSpellDescriptionHTML(spell);
@@ -2715,11 +2954,11 @@ function closeSpellDetail() {
   document.getElementById('spell-detail-overlay').classList.remove('open');
 }
 
-// Ctrl+S to export/save
+// Ctrl+S to save library
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey && e.key === 's') {
     e.preventDefault();
-    exportLibrary();
+    saveLibrary();
   }
 });
 
