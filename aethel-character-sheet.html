@@ -1203,10 +1203,19 @@ textarea.action-col-input {
 .action-filter-tabs {
   display: flex;
   gap: 0.25rem;
-  padding: 0.35rem 0 0.5rem 0.75rem;
+  padding: 0.35rem 0 0.25rem 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.action-filter-tabs.row-type {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.action-filter-tabs.row-effect {
+  padding-top: 0.2rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(184,115,51,0.15);
   margin-bottom: 0.4rem;
-  flex-wrap: wrap;
 }
 .action-filter-tab {
   background: transparent;
@@ -1224,6 +1233,48 @@ textarea.action-col-input {
 .action-filter-tab:hover { color: var(--ink); border-color: var(--copper); }
 .action-filter-tab.active {
   background: rgba(184,115,51,0.18);
+  border-color: var(--copper);
+  color: var(--ink);
+}
+/* Effect filter chips — teal accent to distinguish from type row */
+.action-effect-tab {
+  background: transparent;
+  border: 1px solid rgba(60,120,110,0.3);
+  border-radius: 10px;
+  color: rgba(30,22,14,0.65);
+  font-family: inherit;
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.action-effect-tab:hover { color: var(--ink); border-color: rgba(60,140,120,0.7); }
+.action-effect-tab.active {
+  background: rgba(60,120,110,0.18);
+  border-color: rgba(60,140,120,0.75);
+  color: var(--ink);
+}
+/* Sort cost toggle — pushed to right edge */
+.action-sort-btn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.22);
+  border-radius: 3px;
+  color: rgba(30,22,14,0.55);
+  font-family: inherit;
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.action-sort-btn:hover { color: var(--ink); border-color: var(--copper); }
+.action-sort-btn.active {
+  background: rgba(184,115,51,0.12);
   border-color: var(--copper);
   color: var(--ink);
 }
@@ -1258,7 +1309,7 @@ textarea.action-col-input {
 }
 .action-card:last-child { border-bottom: none; }
 .action-card:hover { background: rgba(184,115,51,0.04); }
-.action-card-header { display: flex; align-items: center; gap: 0.4rem; flex-wrap: nowrap; cursor: pointer; user-select: none; }
+.action-card-header { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; cursor: pointer; user-select: none; }
 .action-card-chevron {
   font-size: 0.5rem;
   color: var(--text-label);
@@ -1347,6 +1398,44 @@ textarea.action-col-input {
   color: var(--text-soft);
   background: rgba(22,18,14,0.03);
 }
+
+/* ── ACTION CARD META INDICATORS ── */
+.action-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.action-effect-pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  opacity: 0.78;
+}
+.pip-damage    { background: var(--crimson-soft); }
+.pip-heal      { background: #3d9158; }
+.pip-condition { background: #b87a18; }
+.pip-buff      { background: var(--teal-light); }
+.pip-move      { background: rgba(184,115,51,0.55); }
+.pip-other     { background: rgba(184,115,51,0.42); }
+.action-target-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.06rem 0.28rem;
+  border: 1px solid rgba(184,115,51,0.2);
+  border-radius: 2px;
+  color: rgba(30,22,14,0.45);
+  background: rgba(22,18,14,0.03);
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.7;
+}
+.target-tag-aoe  { border-color: rgba(160,48,48,0.28); color: rgba(140,40,40,0.55); }
+.target-tag-self { border-color: rgba(45,128,128,0.28); color: rgba(30,95,95,0.6); }
 
 /* ── ACTION MODAL ── */
 .action-modal-backdrop {
@@ -2996,12 +3085,22 @@ textarea.action-col-input {
           <div class="section-title">Actions</div>
           <button class="action-card-btn" onclick="openSpellLibraryImport()" style="font-size:0.5rem;padding:0.2rem 0.6rem;opacity:0.75;" title="Import spells from a Spell Slinger export">↑ Import Library</button>
         </div>
-        <div class="action-filter-tabs" id="action-filter-tabs">
+        <div class="action-filter-tabs row-type" id="action-filter-tabs">
           <button class="action-filter-tab active" onclick="setActionFilter('All')">All</button>
           <button class="action-filter-tab" onclick="setActionFilter('Action')">Action</button>
           <button class="action-filter-tab" onclick="setActionFilter('Bonus Action')">Bonus Action</button>
           <button class="action-filter-tab" onclick="setActionFilter('Reaction')">Reaction</button>
           <button class="action-filter-tab" onclick="setActionFilter('Passive')">Passive</button>
+        </div>
+        <div class="action-filter-tabs row-effect" id="action-effect-tabs">
+          <button class="action-effect-tab active" onclick="setEffectFilter('All')">All</button>
+          <button class="action-effect-tab" onclick="setEffectFilter('damage')">Damage</button>
+          <button class="action-effect-tab" onclick="setEffectFilter('heal')">Healing</button>
+          <button class="action-effect-tab" onclick="setEffectFilter('condition')">Condition</button>
+          <button class="action-effect-tab" onclick="setEffectFilter('buff')">Buff/Effect</button>
+          <button class="action-effect-tab" onclick="setEffectFilter('move')">Movement</button>
+          <button class="action-effect-tab" onclick="setEffectFilter('other')">Utility</button>
+          <button class="action-sort-btn" id="action-sort-cost-btn" onclick="toggleSortCost()">↓ Sort: Cost</button>
         </div>
         <div class="action-cards-scroll" id="action-cards-scroll"><!-- rendered by JS --></div>
         <button class="action-add-btn" id="action-add-btn" onclick="openActionModalFiltered()">✦ Add Action</button>
@@ -4770,6 +4869,8 @@ function saveActionTable(tableId) {
 
 // ── UNIFIED ACTIONS SECTION ──
 let _activeActionFilter = 'All';
+let _activeEffectFilter = 'All';
+let _sortByCost = false;
 const _expandedCards = new Set();
 
 function toggleActionCard(cardId) {
@@ -4790,6 +4891,22 @@ function setActionFilter(type) {
     btn.classList.toggle('active', btn.textContent.trim() === type);
   });
   updateAddActionBtn();
+  renderUnifiedSection();
+}
+
+function setEffectFilter(effect) {
+  _activeEffectFilter = effect;
+  const labelMap = { All: 'All', damage: 'Damage', heal: 'Healing', condition: 'Condition', buff: 'Buff/Effect', move: 'Movement', other: 'Utility' };
+  document.querySelectorAll('.action-effect-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === (labelMap[effect] ?? effect));
+  });
+  renderUnifiedSection();
+}
+
+function toggleSortCost() {
+  _sortByCost = !_sortByCost;
+  const btn = document.getElementById('action-sort-cost-btn');
+  if (btn) btn.classList.toggle('active', _sortByCost);
   renderUnifiedSection();
 }
 
@@ -4860,9 +4977,32 @@ function renderActionCardHtml(row, tableId, idx) {
   const cardId = `action-card-${tableId}-${idx}`;
   const isExpanded = _expandedCards.has(cardId);
 
+  // Effect pips
+  const PIP_CLASS = { damage:'pip-damage', heal:'pip-heal', condition:'pip-condition', buff:'pip-buff', move:'pip-move', other:'pip-other' };
+  const effectPips = (row.effects || [])
+    .filter(e => PIP_CLASS[e])
+    .map(e => `<span class="action-effect-pip ${PIP_CLASS[e]}" title="${e}"></span>`)
+    .join('');
+
+  // Targeting tag from spell form
+  const AOE_FORMS  = new Set(['Close Burst','Ranged Burst','Broad Wave','Binding Ring','Arcane Wall']);
+  const SINGLE_FORMS = new Set(['Simple Projection','Channel Cantrip']);
+  const SELF_FORMS = new Set(['Self Channel']);
+  let targetTag = '';
+  if (row.spellForm) {
+    if (AOE_FORMS.has(row.spellForm))    targetTag = `<span class="action-target-tag target-tag-aoe">AoE</span>`;
+    else if (SINGLE_FORMS.has(row.spellForm)) targetTag = `<span class="action-target-tag">Single</span>`;
+    else if (SELF_FORMS.has(row.spellForm))   targetTag = `<span class="action-target-tag target-tag-self">Self</span>`;
+  }
+
+  const metaHtml = (effectPips || targetTag)
+    ? `<div class="action-card-meta">${effectPips}${targetTag}</div>`
+    : '';
+
   return `<div class="action-card${isExpanded ? ' expanded' : ''}" id="${cardId}">
     <div class="action-card-header" onclick="toggleActionCard('${cardId}')">
       <div class="action-card-name">${esc(row.name || '(Unnamed)')}</div>
+      ${metaHtml}
       ${badges.join('')}
       <span class="action-card-chevron">▶</span>
     </div>
@@ -4881,13 +5021,22 @@ function renderUnifiedSection() {
   const scroll = document.getElementById('action-cards-scroll');
   if (!scroll) return;
 
-  const allRows = [];
+  let allRows = [];
   Object.entries(ACTION_TABLE_CONFIGS).forEach(([tableId]) => {
     (actionTableData[tableId] || []).forEach((row, idx) => {
-      if (_activeActionFilter === 'All' || row.actionType === _activeActionFilter)
-        allRows.push({ row, tableId, idx });
+      if (_activeActionFilter !== 'All' && row.actionType !== _activeActionFilter) return;
+      if (_activeEffectFilter !== 'All' && !(row.effects || []).includes(_activeEffectFilter)) return;
+      allRows.push({ row, tableId, idx });
     });
   });
+
+  if (_sortByCost) {
+    allRows.sort((a, b) => {
+      const ca = a.row.resourceCost?.hasCost ? (Number(a.row.resourceCost.amount) || 0) : 0;
+      const cb = b.row.resourceCost?.hasCost ? (Number(b.row.resourceCost.amount) || 0) : 0;
+      return cb - ca;
+    });
+  }
 
   if (allRows.length === 0) {
     const label = _activeActionFilter === 'All' ? 'entries' : _activeActionFilter.toLowerCase() + 's';
