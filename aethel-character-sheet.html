@@ -2675,6 +2675,140 @@ textarea.action-col-input {
 .inv-currency-total { font-family: 'Crimson Text', serif; font-size: 0.88rem; font-style: italic; color: var(--text-soft); padding: 0 0.75rem 0.3rem; }
 .inv-currency-note  { font-family: 'Crimson Text', serif; font-size: 0.7rem; font-style: italic; color: var(--text-label); padding: 0 0.75rem 0.6rem; }
 
+/* ── ENCUMBRANCE SUMMARY ── */
+.enc-summary {
+  background: var(--vellum);
+  border: 1px solid var(--copper);
+  border-radius: 2px;
+  padding: 0.65rem 1rem 0.55rem;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.enc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 0.5rem;
+}
+.enc-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.32rem;
+}
+.enc-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  width: 12rem;
+  flex-shrink: 0;
+}
+.enc-count {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  min-width: 3.2rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+.enc-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: rgba(30,22,14,0.12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.enc-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.25s ease;
+}
+.enc-bar-fill.normal    { background: var(--teal); }
+.enc-bar-fill.warning   { background: #c8952a; }
+.enc-bar-fill.danger    { background: var(--crimson-soft); }
+.enc-status-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(184,115,51,0.12);
+}
+.enc-status-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+.enc-status-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.45rem;
+  border-radius: 2px;
+  border: 1px solid;
+}
+.enc-status-badge.normal      { color: var(--teal);         border-color: rgba(30,95,95,0.4);    background: rgba(30,95,95,0.07); }
+.enc-status-badge.encumbered  { color: #c8952a;             border-color: rgba(200,149,42,0.45); background: rgba(200,149,42,0.09); }
+.enc-status-badge.immobilized { color: var(--crimson-soft); border-color: rgba(160,48,48,0.4);   background: rgba(160,48,48,0.07); }
+.enc-conditions {
+  font-family: 'Crimson Text', serif;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-soft);
+  margin-left: 0.2rem;
+}
+/* Per-item encumbrance controls */
+.inv-enc-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.18rem;
+  flex-wrap: wrap;
+}
+.inv-enc-slots-select {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.25);
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  outline: none;
+  cursor: pointer;
+  padding: 0.08rem 0.2rem;
+}
+.inv-enc-zone-btn {
+  background: transparent;
+  border: 1px solid rgba(184,115,51,0.25);
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  cursor: pointer;
+  padding: 0.08rem 0.3rem;
+  transition: all 0.12s;
+}
+.inv-enc-zone-btn:hover { border-color: var(--copper); color: var(--copper-dark); background: rgba(184,115,51,0.06); }
+.inv-enc-zone-btn.readied { color: #c8952a; border-color: rgba(200,149,42,0.45); background: rgba(200,149,42,0.09); }
+.inv-enc-worn { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-label); font-style: italic; }
+
 /* ── PROFICIENCIES & TRAINING ── */
 .prof-layout {
   display: grid;
@@ -5641,6 +5775,105 @@ function toggleInvSection(sec) {
   renderInventoryTab();
 }
 
+// ── Encumbrance ──
+function calcEncumbrance() {
+  const refMod  = getAbilityMod('REF');
+  const fortMod = getAbilityMod('FORT');
+  const readiedCap = 2 + refMod;
+  const totalCap   = 8 + fortMod;
+  const packCap    = Math.max(0, totalCap - readiedCap);
+  let readiedUsed = 0, packUsed = 0;
+
+  function countItem(item, wornArmor) {
+    if (wornArmor) return; // equipped armor = 0 slots, no zone
+    const s = item.slots ?? 1;
+    const z = item.zone  ?? 'pack';
+    if (z === 'readied') readiedUsed += s;
+    else                 packUsed    += s;
+  }
+
+  inventoryData.armor.forEach(    item => countItem(item, !!item.equipped));
+  inventoryData.shields.forEach(  item => countItem(item, false));
+  inventoryData.weapons.forEach(  item => countItem(item, false));
+  inventoryData.consumables.forEach(item => countItem(item, false));
+  inventoryData.gear.forEach(     item => countItem(item, false));
+  inventoryData.magicItems.forEach(item => countItem(item, false));
+
+  const totalUsed = readiedUsed + packUsed;
+  let status = 'Normal';
+  if (totalUsed > totalCap + 4) status = 'Immobilized';
+  else if (totalUsed > totalCap) status = 'Encumbered';
+
+  return { readiedCap, totalCap, packCap, readiedUsed, packUsed, totalUsed, status };
+}
+
+function _encSummaryHtml() {
+  const { readiedCap, packCap, readiedUsed, packUsed, totalUsed, totalCap, status } = calcEncumbrance();
+
+  function bar(used, cap) {
+    const pct = cap > 0 ? Math.min(100, Math.round(used / cap * 100)) : (used > 0 ? 100 : 0);
+    const cls = used > cap ? 'danger' : used >= cap * 0.8 ? 'warning' : 'normal';
+    return `<div class="enc-bar-wrap"><div class="enc-bar-fill ${cls}" style="width:${pct}%"></div></div>`;
+  }
+
+  const statusCls = status.toLowerCase();
+  const condNote = status === 'Encumbered'
+    ? 'Movement halved · Distracted (Disadv. on attacks &amp; REF saves, no Reactions)'
+    : status === 'Immobilized'
+    ? 'Cannot move or take actions · Distracted'
+    : '';
+
+  return `<div class="enc-summary">
+    <div class="enc-title">Encumbrance</div>
+    <div class="enc-row">
+      <span class="enc-label">Readied Slots (Belt)</span>
+      <span class="enc-count">${readiedUsed} / ${readiedCap}</span>
+      ${bar(readiedUsed, readiedCap)}
+    </div>
+    <div class="enc-row">
+      <span class="enc-label">Pack Slots (Backpack)</span>
+      <span class="enc-count">${packUsed} / ${packCap}</span>
+      ${bar(packUsed, packCap)}
+    </div>
+    <div class="enc-status-wrap">
+      <span class="enc-status-label">Status</span>
+      <span class="enc-status-badge ${statusCls}">${status}</span>
+      ${condNote ? `<span class="enc-conditions">${condNote}</span>` : ''}
+    </div>
+  </div>`;
+}
+
+function setInvSlots(section, id, val) {
+  const dataKey = section === 'magic' ? 'magicItems' : section;
+  const item = inventoryData[dataKey].find(x => x.id === id);
+  if (!item) return;
+  item.slots = parseInt(val) || 0;
+  saveInventory();
+  renderInventoryTab();
+}
+
+function toggleInvZone(section, id) {
+  const dataKey = section === 'magic' ? 'magicItems' : section;
+  const item = inventoryData[dataKey].find(x => x.id === id);
+  if (!item) return;
+  item.zone = (item.zone ?? 'pack') === 'pack' ? 'readied' : 'pack';
+  saveInventory();
+  renderInventoryTab();
+}
+
+function _invEncControls(section, item, wornArmor) {
+  if (wornArmor) return `<div class="inv-enc-row"><span class="inv-enc-worn">Worn — 0 slots</span></div>`;
+  const slots = item.slots ?? 1;
+  const zone  = item.zone  ?? 'pack';
+  const slotOpts = [
+    [0, '0 — Free'], [1, '1 — Standard'], [2, '2 — Bulky'], [3, '3 — Massive'],
+  ].map(([v, l]) => `<option value="${v}"${slots === v ? ' selected' : ''}>${l}</option>`).join('');
+  return `<div class="inv-enc-row">
+    <select class="inv-enc-slots-select" onchange="setInvSlots('${section}','${item.id}',this.value)">${slotOpts}</select>
+    <button class="inv-enc-zone-btn${zone === 'readied' ? ' readied' : ''}" onclick="toggleInvZone('${section}','${item.id}')">${zone === 'readied' ? '✦ Belt' : 'Pack'}</button>
+  </div>`;
+}
+
 // ── Suggested Defense ──
 function getSuggestedDefense() {
   const ref = getAbilityMod('REF');
@@ -5677,6 +5910,7 @@ function renderInventoryTab() {
     { key: 'currency',     label: 'Currency',            fn: _invCurrencyHtml },
   ];
   wrap.innerHTML = `
+    ${_encSummaryHtml()}
     <div class="inv-defense-panel">
       <div class="inv-def-title">Suggested Defense</div>
       <div class="inv-def-body">
@@ -5727,6 +5961,7 @@ function _invArmorRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name || 'Unnamed')}</div>
       <div class="inv-item-meta">${escHtml(meta)}</div>
+      ${_invEncControls('armor', item, !!item.equipped)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn${item.equipped ? ' equip-on' : ''}" onclick="toggleEquipArmor('${item.id}')">${item.equipped ? '✦ Equipped' : 'Equip'}</button>
@@ -5783,6 +6018,7 @@ function _invShieldRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name || 'Unnamed')}</div>
       ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
+      ${_invEncControls('shields', item, false)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn${item.equipped ? ' equip-on' : ''}" onclick="toggleEquipShield('${item.id}')">${item.equipped ? '✦ Equipped' : 'Equip'}</button>
@@ -5826,6 +6062,7 @@ function _invWeaponRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
       <div class="inv-item-meta">${meta}</div>
+      ${_invEncControls('weapons', item, false)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn" onclick="editInvItem('weapons','${item.id}')">Edit</button>
@@ -5873,6 +6110,7 @@ function _invConsumableRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
       ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
+      ${_invEncControls('consumables', item, false)}
     </div>
     <div class="inv-item-actions">
       <div class="inv-qty-ctrl">
@@ -5925,6 +6163,7 @@ function _invSimpleRow(item, editKey) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
       ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
+      ${_invEncControls(editKey, item, false)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn" onclick="editInvItem('${editKey}','${item.id}')">Edit</button>
