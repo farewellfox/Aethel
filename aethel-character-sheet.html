@@ -2430,6 +2430,7 @@ textarea.action-col-input {
 .feat-src-background   { color: var(--copper-dark); border-color: rgba(184,115,51,0.4);   background: rgba(184,115,51,0.07); }
 .feat-src-ancestry     { color: var(--crimson-soft);border-color: rgba(160,48,48,0.4);    background: rgba(160,48,48,0.07); }
 .feat-src-other        { color: var(--text-soft);   border-color: rgba(30,22,14,0.25);    background: rgba(30,22,14,0.04); }
+.feat-src-talent       { color: #c8952a;            border-color: rgba(200,149,42,0.45);  background: rgba(200,149,42,0.09); }
 .feat-desc-full { display: none; }
 .feat-row.expanded .feat-desc-short { display: none; }
 .feat-row.expanded .feat-desc-full  { display: block; white-space: pre-wrap; }
@@ -2504,6 +2505,45 @@ textarea.action-col-input {
 }
 .feat-desc-textarea::placeholder { color: rgba(30,22,14,0.5); font-style: italic; }
 .feat-desc-textarea:focus { border-bottom-color: var(--copper); background: rgba(184,115,51,0.04); }
+.feat-talent-fields { display: flex; flex-direction: column; gap: 0.4rem; }
+.feat-talent-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 0.1rem;
+  display: block;
+}
+.feat-talent-unlock {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-top: 0.15rem;
+  cursor: pointer;
+  user-select: none;
+}
+.feat-talent-unlock input[type=checkbox] { accent-color: var(--copper); cursor: pointer; }
+.feat-desc-textarea.locked { opacity: 0.38; }
+.feat-lvl2-indicator {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 0.05rem 0.3rem;
+  border-radius: 2px;
+  display: inline-block;
+  margin-bottom: 0.2rem;
+}
+.feat-lvl2-indicator.unlocked { color: #c8952a; border: 1px solid rgba(200,149,42,0.45); background: rgba(200,149,42,0.09); }
+.feat-lvl2-indicator.locked   { color: var(--text-soft); border: 1px solid rgba(30,22,14,0.2); background: rgba(30,22,14,0.04); opacity: 0.6; }
 
 /* ── INVENTORY TAB ── */
 .inv-defense-panel {
@@ -3173,6 +3213,7 @@ textarea.action-col-input {
             <option value="Subclass">Subclass</option>
             <option value="Background">Background</option>
             <option value="Ancestry">Ancestry</option>
+            <option value="Talent">Talent</option>
             <option value="Other">Other</option>
           </select>
         </div>
@@ -4512,8 +4553,28 @@ function renderLevelLog() {
 
     if (!entry.features) entry.features = [];
     const structFeatHtml = entry.features.map((f, idx) => {
-      const srcOpts = ['Class','Subclass','Background','Ancestry','Other']
+      const srcOpts = ['Class','Subclass','Background','Ancestry','Talent','Other']
         .map(s => `<option value="${s}"${f.source===s?' selected':''}>${s}</option>`).join('');
+      const isTalent = f.source === 'Talent';
+      const descUI = isTalent ? `
+        <div class="feat-talent-fields">
+          <div>
+            <span class="feat-talent-label">Level 1 — Narrative &amp; Utility</span>
+            <textarea class="feat-desc-textarea" placeholder="Narrative &amp; Utility description…"
+              oninput="updateFeatureInLevel(${lvl},${idx},'description',this.value)">${escHtml(f.description||'')}</textarea>
+          </div>
+          <div>
+            <span class="feat-talent-label">Level 2 — Mechanical Spike</span>
+            <textarea class="feat-desc-textarea${f.level2Unlocked ? '' : ' locked'}" placeholder="Mechanical Spike description…"
+              oninput="updateFeatureInLevel(${lvl},${idx},'description2',this.value)">${escHtml(f.description2||'')}</textarea>
+            <label class="feat-talent-unlock">
+              <input type="checkbox" ${f.level2Unlocked ? 'checked' : ''}
+                onchange="updateFeatureInLevel(${lvl},${idx},'level2Unlocked',this.checked)">
+              Level 2 Unlocked
+            </label>
+          </div>
+        </div>` : `<textarea class="feat-desc-textarea" placeholder="Description…"
+          oninput="updateFeatureInLevel(${lvl},${idx},'description',this.value)">${escHtml(f.description||'')}</textarea>`;
       return `<div class="feat-entry-row">
         <div class="feat-entry-fields">
           <input type="text" class="feat-name-input" placeholder="Feature name…" value="${escHtml(f.name||'')}"
@@ -4521,8 +4582,7 @@ function renderLevelLog() {
           <select class="feat-source-select" onchange="updateFeatureInLevel(${lvl},${idx},'source',this.value)">${srcOpts}</select>
           <button class="action-del-btn" onclick="deleteFeatureFromLevel(${lvl},${idx})" title="Remove">✕</button>
         </div>
-        <textarea class="feat-desc-textarea" placeholder="Description…"
-          oninput="updateFeatureInLevel(${lvl},${idx},'description',this.value)">${escHtml(f.description||'')}</textarea>
+        ${descUI}
       </div>`;
     }).join('');
 
@@ -6050,6 +6110,7 @@ function updateFeatureInLevel(lvl, idx, field, val) {
   entry.features[idx][field] = val;
   saveLevelLog();
   renderFeaturesTab();
+  if (field === 'source' || field === 'level2Unlocked') renderLevelLog();
 }
 
 function sortFeatures(col) {
@@ -6088,7 +6149,14 @@ function renderFeaturesTab() {
   const allFeatures = [];
   levelEntries.forEach(entry => {
     (entry.features || []).forEach(f => {
-      allFeatures.push({ name: f.name || '', source: f.source || 'Other', description: f.description || '', _level: entry.level });
+      allFeatures.push({
+        name: f.name || '',
+        source: f.source || 'Other',
+        description: f.description || '',
+        description2: f.description2 || '',
+        level2Unlocked: !!f.level2Unlocked,
+        _level: entry.level,
+      });
     });
   });
 
@@ -6120,16 +6188,30 @@ function renderFeaturesTab() {
   }
 
   const rows = visibleFeatures.map(f => {
+    const isTalent = f.source === 'Talent';
     const descEsc = escHtml(f.description);
     const truncated = f.description.length > 60 ? escHtml(f.description.slice(0, 60)) + '…' : descEsc;
     const srcClass = 'feat-src-' + f.source.toLowerCase().replace(/\s+/g, '');
+    let descFull;
+    if (isTalent) {
+      const lvl2EscStyle = f.level2Unlocked ? '' : ' style="opacity:0.4;"';
+      const lvl2Indicator = f.level2Unlocked
+        ? '<span class="feat-lvl2-indicator unlocked">Level 2 Unlocked</span>'
+        : '<span class="feat-lvl2-indicator locked">Level 2 Locked</span>';
+      descFull = `<span style="display:block;font-size:0.7rem;font-family:'Cinzel',serif;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.15rem;">Lvl 1 — Narrative &amp; Utility</span>${descEsc || '<em style="color:var(--text-label)">—</em>'}` +
+        `<span style="display:block;margin-top:0.5rem;">${lvl2Indicator}</span>` +
+        `<span style="display:block;font-size:0.7rem;font-family:'Cinzel',serif;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-soft);margin:0.2rem 0 0.15rem;">Lvl 2 — Mechanical Spike</span>` +
+        `<span${lvl2EscStyle}>${escHtml(f.description2) || '<em style="color:var(--text-label)">—</em>'}</span>`;
+    } else {
+      descFull = descEsc;
+    }
     return `<div class="feat-row" onclick="this.classList.toggle('expanded')">
       <div class="feat-cell feat-name">${escHtml(f.name) || '<em style="color:var(--text-label)">Unnamed</em>'}</div>
       <div class="feat-cell feat-source"><span class="feat-source-badge ${srcClass}">${escHtml(f.source)}</span></div>
       <div class="feat-cell feat-level">${f._level}</div>
       <div class="feat-cell feat-desc">
         <span class="feat-desc-short">${truncated || '<em style="color:var(--text-label)">—</em>'}</span>
-        <span class="feat-desc-full">${descEsc}</span>
+        <span class="feat-desc-full">${descFull}</span>
       </div>
     </div>`;
   }).join('');

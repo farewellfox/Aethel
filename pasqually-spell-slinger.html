@@ -1662,8 +1662,10 @@ const MIND_AUG_SECTIONS = [
     augments: [
       { id: 'kinetic_chain',   name: 'Kinetic Chain',   cost: 3, desc: 'If the Spell Form deals damage, the damage dealt is also dealt to a second enemy target within 10 ft.' },
       { id: 'flawless_strike', name: 'Flawless Strike',  cost: 2, desc: 'If this Spell Form lands a Glancing Blow (half damage), it is converted to Full Damage instead.' },
-      { id: 'flicker_warp',   name: 'Flicker Warp',     cost: 2, desc: 'After casting this Spell Form, you may teleport up to 30 ft. to an unoccupied space you can see.' },
+      { id: 'flicker_warp',   name: 'Flicker Warp',     cost: 3, desc: 'After casting this Spell Form, you may teleport up to 30 ft. to an unoccupied space you can see.' },
       { id: 'haste_field',    name: 'Haste Field',      cost: 2, desc: 'If this Spell Form affects an ally (including you), that ally\'s movement speed is doubled until the end of their next turn.' },
+      { id: 'expose',         name: 'Expose',           cost: 2, desc: 'If this Spell Form hits or affects a target, that target\'s Defense Score is reduced by 2 until the start of your next turn. Does not stack with multiple casts.' },
+      { id: 'aftershock',     name: 'Aftershock',       cost: 2, desc: 'If the target already has any condition applied to them, this Spell Form deals an additional 1d8 bonus damage.' },
     ]
   },
   {
@@ -2769,7 +2771,7 @@ function handleLoadFile(input) {
 }
 
 // ── Import Modal ────────────────────────────────────────────────
-const IMPORT_LEVEL_COSTS  = [3, 4, 6, 7, 10, 11, 15, 16, 20];
+const IMPORT_LEVEL_COSTS  = [3, 4, 6, 8, 11, 13, 17, 20, 24];
 const IMPORT_LEVEL_LABELS = [
   '1st — Simple', '2nd — Advanced', '3rd — Major', '4th — Epic', '5th — Legendary',
   '6th — Mythic',  '7th — Mythic',   '8th — Cosmic', '9th — Cosmic',
