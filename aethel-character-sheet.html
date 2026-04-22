@@ -2807,7 +2807,8 @@ textarea.action-col-input {
 }
 .inv-enc-zone-btn:hover { border-color: var(--copper); color: var(--copper-dark); background: rgba(184,115,51,0.06); }
 .inv-enc-zone-btn.readied { color: #c8952a; border-color: rgba(200,149,42,0.45); background: rgba(200,149,42,0.09); }
-.inv-enc-worn { font-family: 'Cinzel', serif; font-size: 0.48rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-label); font-style: italic; }
+.inv-enc-zone-btn.worn    { color: var(--teal); border-color: rgba(30,95,95,0.4); background: rgba(30,95,95,0.08); }
+.inv-enc-slots-select:disabled { opacity: 0.35; cursor: not-allowed; }
 
 /* ── PROFICIENCIES & TRAINING ── */
 .prof-layout {
@@ -5784,20 +5785,20 @@ function calcEncumbrance() {
   const packCap    = Math.max(0, totalCap - readiedCap);
   let readiedUsed = 0, packUsed = 0;
 
-  function countItem(item, wornArmor) {
-    if (wornArmor) return; // equipped armor = 0 slots, no zone
+  function countItem(item) {
+    const z = item.zone ?? 'pack';
+    if (z === 'worn') return; // worn/equipped = 0 slots
     const s = item.slots ?? 1;
-    const z = item.zone  ?? 'pack';
     if (z === 'readied') readiedUsed += s;
     else                 packUsed    += s;
   }
 
-  inventoryData.armor.forEach(    item => countItem(item, !!item.equipped));
-  inventoryData.shields.forEach(  item => countItem(item, false));
-  inventoryData.weapons.forEach(  item => countItem(item, false));
-  inventoryData.consumables.forEach(item => countItem(item, false));
-  inventoryData.gear.forEach(     item => countItem(item, false));
-  inventoryData.magicItems.forEach(item => countItem(item, false));
+  inventoryData.armor.forEach(      countItem);
+  inventoryData.shields.forEach(    countItem);
+  inventoryData.weapons.forEach(    countItem);
+  inventoryData.consumables.forEach(countItem);
+  inventoryData.gear.forEach(       countItem);
+  inventoryData.magicItems.forEach( countItem);
 
   const totalUsed = readiedUsed + packUsed;
   let status = 'Normal';
@@ -5856,21 +5857,24 @@ function toggleInvZone(section, id) {
   const dataKey = section === 'magic' ? 'magicItems' : section;
   const item = inventoryData[dataKey].find(x => x.id === id);
   if (!item) return;
-  item.zone = (item.zone ?? 'pack') === 'pack' ? 'readied' : 'pack';
+  const cur = item.zone ?? 'pack';
+  item.zone = cur === 'pack' ? 'readied' : cur === 'readied' ? 'worn' : 'pack';
   saveInventory();
   renderInventoryTab();
 }
 
-function _invEncControls(section, item, wornArmor) {
-  if (wornArmor) return `<div class="inv-enc-row"><span class="inv-enc-worn">Worn — 0 slots</span></div>`;
+function _invEncControls(section, item) {
   const slots = item.slots ?? 1;
   const zone  = item.zone  ?? 'pack';
+  const worn  = zone === 'worn';
   const slotOpts = [
     [0, '0 — Free'], [1, '1 — Standard'], [2, '2 — Bulky'], [3, '3 — Massive'],
   ].map(([v, l]) => `<option value="${v}"${slots === v ? ' selected' : ''}>${l}</option>`).join('');
+  const zoneCls  = zone === 'readied' ? ' readied' : zone === 'worn' ? ' worn' : '';
+  const zoneLabel = zone === 'readied' ? '✦ Belt' : zone === 'worn' ? '✦ Worn' : 'Pack';
   return `<div class="inv-enc-row">
-    <select class="inv-enc-slots-select" onchange="setInvSlots('${section}','${item.id}',this.value)">${slotOpts}</select>
-    <button class="inv-enc-zone-btn${zone === 'readied' ? ' readied' : ''}" onclick="toggleInvZone('${section}','${item.id}')">${zone === 'readied' ? '✦ Belt' : 'Pack'}</button>
+    <select class="inv-enc-slots-select" onchange="setInvSlots('${section}','${item.id}',this.value)"${worn ? ' disabled' : ''}>${slotOpts}</select>
+    <button class="inv-enc-zone-btn${zoneCls}" onclick="toggleInvZone('${section}','${item.id}')">${zoneLabel}</button>
   </div>`;
 }
 
@@ -5961,7 +5965,7 @@ function _invArmorRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name || 'Unnamed')}</div>
       <div class="inv-item-meta">${escHtml(meta)}</div>
-      ${_invEncControls('armor', item, !!item.equipped)}
+      ${_invEncControls('armor', item)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn${item.equipped ? ' equip-on' : ''}" onclick="toggleEquipArmor('${item.id}')">${item.equipped ? '✦ Equipped' : 'Equip'}</button>
@@ -6018,7 +6022,7 @@ function _invShieldRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name || 'Unnamed')}</div>
       ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
-      ${_invEncControls('shields', item, false)}
+      ${_invEncControls('shields', item)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn${item.equipped ? ' equip-on' : ''}" onclick="toggleEquipShield('${item.id}')">${item.equipped ? '✦ Equipped' : 'Equip'}</button>
@@ -6062,7 +6066,7 @@ function _invWeaponRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
       <div class="inv-item-meta">${meta}</div>
-      ${_invEncControls('weapons', item, false)}
+      ${_invEncControls('weapons', item)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn" onclick="editInvItem('weapons','${item.id}')">Edit</button>
@@ -6110,7 +6114,7 @@ function _invConsumableRow(item) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
       ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
-      ${_invEncControls('consumables', item, false)}
+      ${_invEncControls('consumables', item)}
     </div>
     <div class="inv-item-actions">
       <div class="inv-qty-ctrl">
@@ -6163,7 +6167,7 @@ function _invSimpleRow(item, editKey) {
     <div class="inv-item-main">
       <div class="inv-item-name">${escHtml(item.name||'Unnamed')}</div>
       ${item.description ? `<div class="inv-item-meta">${escHtml(item.description)}</div>` : ''}
-      ${_invEncControls(editKey, item, false)}
+      ${_invEncControls(editKey, item)}
     </div>
     <div class="inv-item-actions">
       <button class="inv-btn" onclick="editInvItem('${editKey}','${item.id}')">Edit</button>
